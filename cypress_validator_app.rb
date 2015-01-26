@@ -1,12 +1,18 @@
-require 'sinatra'
+require "sinatra/base"
+require "sinatra/reloader"
+
 
 class CypressValidatorApp < Sinatra::Base
-  get "/" do
-    erb :index
+
+  configure :development do
+    register Sinatra::Reloader
   end
 
+  get "/" do
+    erb :index, layout: :layout
+  end
 
-  get "/validate" do
-
+  post "/validate" do
+    erb :results, layout: :layout
   end
 end

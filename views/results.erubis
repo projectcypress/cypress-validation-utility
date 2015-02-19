@@ -1,0 +1,20 @@
+<div>
+  <div id="test_result_tabs" class="tab-content">
+
+    <div class="tab-pane" id="test_measure_errors">
+      <h4>Errors</h4>
+    </div>
+
+    <div class="tab-pane" id="test_measure_qrda_errors">
+      <h4>QRDA Errors</h4>
+      <%#= render :partial=>'test_executions/error_list', :locals=>{grouped_errors: execution_errors.by_validation_type(:xml_validation).by_type(:error).group_by(&:validator), error_map:error_map } %>
+    </div>
+ 
+  </div><!-- end #test_result_tabs -->
+  <% error_map, error_attributes = match_errors(@upload)%>
+  <div id="xml_frame">
+    <%#= erubis :'documents/subnav', layout: false%>  
+    <h3>Vendor Generated XML</h3>
+    <%= erubis :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
+  </div>
+</div>

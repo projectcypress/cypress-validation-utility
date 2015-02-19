@@ -1,22 +1,6 @@
-GEM
-  remote: https://rubygems.org/
+PATH
+  remote: ../health-data-standards
   specs:
-    activemodel (4.1.8)
-      activesupport (= 4.1.8)
-      builder (~> 3.1)
-    activesupport (4.1.8)
-      i18n (~> 0.6, >= 0.6.9)
-      json (~> 1.7, >= 1.7.7)
-      minitest (~> 5.1)
-      thread_safe (~> 0.1)
-      tzinfo (~> 1.1)
-    backports (3.6.4)
-    bson (2.3.0)
-    builder (3.2.2)
-    connection_pool (2.1.0)
-    daemons (1.1.9)
-    erubis (2.7.0)
-    eventmachine (1.0.3)
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)
       builder (~> 3.1)
@@ -30,12 +14,34 @@ GEM
       rest-client (~> 1.6.7)
       rubyzip (= 0.9.9)
       uuid (~> 2.3.7)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (4.1.9)
+      activesupport (= 4.1.9)
+      builder (~> 3.1)
+    activesupport (4.1.9)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
+    backports (3.6.4)
+    bson (2.3.0)
+    builder (3.2.2)
+    coderay (1.1.0)
+    connection_pool (2.1.1)
+    daemons (1.1.9)
+    erubis (2.7.0)
+    eventmachine (1.0.3)
     i18n (0.7.0)
     json (1.8.2)
     log4r (1.1.10)
     macaddr (1.7.1)
       systemu (~> 2.6.2)
     memoist (0.9.3)
+    method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.5.3)
     minitest (5.5.1)
@@ -57,6 +63,10 @@ GEM
     origin (2.1.1)
     protected_attributes (1.0.8)
       activemodel (>= 4.0.1, < 5.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -79,6 +89,7 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (~> 1.3)
+    slop (3.6.0)
     systemu (2.6.4)
     thin (1.6.2)
       daemons (>= 1.0.9)
@@ -96,7 +107,8 @@ PLATFORMS
 
 DEPENDENCIES
   erubis
-  health-data-standards (= 3.5.3)
+  health-data-standards!
+  pry
   sinatra
   sinatra-contrib
   thin

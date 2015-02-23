@@ -1,14 +1,42 @@
 require "sinatra/base"
 require "sinatra/reloader"
+require "sinatra/assetpack"
+require 'sass_paths'
+require "sass"
 require "pry"
 require "health-data-standards"
 # require_relative "./document_upload"
 
 
 class CypressValidatorApp < Sinatra::Base
+  register Sinatra::AssetPack
 
   configure :development do
     register Sinatra::Reloader
+  end
+
+  SassPaths.append("#{CypressValidatorApp.root}/app/css")
+  
+
+  assets do
+    js :application, [
+      '/js/vendor/jquery-1.11.1.min.js',
+      '/js/vendor/bootstrap.js',
+      '/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
+      '/js/vendor/validator.js',
+      '/js/cypress-navigator.js',
+      '/js/main.js'
+    ]
+
+    css :application, [
+      '/css/bootstrap.css',
+      '/css/bootstrap-theme.css',
+      '/css/cypress_new.css',
+      '/css/main.css'
+    ]
+
+    js_compression :jsmin
+    css_compression :sass
   end
 
   helpers do

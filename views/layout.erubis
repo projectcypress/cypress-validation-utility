@@ -14,9 +14,7 @@
   <title></title>
   <meta content="" name="description">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link href="/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
-  <link href="/css/main.css" rel="stylesheet"></head>
+  <%= css :application %>
 
 <body>
   <!--[if lt IE 9]>
@@ -50,8 +48,7 @@
 
       <p><a href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> <a href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p>
     </footer>
-  </div><!-- /container --><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> <script>
-window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')
-  </script> <script src="js/vendor/bootstrap.min.js"></script> <script src="js/main.js"></script>
+  </div><!-- /container -->
+  <%= js :application %>
 </body>
 </html>

@@ -5,15 +5,10 @@
    ========================================================================== */
 
 
+div.form-group div.radio label {
+    padding-left: 0.5em;
+}
 
-
-
-
-
-
-
-
-
-
-
-
+legend {
+    margin-bottom: 1em;
+}

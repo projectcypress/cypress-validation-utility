@@ -24,15 +24,14 @@
   <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
-        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <a class=
-        "navbar-brand" href="#"><img class="pull-left" height="25" src="img/cypress_logo.png">
+        <a class="navbar-brand" href="./">
+          <img class="pull-left" style="height: 25px;" src="images/cypress_logo.png">
 
-        <div class="pull-right" style="color:black">
-          validation utility
-        </div></a>
+          <span class="pull-right" style="color:black">
+            validation utility
+          </span>
+        </a>
       </div>
-
-      <div class="navbar-collapse collapse" id="navbar"></div><!--/.navbar-collapse -->
     </div>
   </nav>
 

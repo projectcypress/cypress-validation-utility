@@ -1,20 +1,62 @@
-<div>
+<div id="error_report_toc">
   <div id="test_result_tabs" class="tab-content">
 
     <div class="tab-pane" id="test_measure_errors">
       <h4>Errors</h4>
     </div>
 
-    <div class="tab-pane" id="test_measure_qrda_errors">
+    <% error_map, error_attributes = match_errors(@upload) %>
+
+    <div id="test_measure_qrda_errors">
       <h4>QRDA Errors</h4>
-      <%#= render :partial=>'test_executions/error_list', :locals=>{grouped_errors: execution_errors.by_validation_type(:xml_validation).by_type(:error).group_by(&:validator), error_map:error_map } %>
+      <%= erb :'documents/_error_list', :locals=>{grouped_errors: group_errors(@upload), error_map: error_map } %>
     </div>
  
   </div><!-- end #test_result_tabs -->
-  <% error_map, error_attributes = match_errors(@upload)%>
   <div id="xml_frame">
-    <%#= erubis :'documents/subnav', layout: false%>  
+    <%= erb :'documents/subnav', layout: false%>  
     <h3>Vendor Generated XML</h3>
-    <%= erubis :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
+    <%= erb :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
   </div>
 </div>
+
+<script>
+window.onload=function() {
+function showErrorPopup(anchor) {
+    if ($(anchor)) {
+      $('span.error_popup').popover('hide')
+      $('span'+anchor).popover('show');
+      jumpToElement(anchor);
+    }
+  }
+
+  var navigation =  $("#xml_frame .subnav").show().navigator({targets:"a.qrda_error_link",action:showErrorPopup});
+  $("#xml_frame").fixedHeader();
+
+  $("a.qrda_error_link").on('click',function() {
+    showErrorPopup($(this).attr('href'));
+    navigation.data('navigator').setIndex($(this).attr('href'));
+    return false;
+  });
+
+  $("section.execution").on('click','.error i.icon',function() {
+    //('span.error_popup',$(this)).popover('toggle')
+    var anyVisible = false;
+    var possibilities = $('span.error_popup', $('div#x'+$(this).data('error')));
+    for(var i =0;i<possibilities.length;i++){
+      if($(possibilities[i]).data('popover') && $(possibilities[i]).data('popover').tip().hasClass('in')){
+        anyVisible = true;
+        break;
+      }
+    }
+    if(anyVisible || possibilities.length == 0){
+      $('span.error_popup').popover('hide');
+    }else{
+      var href = '#'+$(possibilities[0]).attr('id');
+      showErrorPopup(href);
+      navigation.data('navigator').setIndex(href);
+    }
+
+  });
+}
+  </script>

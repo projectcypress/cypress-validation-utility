@@ -1,34 +1,46 @@
-<form action="/validate" class="form-inline" method="post" enctype="multipart/form-data">
-  <div class="form-group col-sm-5" style="">
-    <label for="exampleInputFile">QRDA File</label>
-    <input type="file" name="file" class="form-control">
-  </div>
-  <fieldset class="radio-group">
-    <div class="form-group col-sm-1">
-    <div class="radio">
-      <label><input name="program" type="radio" value="eh"> EH</label>
+<form action="/validate" class="form-inline" method="post" data-toggle="validator" enctype="multipart/form-data">
+  <div class="radio-group well" style="">
+    <legend>Document</legend>
+    <div class="form-group col-1">
+      <label for="inputFile">QRDA File</label>
+      <input type="file" name="file" class="form-control" required id="inputFile">
     </div>
   </div>
-  <div class="form-group col-sm-1">
-    <div class="radio">
-      <label><input name="program" type="radio" value="ep"> EP</label>
-    </div>
-  </div>
-  </fieldset>
-  <fieldset class="radio-group">
-  </fieldset>
 
-  <div class="form-group col-sm-1">
-    <div class="radio">
-      <label><input name="file_type" type="radio" value="cat1"> Cat I</label>
+  <div class="radio-group well">
+    <legend>Document Type</legend>
+    <div class="form-group col-1">
+      <div class="radio">
+        <label for="eh">EH</label>
+        <input name="program" class="form-control" type="radio" class="radio" required value="eh" id="eh">
+      </div>
     </div>
-  </div>
-  <div class="form-group col-sm-1">
-    <div class="radio">
-      <label><input name="file_type" type="radio" value="cat3"> Cat III</label>
+    <div class="form-group col-1">
+      <div class="radio">
+        <label for="ep">EP</label>
+        <input name="program" class="form-control" type="radio" value="ep" required id="ep">
+      </div>
     </div>
+    <div class="help-block with-errors"></div>
   </div>
-  <div class="form-group col-sm-1">
-    <input class="btn btn-primary btn-sm" type="submit" value="Submit">
+
+  <div class="radio-group well">
+    <legend>Reporting Program</legend>
+    <div class="form-group col-1">
+      <div class="radio">
+        <label for="cat1">Cat I</label>
+        <input name="file_type" class="form-control" type="radio" value="cat1" required id="cat1">
+      </div>
+    </div>
+    <div class="form-group col-1">
+      <div class="radio">
+        <label for="cat3">Cat III</label>
+        <input name="file_type" class="form-control" type="radio" value="cat3" required id="cat3">
+      </div>
+    </div>
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group col-1">
+    <input class="btn btn-primary btn-sm form-control" type="submit" value="Submit">
   </div>
 </form>

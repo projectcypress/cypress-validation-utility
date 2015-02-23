@@ -59,7 +59,7 @@ class CypressValidatorApp < Sinatra::Base
     end
 
     def match_errors(upload)
-      doc = Nokogiri::XML(upload.content)
+      doc = upload.content
       uuid = UUID.new
       error_map = {}
       error_id = 0
@@ -93,6 +93,10 @@ class CypressValidatorApp < Sinatra::Base
     end
   end
 
+  def group_errors(upload)
+    @upload.errors.group_by{ |err| err.validator}
+  end
+
   get "/" do
     erb :index
   end
@@ -108,21 +112,22 @@ class DocumentUpload
 
   def initialize(file, doc_type, program=nil)
     @content = File.read(file)
+    @content = Nokogiri::XML(@content)
     @doc_type = doc_type
     @program = program
-    @errors = validators(@doc_type).inject([]) do |errors, v|
-      errors.concat(v.validate(content))
+    @errors = validators.inject([]) do |errors, v|
+      errors.concat(v.validate(@content))
     end
 
   end
 
   private
 
-  def validators(doc_type)
+  def validators
     return @validators if @validators
 
     @validators = [HealthDataStandards::Validate::CDA.instance]
-    val_class = case doc_type
+    val_class = case @doc_type
     when "cat1"
       HealthDataStandards::Validate::Cat1
     when "cat3"

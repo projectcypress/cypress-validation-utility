@@ -49,6 +49,7 @@
       <p><a href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> <a href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p>
     </footer>
   </div><!-- /container -->
+
   <%= js :application %>
 </body>
 </html>

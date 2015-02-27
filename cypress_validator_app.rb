@@ -23,8 +23,8 @@ class CypressValidatorApp < Sinatra::Base
       '/js/vendor/jquery-1.11.1.min.js',
       '/js/vendor/bootstrap.js',
       '/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js',
-      '/js/vendor/validator.js',
       '/js/cypress-navigator.js',
+      '/js/vendor/h5f.min.js',
       '/js/main.js'
     ]
 

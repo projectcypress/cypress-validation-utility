@@ -1,4 +1,4 @@
-<form action="/validate" class="form-inline" method="post" data-toggle="validator" enctype="multipart/form-data">
+<form action="/validate" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
   <div class="radio-group well" style="">
     <legend>Document</legend>
     <div class="form-group col-1">
@@ -8,7 +8,7 @@
   </div>
 
   <div class="radio-group well">
-    <legend>Document Type</legend>
+    <legend>Reporting Program</legend>
     <div class="form-group col-1">
       <div class="radio">
         <label for="eh">EH</label>
@@ -25,7 +25,7 @@
   </div>
 
   <div class="radio-group well">
-    <legend>Reporting Program</legend>
+    <legend>Document Type</legend>
     <div class="form-group col-1">
       <div class="radio">
         <label for="cat1">Cat I</label>
@@ -44,3 +44,9 @@
     <input class="btn btn-primary btn-sm form-control" type="submit" value="Submit">
   </div>
 </form>
+
+<script>
+window.onload = function() {
+  H5F.setup(document.getElementById("upload_form"));
+}
+</script>

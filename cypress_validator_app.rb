@@ -35,7 +35,7 @@ class CypressValidatorApp < Sinatra::Base
       '/css/main.css'
     ]
 
-    js_compression :jsmin
+    js_compression :uglify
     css_compression :sass
   end
 

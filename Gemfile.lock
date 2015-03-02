@@ -1,5 +1,7 @@
-PATH
-  remote: ../health-data-standards
+GIT
+  remote: https://github.com/ssayer/health-data-standards.git
+  revision: fbb05e1b9aea2c6efc9e16cc3c1deace81d79ca5
+  branch: validators
   specs:
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)
@@ -35,6 +37,7 @@ GEM
     daemons (1.1.9)
     erubis (2.7.0)
     eventmachine (1.0.7)
+    execjs (2.3.0)
     i18n (0.7.0)
     jsmin (1.0.1)
     json (1.8.2)
@@ -53,7 +56,7 @@ GEM
       tzinfo (>= 0.3.37)
     mongoid-tree (1.0.4)
       mongoid (>= 3.0, <= 4.0)
-    moped (2.0.3)
+    moped (2.0.4)
       bson (~> 2.2)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
@@ -108,6 +111,9 @@ GEM
     tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uglifier (2.7.0)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     uuid (2.3.7)
       macaddr (~> 1.0)
 
@@ -124,3 +130,4 @@ DEPENDENCIES
   sinatra-assetpack
   sinatra-contrib
   thin
+  uglifier

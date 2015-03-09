@@ -1,24 +1,34 @@
-<div id="error_report_toc">
+<div>
+  <ul id="error_report_toc" class="nav nav-tabs">
+    <li class="active"><a href="#test_summary" data-toggle="tab">Summary</a></li>
+    <li class=""><a href="#test_measure_qrda_errors" data-toggle="tab">QRDA Errors</a></li>
+  </ul>
+  
   <div id="test_result_tabs" class="tab-content">
-
-    <div class="tab-pane" id="test_measure_errors">
-      <h4>Errors</h4>
+    <div class="tab-pane active" id="test_summary">
+      <h4>Summary</h4>
+      <% if @upload.program %>
+        <p>Validating against the CMS <%= @upload.program %> schematron.</p>
+      <% else %>
+        <p>No submission program detected, validating against the base schematron only. </p>
+      <% end %>
     </div>
 
     <% error_map, error_attributes = match_errors(@upload) %>
 
-    <div id="test_measure_qrda_errors">
+    <div class="tab-pane" id="test_measure_qrda_errors">
       <h4>QRDA Errors</h4>
       <%= erb :'documents/_error_list', :locals=>{grouped_errors: group_errors(@upload), error_map: error_map } %>
     </div>
- 
   </div><!-- end #test_result_tabs -->
+
+
   <div id="xml_frame">
     <%= erb :'documents/subnav', layout: false%>  
     <h3>Vendor Generated XML</h3>
     <%= erb :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
   </div>
-</div>
+
 
 <script>
 window.onload=function() {

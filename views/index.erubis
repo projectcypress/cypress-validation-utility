@@ -7,39 +7,6 @@
     </div>
   </div>
 
-  <div class="radio-group well">
-    <legend>Reporting Program</legend>
-    <div class="form-group col-1">
-      <div class="radio">
-        <label for="eh">EH</label>
-        <input name="program" class="form-control" type="radio" class="radio" required value="eh" id="eh">
-      </div>
-    </div>
-    <div class="form-group col-1">
-      <div class="radio">
-        <label for="ep">EP</label>
-        <input name="program" class="form-control" type="radio" value="ep" required id="ep">
-      </div>
-    </div>
-    <div class="help-block with-errors"></div>
-  </div>
-
-  <div class="radio-group well">
-    <legend>Document Type</legend>
-    <div class="form-group col-1">
-      <div class="radio">
-        <label for="cat1">Cat I</label>
-        <input name="file_type" class="form-control" type="radio" value="cat1" required id="cat1">
-      </div>
-    </div>
-    <div class="form-group col-1">
-      <div class="radio">
-        <label for="cat3">Cat III</label>
-        <input name="file_type" class="form-control" type="radio" value="cat3" required id="cat3">
-      </div>
-    </div>
-    <div class="help-block with-errors"></div>
-  </div>
   <div class="form-group col-1">
     <input class="btn btn-primary btn-sm form-control" type="submit" value="Submit">
   </div>

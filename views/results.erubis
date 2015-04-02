@@ -8,10 +8,11 @@
     <div class="tab-pane active" id="test_summary">
       <h4>Summary</h4>
       <% if @upload.program %>
-        <p>Validating against the CMS <%= @upload.program %> schematron.</p>
+        <p>Validating against the CMS <%= @upload.program.upcase %> schematron.</p>
       <% else %>
         <p>No submission program detected, validating against the base schematron only. </p>
       <% end %>
+      <p>Validating a QRDA <%= @upload.doc_type.upcase %> document.</p>
     </div>
 
     <% error_map, error_attributes = match_errors(@upload) %>
@@ -28,7 +29,6 @@
     <h3>Vendor Generated XML</h3>
     <%= erb :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
   </div>
-
 
 <script>
 window.onload=function() {

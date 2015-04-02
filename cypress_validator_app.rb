@@ -102,7 +102,7 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   post "/validate" do
-    @upload = DocumentUpload.new(params[:file][:tempfile])
+    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
     erb :results
   end
 

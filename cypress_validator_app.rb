@@ -19,6 +19,8 @@ class CypressValidatorApp < Sinatra::Base
   
 
   assets do
+    serve '/fonts/',  from: 'app/fonts/'
+
     js :application, [
       '/js/vendor/jquery-1.11.1.min.js',
       '/js/vendor/bootstrap.js',
@@ -29,9 +31,8 @@ class CypressValidatorApp < Sinatra::Base
     ]
 
     css :application, [
-      '/css/bootstrap.css',
+      '/css/cypress_new.css', # includes bootstrap
       '/css/bootstrap-theme.css',
-      '/css/cypress_new.css',
       '/css/main.css'
     ]
 

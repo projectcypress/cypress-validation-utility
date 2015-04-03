@@ -1,69 +1,36 @@
-// Core variables and mixins
-@import "bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
+
 
 $linkColor:black;
 // Sprite icons path
 $iconSpritePath:                  "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath:             "../images/glyphicons-halflings-white.png";
-$navbarBackground:                $grayLighter;
-$navbarBackgroundHighlight:       $white;
+
+//== Iconography
+//
+//## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
+
+//** Load fonts from this directory.
+
+// [converter] If $bootstrap-sass-asset-helper if used, provide path relative to the assets load path.
+// [converter] This is because some asset helpers, such as Sprockets, do not work with file-relative paths.
+$icon-font-path: "../fonts/vendor/bootstrap/";
+
+//** File name for all font files.
+$icon-font-name:          "glyphicons-halflings-regular" !default;
+//** Element ID within SVG icon file.
+$icon-font-svg-id:        "glyphicons_halflingsregular" !default;
+
+$icon-font-path:                  "../fonts/vendor/bootstrap/";
+// Core variables and mixins
+@import "vendor/bootstrap"; // The main Bootstrap file
+
+$navbarBackground:                $gray-lighter;
+$navbarBackgroundHighlight:       white;
 $navbarLinkBackgroundHover:       transparent;
 
-$navbarText:                      $grayDarker;
-$navbarLinkColor:                 $grayDarker;
-$navbarLinkColorHover:            $black;
-
-// Bootstrap Mixins
-@import "bootstrap/mixins";
-
-// CSS Reset
-@import "bootstrap/reset";
-
-// Grid system and page structure
-@import "bootstrap/scaffolding";
-@import "bootstrap/grid";
-@import "bootstrap/layouts";
-
-// Base CSS
-@import "bootstrap/type";
-@import "bootstrap/code";
-@import "bootstrap/forms";
-@import "bootstrap/tables";
-
-// Components: Common
-@import "bootstrap/sprites";
-@import "bootstrap/dropdowns";
-@import "bootstrap/wells";
-@import "bootstrap/component-animations";
-@import "bootstrap/close";
-
-// Components: Buttons & Alerts
-@import "bootstrap/buttons";
-@import "bootstrap/button-groups";
-@import "bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons
-
-// Components: Nav
-@import "bootstrap/navs";
-@import "bootstrap/navbar";
-@import "bootstrap/breadcrumbs";
-@import "bootstrap/pagination";
-@import "bootstrap/pager";
-
-// Components: Popovers
-@import "bootstrap/modals";
-@import "bootstrap/tooltip";
-@import "bootstrap/popovers";
-
-// Components: Misc
-@import "bootstrap/thumbnails";
-@import "bootstrap/labels";
-@import "bootstrap/progress-bars";
-@import "bootstrap/accordion";
-@import "bootstrap/carousel";
-@import "bootstrap/hero-unit";
-
-// Utility classes
-@import "bootstrap/utilities"; // Has to be last to override when necessary
+$navbarText:                      $gray-darker;
+$navbarLinkColor:                 $gray-darker;
+$navbarLinkColorHover:            black;
 
 // Cypress specific component styles and overrides
 @import "cypress/variables"; // Defines reused SASS variables throughout our styles

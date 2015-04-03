@@ -1,15 +1,72 @@
-<form action="/validate" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
-  <div class="radio-group well" style="">
-    <legend>Document</legend>
-    <div class="form-group col-1">
-      <label for="inputFile">QRDA File</label>
-      <input type="file" name="file" class="form-control" required id="inputFile">
-    </div>
-  </div>
+<div class="alert alert-danger">
+  <p class="text-danger strong"><span class="angry">WARNING</span>:  This utility is meant for synthetic patient records only.  <span class="angry">DO NOT</span> upload documents containing <a href="http://www.hipaa.com/the-definition-of-protected-health-information/">Protected Health Information (PHI)</a> or <a href="http://www.gsa.gov/portal/content/104256">Personally Identifiable Information (PII)</a>. </p>
 
-  <div class="form-group col-1">
-    <input class="btn btn-primary btn-sm form-control" type="submit" value="Submit">
-  </div>
+  <p>The Cypress QRDA Validation Utility is intended as a development tool for EHR vendors who are testing synthetic QRDA Category I and Category III documents for conformance to CMS submission requirements. Files submitted for validation must not contain PHI or PII.</p>
+</div>
+
+<form action="/validate" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
+
+
+  <legend>Document</legend>
+
+    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+      <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+      <label for="inputFile" class="sr-only">QRDA File</label>
+      <span class="input-group-addon btn btn-default btn-file">
+        <span class="fileinput-new">Select QRDA file</span>
+        <span class="fileinput-exists">Change</span>
+        <input type="file" name="file" id="inputFile" required>
+      </span>
+      <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+    </div>
+
+    <legend>Reporting Program</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> EP
+      </label>
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="eh" id="eh"> EH
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>Document Type</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat1"> Cat I
+      </label>
+      <label class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> Cat III
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>Validate With CMS IG?</legend>
+
+    <div class="form-group">
+      <div class="radio">
+        <label for="combined">Validate against the CMS Combined Implementation Guide:</label>
+        <input name="combined" class="form-control" type="checkbox" value="combined" id="combined">
+      </div>
+    </div>
+    <div class="help-block with-errors"></div>  
+
+    <legend>PHI Confirmation</legend>
+    <div class="form-group">
+      <div class="radio">
+        <label for="warning" class="text-danger">This file does not contain any PHI or PII:</label>
+        <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
+      </div>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <hr>
+
+    <input class="btn btn-primary form-control" type="submit" value="Submit">
+
 </form>
 
 <script>

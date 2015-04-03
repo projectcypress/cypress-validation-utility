@@ -18,3 +18,7 @@ span.angry {
     text-decoration: underline;
     font-weight: bold;
 }
+
+.form-control[data-trigger="fileinput"] {
+  min-width: 200px;
+}

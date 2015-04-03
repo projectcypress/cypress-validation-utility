@@ -12,3 +12,9 @@ div.form-group div.radio label {
 legend {
     margin-bottom: 1em;
 }
+
+span.angry {
+    font-size: 1.5em;
+    text-decoration: underline;
+    font-weight: bold;
+}

@@ -105,15 +105,15 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   post "/validate" do
-    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
+    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program], params[:combined])
     erb :results
   end
 
 class DocumentUpload
 
-  attr_reader :errors, :doc_type, :program, :content
+  attr_reader :errors, :doc_type, :program, :content, :combined_ig
 
-  def initialize(file, doc_type=nil, program=nil)
+  def initialize(file, doc_type, program=nil, combined_ig=nil)
     @content = File.read(file)
     @content = Nokogiri::XML(@content)
     
@@ -124,6 +124,8 @@ class DocumentUpload
     #if the program isn't passed in, see if we can find it in the document
     program = get_program if !program
     @program = program
+
+    @combined_ig = combined_ig
 
     @errors = validators.inject([]) do |errors, v|
       errors.concat(v.validate(@content))

@@ -160,9 +160,9 @@ class DocumentUpload
     #Figure out if the program is EP or EH
     return case prog.value
     when "CPC","PQRS_MU_INDIVIDUAL","PQRS_MU_GROUP","MU_ONLY"
-      "EP"
+      "ep"
     when "HQR_EHR","HQR_IQR","HQR_EHR_IQR"
-      "EH"
+      "eh"
     else
       #If the program name doesn't exist, return nil
       nil
@@ -177,6 +177,7 @@ class DocumentUpload
     when "cat1"
       HealthDataStandards::Validate::Cat1
     when "cat3"
+      raise "Cannot validate an EH QRDA Category III file" if @program.downcase == "eh"
       HealthDataStandards::Validate::Cat3
     else
       raise "Invalid doc_type param: Must be one of (cat1, cat3)"

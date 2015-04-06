@@ -1,12 +1,13 @@
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 35fd326a564f80102d20eb12284f46fa296b23e8
+  revision: 83340fd68029a30f41c291c72c4fecd9e3f00810
   branch: master
   specs:
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+      highline (~> 1.7.0)
       log4r (~> 1.1.10)
       memoist (~> 0.9.1)
       mongoid (~> 4.0.0)
@@ -38,6 +39,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.7)
     execjs (2.3.0)
+    highline (1.7.1)
     i18n (0.7.0)
     jsmin (1.0.1)
     json (1.8.2)
@@ -76,6 +78,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
     rest-client (1.6.8)
@@ -124,6 +127,7 @@ DEPENDENCIES
   erubis
   health-data-standards!
   pry
+  rake
   sass
   sass_paths
   sinatra

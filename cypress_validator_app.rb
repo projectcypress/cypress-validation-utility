@@ -6,8 +6,8 @@ require "sass"
 require "pry"
 require "health-data-standards"
 require_relative "./lib/cms_validators"
-# require_relative "./document_upload"
 
+Mongoid.load!("mongoid.yml")
 
 class CypressValidatorApp < Sinatra::Base
   register Sinatra::AssetPack

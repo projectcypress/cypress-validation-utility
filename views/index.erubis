@@ -36,7 +36,7 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat1"> Cat I
+        <input type="radio" required name="file_type" value="cat1" class="form-control" id="cat1"> Cat I
       </label>
       <label class="btn btn-default">
         <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> Cat III

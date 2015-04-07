@@ -7,10 +7,10 @@
   <div id="test_result_tabs" class="tab-content">
     <div class="tab-pane active" id="test_summary">
       <h4>Summary</h4>
-      <% if @upload.program %>
+      <% if @upload.program != "none" %>
         <p>Validating against the CMS <%= @upload.program.upcase %> schematron.</p>
       <% else %>
-        <p>No submission program detected, validating against the base schematron only. </p>
+        <p>No submission program selected, validating against the base schematron only. </p>
       <% end %>
       <p>Validating a QRDA <%= @upload.doc_type.upcase %> document.</p>
     </div>

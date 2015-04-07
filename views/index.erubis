@@ -24,6 +24,10 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="none" id="none">
+        None
+      </label>
+      <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> EP
       </label>
       <label class="btn btn-default">
@@ -35,24 +39,14 @@
     <legend>Document Type</legend>
 
     <div class="btn-group" data-toggle="buttons">
-      <label class="btn btn-default">
+      <label type="button" class="btn btn-default">
         <input type="radio" required name="file_type" value="cat1" class="form-control" id="cat1"> Cat I
       </label>
-      <label class="btn btn-default">
+      <label type="button" class="btn btn-default">
         <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> Cat III
       </label>
     </div>
     <div class="help-block with-errors"></div>
-
-    <legend>Validate With CMS IG?</legend>
-
-    <div class="form-group">
-      <div class="radio">
-        <label for="combined">Validate against the CMS Combined Implementation Guide:</label>
-        <input name="combined" class="form-control" type="checkbox" value="combined" id="combined">
-      </div>
-    </div>
-    <div class="help-block with-errors"></div>  
 
     <legend>PHI Confirmation</legend>
     <div class="form-group">
@@ -72,5 +66,17 @@
 <script>
 window.onload = function() {
   H5F.setup(document.getElementById("upload_form"));
+
+  $("[name=program]").change(function() {
+    if ($(this).val() == "eh") {
+      $("#cat3").parent().attr("disabled", true);
+      $("#cat3").attr("disabled", true);
+      $("#cat1").click();
+    } else {
+      $("#cat3").parent().attr("disabled", false);
+      $("#cat3").attr("disabled", false);
+    }
+    console.log();
+  });
 }
 </script>

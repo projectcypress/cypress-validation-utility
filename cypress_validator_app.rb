@@ -5,6 +5,7 @@ require 'sass_paths'
 require "sass"
 require "pry"
 require "health-data-standards"
+require_relative "./lib/cms_validators"
 # require_relative "./document_upload"
 
 
@@ -105,15 +106,15 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   post "/validate" do
-    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program], params[:combined])
+    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
     erb :results
   end
 
 class DocumentUpload
 
-  attr_reader :errors, :doc_type, :program, :content, :combined_ig
+  attr_reader :errors, :doc_type, :program, :content
 
-  def initialize(file, doc_type, program=nil, combined_ig=nil)
+  def initialize(file, doc_type, program=nil)
     @content = File.read(file)
     @content = Nokogiri::XML(@content)
     
@@ -124,8 +125,6 @@ class DocumentUpload
     #if the program isn't passed in, see if we can find it in the document
     program = get_program if !program
     @program = program
-
-    @combined_ig = combined_ig
 
     @errors = validators.inject([]) do |errors, v|
       errors.concat(v.validate(@content))
@@ -160,9 +159,9 @@ class DocumentUpload
     #Figure out if the program is EP or EH
     return case prog.value
     when "CPC","PQRS_MU_INDIVIDUAL","PQRS_MU_GROUP","MU_ONLY"
-      "EP"
+      "ep"
     when "HQR_EHR","HQR_IQR","HQR_EHR_IQR"
-      "EH"
+      "eh"
     else
       #If the program name doesn't exist, return nil
       nil
@@ -175,9 +174,21 @@ class DocumentUpload
     @validators = [HealthDataStandards::Validate::CDA.instance]
     val_class = case @doc_type
     when "cat1"
-      HealthDataStandards::Validate::Cat1
+      if @program.downcase == "ep"
+        CypressValidationUtility::Validate::EPCat1
+      elsif @program.downcase == "eh"
+        CypressValidationUtility::Validate::EHCat1
+      else
+        HealthDataStandards::Validate::Cat1
+      end
     when "cat3"
-      HealthDataStandards::Validate::Cat3
+      if @program.downcase == "ep"
+        CypressValidationUtility::Validate::EPCat3
+      elsif @program.downcase == "none"
+        HealthDataStandards::Validate::Cat3
+      else
+        raise "Cannot validate an EH QRDA Category III file"
+      end
     else
       raise "Invalid doc_type param: Must be one of (cat1, cat3)"
     end

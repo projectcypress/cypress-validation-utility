@@ -24,6 +24,10 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="none" id="none">
+        None
+      </label>
+      <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> EP
       </label>
       <label class="btn btn-default">
@@ -43,16 +47,6 @@
       </label>
     </div>
     <div class="help-block with-errors"></div>
-
-    <legend>Validate With CMS IG?</legend>
-
-    <div class="form-group">
-      <div class="radio">
-        <label for="combined">Validate against the CMS Combined Implementation Guide:</label>
-        <input name="combined" class="form-control" type="checkbox" value="combined" id="combined">
-      </div>
-    </div>
-    <div class="help-block with-errors"></div>  
 
     <legend>PHI Confirmation</legend>
     <div class="form-group">

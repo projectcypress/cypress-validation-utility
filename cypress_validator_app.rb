@@ -101,6 +101,12 @@ class CypressValidatorApp < Sinatra::Base
     @upload.errors.group_by{ |err| err.validator}
   end
 
+  before do
+    unless HealthDataStandards::CQM::Bundle.first
+      raise "Please install a bundle in order to use the Cypress Validation Utility"
+    end
+  end
+
   get "/" do
     erb :index
   end
@@ -174,6 +180,9 @@ class DocumentUpload
     @validators = [HealthDataStandards::Validate::CDA.instance]
     val_class = case @doc_type
     when "cat1"
+      bundle = HealthDataStandards::CQM::Bundle.first
+      @validators << HealthDataStandards::Validate::ValuesetValidator.new(bundle)
+      @validators << HealthDataStandards::Validate::Cat1Measure.instance
       if @program.downcase == "ep"
         CypressValidationUtility::Validate::EPCat1
       elsif @program.downcase == "eh"
@@ -182,6 +191,7 @@ class DocumentUpload
         HealthDataStandards::Validate::Cat1
       end
     when "cat3"
+      @validators << HealthDataStandards::Validate::Cat3Measure.instance
       if @program.downcase == "ep"
         CypressValidationUtility::Validate::EPCat3
       elsif @program.downcase == "none"

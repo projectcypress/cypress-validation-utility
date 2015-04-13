@@ -154,7 +154,6 @@
 		<sch:active pattern="p-2.16.840.1.113883.10.20.22.4.72-errors"/>
 		<sch:active pattern="p-2.16.840.1.113883.10.20.17.2.1-errors"/>
 		<sch:active pattern="p-2.16.840.1.113883.10.20.17.3.8-errors"/>		
-		<sch:active pattern="p-2.16.840.1.113883.10.20.17.3.8-errors-2"/>		
 		<sch:active pattern="p-2.16.840.1.113883.10.20.22.4.46-errors"/>
 		<sch:active pattern="p-2.16.840.1.113883.10.20.22.4.47-errors"/>
 		<sch:active pattern="HR-errors"/>
@@ -1616,11 +1615,11 @@
 			<sch:assert id="a-12806" test="@moodCode='EVN'">SHALL contain exactly one [1..1] @moodCode="EVN" event (CodeSystem: ActMood 2.16.840.1.113883.5.1001 STATIC) (CONF:12806).</sch:assert>
 			<sch:assert id="a-12807" test="count(cda:statusCode[@code='completed'])=1">SHALL contain exactly one [1..1] statusCode="completed" completed (CodeSystem: ActStatus 2.16.840.1.113883.5.14 STATIC) (CONF:12807).</sch:assert>
 			<sch:assert id="a-12808" test="count(cda:reference[@typeCode='REFR'])=1">SHALL contain exactly one [1..1] reference (CONF:12808) such that it SHALL contain exactly one [1..1] @typeCode="REFR" refers to (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:12809).</sch:assert>
-			<sch:assert id="a-12868-error" test="(not((cda:reference/cda:externalDocument/cda:setId[@root])) or ((cda:reference/cda:externalDocument/cda:setId[@root]) and ( cda:isValidVersionNeutralId(cda:reference/cda:externalDocument/cda:setId/@root))))">This setId SHALL equal the QualityMeasureDocument/setId which is the eMeasure version neutral id (CONF:12868).</sch:assert>
-			<sch:assert id="a-12811" test="cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC'][@moodCode='EVN']/cda:id[@root='2.16.840.1.113883.4.738']/@extension 
+			<!--sch:assert id="a-12868-error" test="(not((cda:reference/cda:externalDocument/cda:setId[@root])) or ((cda:reference/cda:externalDocument/cda:setId[@root]) and ( cda:isValidVersionNeutralId(cda:reference/cda:externalDocument/cda:setId/@root))))">This setId SHALL equal the QualityMeasureDocument/setId which is the eMeasure version neutral id (CONF:12868).</sch:assert-->
+			<!--sch:assert id="a-12811" test="cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC'][@moodCode='EVN']/cda:id[@root='2.16.840.1.113883.4.738']/@extension
 			and count(cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC'][@moodCode='EVN']/cda:id[@root='2.16.840.1.113883.4.738'])=1
 			and cda:isValidVersionSpecificId(cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']/cda:id[@root='2.16.840.1.113883.4.738']/@extension)">
-			This externalDocument SHALL contain exactly one [1..1] id (CONF:12811) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.4.738" (CONF:12812). SHALL contain exactly one [1..1] @extension (CONF:12813).</sch:assert>
+			This externalDocument SHALL contain exactly one [1..1] id (CONF:12811) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.4.738" (CONF:12812). SHALL contain exactly one [1..1] @extension (CONF:12813).</sch:assert-->
 
 		</sch:rule>
 		<sch:rule id="r-2.16.840.1.113883.10.20.24.3.97-errors" context="cda:organizer[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.97']">
@@ -1732,7 +1731,7 @@
 			<sch:assert id="a-16790-c" test="count(cda:author/cda:assignedAuthor/cda:assignedPerson)=1 or count(cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice)=1">There SHALL be exactly one assignedAuthor/assignedPerson or exactly one assignedAuthor/assignedAuthoringDevice (CONF:16790).</sch:assert>
 			<sch:assert id="a-16791" test="count(cda:realmCode[@code='US'])=1">SHALL contain exactly one [1..1] realmCode="US" (CONF:16791).</sch:assert>
 			
-			<sch:assert id="a-16865-c" test="cda:isDateValid(/cda:ClinicalDocument/cda:effectiveTime/@value)">The content SHALL be a conformant US Realm Date and Time (DTM.US.FIELDED) (2.16.840.1.113883.10.20.22.5.4) (CONF:16865).</sch:assert>
+			<!--sch:assert id="a-16865-c" test="cda:isDateValid(/cda:ClinicalDocument/cda:effectiveTime/@value)">The content SHALL be a conformant US Realm Date and Time (DTM.US.FIELDED) (2.16.840.1.113883.10.20.22.5.4) (CONF:16865).</sch:assert-->
 		
 			<sch:assert id="a-16866-c" test="string-length(cda:author/cda:time//@value)&gt;=8">The content SHALL be a conformant US Realm Date and Time (DTM.US.FIELDED) (2.16.840.1.113883.10.20.22.5.4) (CONF:16866).</sch:assert>
 			<sch:assert id="a-16871-c" test="count(cda:author/cda:assignedAuthor/cda:addr[not(count(cda:city)=1 and count(cda:streetAddressLine)&gt;=1 and count(cda:streetAddressLine)&lt;=4 and (cda:country!='US' or (count(cda:state)=1 and count(cda:postalCode)=1)))])=0">The content SHALL be a conformant US Realm Address (AD.US.FIELDED) (2.16.840.1.113883.10.20.22.5.2) (CONF:16871).</sch:assert>
@@ -2610,12 +2609,12 @@
 		</sch:rule>		
 	</sch:pattern>
 	
-	<sch:pattern id ="p-2.16.840.1.113883.10.20.17.3.8-errors-2">
+	<!--sch:pattern id ="p-2.16.840.1.113883.10.20.17.3.8-errors-2">
 		<sch:rule id="r-2.16.840.1.113883.10.20.17.3.8-errors-2" context="cda:section/cda:templateId[@root='2.16.840.1.113883.10.20.17.2.1']">			
 			<sch:assert id="a-CMS_0027" test="../cda:entry/cda:act/cda:effectiveTime/cda:low and cda:isDateValid(../cda:entry/cda:act/cda:effectiveTime/cda:low/@value)">SHALL be precise to day (CONF:CMS_0027)</sch:assert>
 			<sch:assert id="a-CMS_0028" test="../cda:entry/cda:act/cda:effectiveTime/cda:high and cda:isDateValid(../cda:entry/cda:act/cda:effectiveTime/cda:high/@value)">SHALL be precise to day (CONF:CMS_0028)</sch:assert>									
 		</sch:rule>	
-	</sch:pattern>
+	</sch:pattern-->
 		
 	<sch:pattern id="p-2.16.840.1.113883.10.20.22.4.46-errors">
 		<sch:rule id="r-2.16.840.1.113883.10.20.22.4.46-errors-abstract" abstract="true">
@@ -4290,13 +4289,13 @@
 				This patient SHALL contain discharge time reported in the Encounter Performed section, precise to the seconds (CONF-HR:10129-2).
 			</sch:assert>
 		</sch:rule>
-		<sch:rule context="/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime">	
+		<!--sch:rule context="/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime">
 			
 			<sch:assert id="10130-1-2" test="cda:isAdmissionDateValid(cda:low/@value,cda:high/@value)">
 				Encounter Performed Admission Date (low value) is after the Encounter Performed Discharge Date (high value).
 			</sch:assert>
 			
-		</sch:rule>
+		</sch:rule-->
 
 		<sch:rule context="/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:observation">
 			<sch:assert id="CONF-HR:14430-1-Error" test=" count(//cda:templateId[@root='2.16.840.1.113883.10.20.24.3.55']) > 0 ">
@@ -4305,68 +4304,5 @@
 		</sch:rule>
 
 	</sch:pattern>
-		
-	<!-- DECC added new function used to validate version neutral id strings -->
-	<xsl:function name="cda:isValidVersionNeutralId" as="xs:boolean">					
-		<xsl:param name="versionNeutralId" as="xs:string"/>
-		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.qrda.common.QRDAUtil" name="cda:isValidVersionNeutralId" as="xs:boolean">					
-		<xsl:param name="versionNeutralId" as="xs:string"/>
-		<xsl:choose>
-			<xsl:when test="javaClassName:isValidVersionNeutralId($versionNeutralId)">
-				<xsl:value-of select="true()"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
-			</xsl:otherwise>
-		</xsl:choose-->
-	</xsl:function>
-	
-	<xsl:function name="cda:isValidVersionSpecificId" as="xs:boolean">					
-		<xsl:param name="versionSpecificId" as="xs:string"/>
-		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.qrda.common.QRDAUtil" name="cda:isValidVersionSpecificId" as="xs:boolean">					
-		<xsl:param name="versionSpecificId" as="xs:string"/>
-		<xsl:choose>
-			<xsl:when test="javaClassName:isValidVersionSpecificId($versionSpecificId)">
-				<xsl:value-of select="true()"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
-			</xsl:otherwise>
-		</xsl:choose-->
-	</xsl:function>	
-
-	<xsl:function name="cda:isAdmissionDateValid" as="xs:boolean">
-		<xsl:param name="admit" as="xs:string"/>
-		<xsl:param name="discharge" as="xs:string"/>
-		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.qrda.common.QRDAUtil" name="cda:isAdmissionDateValid" as="xs:boolean">					
-		<xsl:param name="admit" as="xs:string"/>
-		<xsl:param name="discharge" as="xs:string"/>
-		<xsl:choose>
-			<xsl:when test="javaClassName:isAdmissionDateValid($admit,$discharge)">
-				<xsl:value-of select="true()"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
-			</xsl:otherwise>
-		</xsl:choose-->
-	</xsl:function>
-	
-	<xsl:function name="cda:isDateValid" as="xs:boolean">					
-		<xsl:param name="date" as="xs:string"/>
-		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.qrda.common.QRDAUtil" name="cda:isDateValid" as="xs:boolean">					
-		<xsl:param name="date" as="xs:string"/>
-		<xsl:choose>
-			<xsl:when test="javaClassName:isDateValid($date)">
-				<xsl:value-of select="true()"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
-			</xsl:otherwise>
-		</xsl:choose-->
-	</xsl:function>
 	
 </sch:schema>

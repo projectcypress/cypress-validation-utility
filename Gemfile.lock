@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ssayer/health-data-standards.git
-  revision: 8c08190d584fc0cfb1d71da15bc3e7a134330357
+  revision: 1660e4d70594a845b351f748aec64da6768a1dc1
   branch: java_validation
   specs:
     health-data-standards (3.5.3)

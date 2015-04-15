@@ -2777,4 +2777,515 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
   	   1) Returns true if the type is not CD(No validation). 
   	   2) Validate the code by calling isValueSetValidate function if the type is CD and return value based on the validation from this function.
   -->
+	<xsl:function name="cda:validateNegationType" as="xs:boolean">
+		<!-- get the value node -->
+		<xsl:param name="valueNode" as="node()?"/>
+		<xsl:param name="templateID" as="xs:string?"/>
+		<!-- get the parameter values -->
+		<xsl:variable name="type" select="$valueNode/@xsi:type"/>
+		<xsl:variable name="vsid" select="$valueNode/@sdtc:valueSet"/>
+		<xsl:variable name="code" select="$valueNode/@code"/>
+		<xsl:variable name="codesystem" select="$valueNode/@codeSystem"/>
+		<!-- check for type and validation-->
+		<xsl:choose>
+			<xsl:when test="$type = 'CD'">
+				<!-- Call cda:isValueSetValidate function to validate-->
+				<xsl:value-of select="cda:isValidValueSetForQDMCategory($vsid,$code,$codesystem, $templateID)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- No validation if type is not CD -->
+				<xsl:value-of select="true()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- 
+  	DECC August 2014 Release changes, added function to validate for value
+	cases: 16696, 16698, 16700, 16702
+  -->
+	<xsl:function name="cda:validateValueTypePQ" as="xs:boolean">
+		<!-- get the value node -->
+		<xsl:param name="valueNode" as="node()?"/>
+		<!-- get the parameter values -->
+		<xsl:variable name="type" select="$valueNode/@xsi:type"/>
+		<xsl:variable name="value" select="$valueNode/@value"/>
+		<xsl:variable name="unit" select="$valueNode/@unit"/>
+		<!-- check for type and validation-->
+		<xsl:choose>
+			<xsl:when test="$type = 'PQ'">
+				<!--<xsl:value-of select="cda:isVocValidate('2.16.840.1.113883.1.11.12839', $unit, '2.16.840.1.113883.6.8') and string-length($value) &gt; 0"/>-->
+				<!--<xsl:value-of select="cda:isVOCCodeValid('2.16.840.1.113883.1.11.12839', $unit, '2.16.840.1.113883.6.8') and string-length($value) &gt; 0"/>-->
+				<xsl:value-of select="string-length($unit) &gt; 0 and string-length($value) &gt; 0"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="true()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
+	<xsl:function name="cda:isValidValueSetForQDMCategory" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:param name="templateID" as="xs:string?"/>
+		<xsl:value-of select="true()"/>
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidValueSetForQDMCategory" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:param name="templateID" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="javaClassName:isValidValueSetForQDMCategory($templateID,$vsid,$codesystem,$code)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose-->
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
+	<xsl:function name="cda:isVOCCodeValid" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:value-of select="true()"/>
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="javaClassName:isVOCCodeValid($vsid,$codesystem,$code)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose-->
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function to validate data against VSAC -->
+	<xsl:function name="cda:isValueSetValidate" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="string-length($vsid) = 0 or string-length($code) = 0 or string-length($codesystem) = 0">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="count(document('ep_only_unique_vs_20130614.xml')/svs:RetrieveMultipleValueSetsResponse/svs:DescribedValueSet[@ID=$vsid]/svs:ConceptList/svs:Concept[@code=$code][@codeSystem=$codesystem]) = 1">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function to validate data against VOC -->
+	<xsl:function name="cda:isVocValidate" as="xs:boolean">
+		<xsl:param name="vsid" as="xs:string?"/>
+		<xsl:param name="code" as="xs:string?"/>
+		<xsl:param name="codesystem" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="count(document('voc.xml')/voc:systems/voc:system[@valueSetOid=$vsid]/voc:code[@value=$code][@codeSystem=$codesystem]) = 1">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
+	<xsl:function name="cda:isValidDate" as="xs:boolean">
+		<xsl:param name="date-stringT" as="node()*"/>
+		<xsl:value-of select="true()"/>
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean">
+		<xsl:param name="date-stringT" as="node()*"/>
+		<xsl:variable name="date-string" select="$date-stringT[1]/@value"/>
+		<xsl:choose>
+			<xsl:when test="javaClassName:isValidDate($date-string)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose-->
+	</xsl:function>
+	<!-- Function to validate effective date, this functions is taken from EHRPROD sch file. -->
+	<xsl:function xmlns="http://purl.oclc.org/dsdl/schematron" name="cda:isValidEffectiveTime" as="xs:boolean">
+		<xsl:param name="effectiveDateP" as="node()*"/>
+		<xsl:choose>
+			<xsl:when test="count($effectiveDateP/@value) = 1">
+				<xsl:choose>
+					<xsl:when test="cda:isValidDate($effectiveDateP)">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="count($effectiveDateP/cda:low) = 1">
+				<xsl:variable name="low" select="$effectiveDateP/cda:low"/>
+				<xsl:choose>
+					<xsl:when test="cda:isValidDate($low)">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="count($effectiveDateP/cda:center) = 1">
+				<xsl:variable name="center" select="$effectiveDateP/cda:center"/>
+				<xsl:choose>
+					<xsl:when test="cda:isValidDate($center)">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="count($effectiveDateP/cda:high) = 1">
+				<xsl:variable name="high" select="$effectiveDateP/cda:high"/>
+				<xsl:choose>
+					<xsl:when test="cda:isValidDate($high)">
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- DECC August 2014 Release changes, added new function to validate Version specific measure IDs -->
+	<xsl:function name="cda:isMeasureIDValid" as="xs:boolean">
+		<xsl:param name="guid" as="xs:string?"/>
+		<!-- Version specific measure IDs, Using Delimiter as ###-->
+		<xsl:variable name="versionSpecificMeasureIDs">
+					40280381-3e93-d1af-013e-9f642782222a###
+					40280381-3e93-d1af-013e-af14fc6b5642###
+					40280381-3d61-56a7-013e-7aa509de6258###
+					40280381-3e93-d1af-013e-a49f8f204114###
+					40280381-3d61-56a7-013e-8b6a8aca4a39###
+					40280381-3e93-d1af-013e-b277ee0a5a46###
+					40280381-3e93-d1af-013f-3f5c54b20354###
+					40280381-3e93-d1af-013e-b297a0a15bb5###
+					40280381-3e93-d1af-013e-a4caffef4684###
+					40280381-3d61-56a7-013e-8b8f87f64d63###
+					40280381-3e93-d1af-013e-a36090b72cc8###
+					40280381-3e93-d1af-013e-d6e2b772150d###
+					40280381-3d61-56a7-013e-8acbfe873bcb###
+					40280381-3d61-56a7-013e-8f2f5ad054e2###
+					40280381-3d61-56a7-013e-8ab774d0398a###
+					8a4d92b2-3927-d7ae-0139-366c49f93102###
+					40280381-3e93-d1af-013e-a49ca9f94008###
+					40280381-3d61-56a7-013e-6224e2ac25f3###
+					40280381-3d61-56a7-013e-62240559256d###
+					40280381-3d61-56a7-013e-5d11abe068eb###
+					40280381-3d61-56a7-013e-669cbc034836###
+					40280381-3d61-56a7-013e-66a5a5834990###
+					40280381-3d61-56a7-013e-6649110743ce###
+					40280381-3d61-56a7-013e-66a79d4a4a23###
+					40280381-3d61-56a7-013e-7af612436402###
+					40280381-3d61-56a7-013e-6696af6e477f###
+					40280381-3d61-56a7-013e-5bff718b5a57###
+					40280381-3d61-56a7-013e-62237d5d24e1###
+					40280381-3d61-56a7-013e-66ae98364ade###
+					40280381-3d61-56a7-013e-846aae0f021f###
+					40280381-3d61-56a7-013e-62abf5662fff###
+					40280381-3d61-56a7-013e-62367b892985###
+					40280381-3d61-56a7-013e-62e052273699###
+					40280381-3d61-56a7-013e-5b2aa3493c42###
+					40280381-3d61-56a7-013e-5cd94a4d64fa###
+					40280381-3d61-56a7-013e-62684f542b66###
+					8a4d92b2-397a-48d2-0139-b0a6a11f2da5###
+					40280381-3d61-56a7-013e-6b81e6e455a5###
+					40280381-3d61-56a7-013e-66b2ca294c47###
+					40280381-3d61-56a7-013e-425ad8e9179c###
+					40280381-3d61-56a7-013e-666032b244f7###
+					40280381-3d61-56a7-013e-6b885a105724###
+					40280381-3d61-56a7-013e-5d1ef9b76a48###
+					40280381-3d61-56a7-013e-57f49972361a###
+					40280381-3d61-56a7-013e-61ef9907211d###
+					40280381-3d61-56a7-013e-57fa83af36fa###
+					40280381-3d61-56a7-013e-5d4001866c09###
+					40280381-3d61-56a7-013e-5cc8aa6d6290###
+					40280381-3d61-56a7-013e-5d530fd26d47###
+					40280381-3d61-56a7-013e-65c9c3043e54###
+					40280381-3d61-56a7-013e-62af4c523143###
+					40280381-3d61-56a7-013e-7b520eb06bf3###
+					40280381-3d61-56a7-013e-8698ab2e1e30###
+					40280381-3d61-56a7-013e-8a3638093344###
+					40280381-3d61-56a7-013e-7bc533a071d3###
+					40280381-3d61-56a7-013e-5d5b19bf6dfb###
+					40280381-3d61-56a7-013e-7bc5aec17282###
+					40280381-3d61-56a7-013e-66bc02da4dee###
+					40280381-3d61-56a7-013e-62790fe42ca1###
+					40280381-3d61-56a7-013e-57fe7ed437d7###
+					40280381-3d61-56a7-013e-658bc7a23c9c###
+					40280381-3d61-56a7-013e-5d9034cf7065###
+					40280381-3e93-d1af-013e-9e3e037e08d6###
+					40280381-3f77-75c9-013f-7b481cea02fd###
+		</xsl:variable>
+		<xsl:variable name="measureID" select="concat($guid,'###')"/>
+		<xsl:choose>
+			<xsl:when test="string-length($guid) =0">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="contains($versionSpecificMeasureIDs, $measureID)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function xmlns="http://purl.oclc.org/dsdl/schematron" name="cda:validatePattern" as="xs:boolean">
+		<xsl:param name="identifier" as="xs:string"/>
+		<xsl:choose>
+			<xsl:when test="string-length($identifier) &gt; 0">
+				<xsl:analyze-string select="$identifier" regex="^([9]{{1,}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="true()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function xmlns="http://purl.oclc.org/dsdl/schematron" name="cda:validateHIC" as="xs:boolean">
+		<xsl:param name="hic" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="string-length($hic) = 7">
+				<xsl:analyze-string select="$hic" regex="(^[A-Z]{{1}})(\d{{6}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:when test="string-length($hic) = 8">
+				<xsl:analyze-string select="$hic" regex="(^[A-Z]{{2}})(\d{{6}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:when test="string-length($hic) = 9">
+				<xsl:analyze-string select="$hic" regex="(^[A-Z]{{3}})(\d{{6}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:when test="string-length($hic) = 10">
+				<xsl:analyze-string select="$hic" regex="(^[A-Z]{{1}})(\d{{9}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:analyze-string select="$hic" regex="(\d{{9}})([A-Z]{{1}})$">
+							<xsl:matching-substring>
+								<xsl:value-of select="cda:validatePattern(regex-group(1))"/>
+							</xsl:matching-substring>
+							<xsl:non-matching-substring>
+								<xsl:value-of select="false()"/>
+							</xsl:non-matching-substring>
+						</xsl:analyze-string>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:when test="string-length($hic) = 11">
+				<xsl:analyze-string select="$hic" regex="(^\d{{9}})([A-Z]{{1}}\d{{1}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(1))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:analyze-string select="$hic" regex="(\d{{9}})([A-Z]{{2}})$">
+							<xsl:matching-substring>
+								<xsl:value-of select="cda:validatePattern(regex-group(1))"/>
+							</xsl:matching-substring>
+							<xsl:non-matching-substring>
+								<xsl:analyze-string select="$hic" regex="([A-Z]{{2}})(\d{{9}})$">
+									<xsl:matching-substring>
+										<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+									</xsl:matching-substring>
+									<xsl:non-matching-substring>
+										<xsl:value-of select="false()"/>
+									</xsl:non-matching-substring>
+								</xsl:analyze-string>
+							</xsl:non-matching-substring>
+						</xsl:analyze-string>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:when test="string-length($hic) = 12">
+				<xsl:analyze-string select="$hic" regex="(^[A-Z]{{3}})(\d{{9}})$">
+					<xsl:matching-substring>
+						<xsl:value-of select="cda:validatePattern(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<!-- Added algorithm to check the string-length of NPI value(if greater than 10 digits - error triggered - for 2012 Phase 1 - 12/12/11) -->
+	<xsl:function name="cda:isValidNPI" as="xs:boolean">
+		<xsl:param name="npi-string" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="matches(substring($npi-string,1,4),'1234')">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="string-length($npi-string) &gt; 10">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="matches($npi-string,'\d{10}')">
+				<xsl:variable name="step2" select="concat('80840',$npi-string)"/>
+				<xsl:variable name="step3" select="substring($step2,1,14)"/>
+				<xsl:variable name="checkDig" select="xs:integer(substring($step2,15,1))"/>
+				<xsl:analyze-string select="$step3" regex="(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)">
+					<xsl:matching-substring>
+						<xsl:variable name="d1" select="xs:integer(regex-group(1))"/>
+						<xsl:variable name="d2" select="xs:integer(regex-group(2))"/>
+						<xsl:variable name="d3" select="xs:integer(regex-group(3))"/>
+						<xsl:variable name="d4" select="xs:integer(regex-group(4))"/>
+						<xsl:variable name="d5" select="xs:integer(regex-group(5))"/>
+						<xsl:variable name="d6" select="xs:integer(regex-group(6))"/>
+						<xsl:variable name="d7" select="xs:integer(regex-group(7))"/>
+						<xsl:variable name="d8" select="xs:integer(regex-group(8))"/>
+						<xsl:variable name="d9" select="xs:integer(regex-group(9))"/>
+						<xsl:variable name="d10" select="xs:integer(regex-group(10))"/>
+						<xsl:variable name="d11" select="xs:integer(regex-group(11))"/>
+						<xsl:variable name="d12" select="xs:integer(regex-group(12))"/>
+						<xsl:variable name="d13" select="xs:integer(regex-group(13))"/>
+						<xsl:variable name="d14" select="xs:integer(regex-group(14))"/>
+						<xsl:variable name="d14s1" select="xs:integer(cda:sumDigits(xs:string($d14*2)))"/>
+						<xsl:variable name="d12s1" select="xs:integer(cda:sumDigits(xs:string($d12*2)))"/>
+						<xsl:variable name="d10s1" select="xs:integer(cda:sumDigits(xs:string($d10*2)))"/>
+						<xsl:variable name="d8s1" select="xs:integer(cda:sumDigits(xs:string($d8*2)))"/>
+						<xsl:variable name="d6s1" select="xs:integer(cda:sumDigits(xs:string($d6*2)))"/>
+						<xsl:variable name="d4s1" select="xs:integer(cda:sumDigits(xs:string($d4*2)))"/>
+						<xsl:variable name="d2s1" select="xs:integer(cda:sumDigits(xs:string($d2*2)))"/>
+						<xsl:variable name="digRigGrpTotal" select="$d14s1+$d12s1+$d10s1+$d8s1+$d6s1+$d4s1+$d2s1"/>
+						<xsl:variable name="step4" select="$digRigGrpTotal+($d1+$d3+$d5+$d7+$d9+$d11+$d13)"/>
+						<xsl:value-of select="cda:checkNPI($step4,$checkDig)"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function name="cda:sumDigits" as="xs:string">
+		<xsl:param name="content" as="xs:string"/>
+		<xsl:choose>
+			<xsl:when test="string-length($content)=2">
+				<xsl:analyze-string select="$content" regex="(\d)(\d)">
+					<xsl:matching-substring>
+						<xsl:value-of select="xs:integer(regex-group(1)) + xs:integer(regex-group(2))"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="0"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="xs:integer($content)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function name="cda:checkNPI" as="xs:boolean">
+		<xsl:param name="total" as="xs:double"/>
+		<xsl:param name="checkDigit" as="xs:integer"/>
+		<xsl:choose>
+			<xsl:when test="($total + $checkDigit) mod 10 = 0">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function name="cda:validateSSN" as="xs:boolean">
+		<xsl:param name="ssn" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="$ssn != '999999999'">
+				<xsl:analyze-string select="$ssn" regex="^\d{{9}}$">
+					<xsl:matching-substring>
+						<xsl:value-of select="true()"/>
+					</xsl:matching-substring>
+					<xsl:non-matching-substring>
+						<xsl:value-of select="false()"/>
+					</xsl:non-matching-substring>
+				</xsl:analyze-string>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function name="cda:checkLength" as="xs:boolean">
+		<xsl:param name="content" as="xs:string?"/>
+		<xsl:param name="length" as="xs:integer"/>
+		<xsl:param name="isRequired" as="xs:string"/>
+		<xsl:choose>
+			<xsl:when test="string-length($content) &gt; $length">
+				<xsl:value-of select="false()"/>
+			</xsl:when>
+			<xsl:when test="string-length($content) = 0">
+				<xsl:choose>
+					<xsl:when test="$isRequired='Y'">
+						<xsl:value-of select="false()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="true()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="true()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	<xsl:function name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+		<xsl:param name="pgmYear" as="xs:string?"/>
+		<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
+		<xsl:value-of select="true()"/>
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+		<xsl:param name="pgmYear" as="xs:string?"/>
+		<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
+		<xsl:choose>
+			<xsl:when test="javaClassName:isValidMeasureVersionSpecificID($pgmYear, $isValidMeasureVersionSpecificID)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="false()"/>
+			</xsl:otherwise>
+		</xsl:choose-->
+	</xsl:function>
 </sch:schema>

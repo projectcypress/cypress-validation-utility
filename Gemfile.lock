@@ -1,7 +1,5 @@
-GIT
-  remote: https://github.com/ssayer/health-data-standards.git
-  revision: 1db24ffb7246993c7474ab7e2c536e171a3c0279
-  branch: java_validation
+PATH
+  remote: ../health-data-standards
   specs:
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)
@@ -31,7 +29,6 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     backports (3.6.4)
-    bson (2.3.0)
     bson (2.3.0-java)
     builder (3.2.2)
     coderay (1.1.0)
@@ -66,8 +63,6 @@ GEM
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
     multi_json (1.10.1)
-    nokogiri (1.6.0)
-      mini_portile (~> 0.5.0)
     nokogiri (1.6.0-java)
       mini_portile (~> 0.5.0)
     optionable (0.2.0)
@@ -122,7 +117,6 @@ GEM
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
       rack (~> 1.0)
-    thread_safe (0.3.5)
     thread_safe (0.3.5-java)
     tilt (1.4.1)
     tzinfo (1.2.2)

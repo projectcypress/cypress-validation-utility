@@ -3,7 +3,7 @@ development:
     default:
       database: cypress_validation_utility_development
       hosts:
-	- localhost:27017
+        - localhost:27017
   options:
     raise_not_found_error: false
 
@@ -12,7 +12,7 @@ test:
     default:
       database: cypress_validation_utility_test
       hosts:
-	- <%= ENV['TEST_DB_HOST'] || 'localhost' %>:27017
+        - <%= ENV['TEST_DB_HOST'] || 'localhost' %>:27017
   options:
     raise_not_found_error: false
 
@@ -21,6 +21,6 @@ production:
     default:
       database: cypress_validation_utility_production
       hosts:
-	- localhost:27017
+        - localhost:27017
   options:
     raise_not_found_error: false

@@ -121,8 +121,8 @@ class DocumentUpload
   attr_reader :errors, :doc_type, :program, :content
 
   def initialize(file, doc_type, program=nil)
-    @content = File.read(file)
-    @content = Nokogiri::XML(@content)
+    content_string = File.read(file)
+    @content = Nokogiri::XML(content_string)
     
     #if the doc_type isn't passed in, see if we can find it in the document
     doc_type = get_doc_type if !doc_type
@@ -133,7 +133,7 @@ class DocumentUpload
     @program = program
 
     @errors = validators.inject([]) do |errors, v|
-      errors.concat(v.validate(@content))
+      errors.concat(v.validate(content_string))
     end
 
   end

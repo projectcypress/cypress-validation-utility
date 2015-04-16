@@ -45,6 +45,15 @@ class CypressValidatorApp < Sinatra::Base
 
   helpers do
 
+    VALIDATOR_NAMES = {HealthDataStandards::Validate::CDA => "CDA",
+                       HealthDataStandards::Validate::Cat1 => "QRDA",
+                       HealthDataStandards::Validate::Cat3 => "QRDA",
+                       CypressValidationUtility::Validate::EPCat1 => "CMS",
+                       CypressValidationUtility::Validate::EPCat3 => "CMS",
+                       HealthDataStandards::Validate::ValuesetValidator => "Value Sets",
+                       HealthDataStandards::Validate::Cat1Measure => "Measures",
+                       HealthDataStandards::Validate::Cat3Measure => "Measures"}
+
       NODE_TYPES ={ 1 => :element ,
                     2 => :attribute ,
                     3 => :text,
@@ -60,6 +69,14 @@ class CypressValidatorApp < Sinatra::Base
 
     def node_type(type)
       return NODE_TYPES[type]
+    end
+
+    def validator_name(validator)
+      VALIDATOR_NAMES[validator.class]
+    end
+
+    def validator_slug(validator)
+      validator.class.name.underscore.gsub("/", "_")
     end
 
     def match_errors(upload)
@@ -97,10 +114,6 @@ class CypressValidatorApp < Sinatra::Base
     end
   end
 
-  def group_errors(upload)
-    @upload.errors.group_by{ |err| err.validator}
-  end
-
   before do
     unless HealthDataStandards::CQM::Bundle.first
       raise "Please install a bundle in order to use the Cypress Validation Utility"
@@ -113,12 +126,13 @@ class CypressValidatorApp < Sinatra::Base
 
   post "/validate" do
     @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
+    # binding.pry
     erb :results
   end
 
 class DocumentUpload
 
-  attr_reader :errors, :doc_type, :program, :content
+  attr_reader :doc_type, :program, :content
 
   def initialize(file, doc_type, program=nil)
     content_string = File.read(file)
@@ -132,10 +146,19 @@ class DocumentUpload
     program = get_program if !program
     @program = program
 
-    @errors = validators.inject([]) do |errors, v|
-      errors.concat(v.validate(content_string))
+    @errors = validators.inject({}) do |errors, v|
+      errors[v] = v.validate(content_string)
+      errors
     end
 
+  end
+
+  def grouped_errors
+    @errors
+  end
+
+  def errors
+    @errors.values.flatten
   end
 
   private
@@ -177,7 +200,7 @@ class DocumentUpload
   def validators
     return @validators if @validators
 
-    @validators = [HealthDataStandards::Validate::CDA.instance]
+    @validators = []
     val_class = case @doc_type
     when "cat1"
       bundle = HealthDataStandards::CQM::Bundle.first
@@ -204,6 +227,7 @@ class DocumentUpload
     end
 
     @validators << val_class.instance
+    @validators << HealthDataStandards::Validate::CDA.instance  
   end
 
 end

@@ -1,7 +1,7 @@
 GIT
-  remote: https://github.com/ssayer/health-data-standards.git
-  revision: 259753e21955d9a01fb71b40feb2ea1cb23148f7
-  branch: java_validation
+  remote: https://github.com/projectcypress/health-data-standards.git
+  revision: ac4869fd1c22352faa74fd65f6ce44daaafe97ba
+  branch: master
   specs:
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)
@@ -41,7 +41,7 @@ GEM
     eventmachine (1.0.7)
     execjs (2.3.0)
     ffi (1.9.8-java)
-    highline (1.7.1)
+    highline (1.7.2)
     i18n (0.7.0)
     jsmin (1.0.1)
     json (1.8.2)

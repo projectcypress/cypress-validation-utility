@@ -109,11 +109,11 @@
 		<sch:assert id="a-711168" test="cda:assignedEntity/cda:representedOrganization[count(cda:id[@root='2.16.840.1.113883.4.2'])=1]">This representedOrganization SHALL contain exactly one [1..1] id (CONF:711168) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.4.2" Tax ID Number (CONF:711171).</sch:assert>
 		<sch:let name="programName" value="../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7']/@extension"/>
 		<sch:assert id="a-711170" test="($programName='CPC' or $programName='PQRS_MU_INDIVIDUAL' or $programName='MU_ONLY' or $programName='PQRS_MU_GROUP') and (not($programName='PQRS_MU_GROUP') and count(cda:assignedEntity/cda:id[@root='2.16.840.1.113883.4.6']/@extension)=1) or (($programName='PQRS_MU_GROUP') and count(cda:assignedEntity/cda:id[@root='2.16.840.1.113883.4.6']/@extension)=0)">SHALL contain exactly one [1..1] @extension (CONF:711170). Note: This is the provider's NPI, it is only present when this is not PQRS GPRO reporting.</sch:assert>
-		<!--sch:assert id="p-10706" test="(not($programName='CPC' or $programName='PQRS_MU_INDIVIDUAL' or $programName='MU_ONLY' or $programName='PQRS_MU_GROUP')) or (not($programName='PQRS_MU_GROUP') and cda:assignedEntity[count(cda:id[cda:isValidNPI(@extension)])=1]) or (($programName='PQRS_MU_GROUP') and count(cda:assignedEntity/cda:id/@extension)=0)">PQRS_10706: /ClinicalDocument/documentationOf/serviceEvent/performer/assignedEntity/id[@root=&quot;2.16.840.1.113883.4.6&quot;]/@extension When provided the NPI must be in the correct format. A valid NPI is 10 numeric digits where the 10th digit is a check digit computed using the Luhn algorithm. Note: For the Eligible Professional (EP) programs, NPI is required except for the Group Practice Reporting Option (GPRO). For GPRO, id/@root='2.16.840.1.113883.4.6' is coupled with @nullFlavor=&quot;NA&quot;, and @extension SHALL be omitted.</sch:assert-->
+		<sch:assert id="p-10706" test="(not($programName='CPC' or $programName='PQRS_MU_INDIVIDUAL' or $programName='MU_ONLY' or $programName='PQRS_MU_GROUP')) or (not($programName='PQRS_MU_GROUP') and cda:assignedEntity[count(cda:id[cda:isValidNPI(@extension)])=1]) or (($programName='PQRS_MU_GROUP') and count(cda:assignedEntity/cda:id/@extension)=0)">PQRS_10706: /ClinicalDocument/documentationOf/serviceEvent/performer/assignedEntity/id[@root=&quot;2.16.840.1.113883.4.6&quot;]/@extension When provided the NPI must be in the correct format. A valid NPI is 10 numeric digits where the 10th digit is a check digit computed using the Luhn algorithm. Note: For the Eligible Professional (EP) programs, NPI is required except for the Group Practice Reporting Option (GPRO). For GPRO, id/@root='2.16.840.1.113883.4.6' is coupled with @nullFlavor=&quot;NA&quot;, and @extension SHALL be omitted.</sch:assert>
 <!--
 <sch:assert id="a-711170" test="not(../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7'][@extension ='CPC' or @extension ='PQRS_MU_INDIVIDUAL' or @extension ='MU_ONLY' or @extension ='PQRS_MU_GROUP']) or (../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7'][@extension ='PQRS_MU_GROUP'] and not(cda:assignedEntity[count(cda:id[@extension])=1])) or (not(../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7'][@extension ='PQRS_MU_GROUP']) and cda:assignedEntity[count(cda:id[cda:isValidNPI(@extension)])=1])">SHALL contain exactly one [1..1] @extension (CONF:711170). PQRS_10706: /ClinicalDocument/documentationOf/serviceEvent/performer/assignedEntity/id[@root=&quot;2.16.840.1.113883.4.6&quot;]/@extension When provided the NPI must be in the correct format. A valid NPI is 10 numeric digits where the 10th digit is a check digit computed using the Luhn algorithm. Note: For the Eligible Professional (EP) programs, NPI is required except for the Group Practice Reporting Option (GPRO). For GPRO, id/@root='2.16.840.1.113883.4.6' is coupled with @nullFlavor=&quot;NA&quot;, and @extension SHALL be omitted.</sch:assert>
 -->
-		<!--sch:assert id="a-711172" test="cda:assignedEntity/cda:representedOrganization[count(cda:id[cda:validateSSN(@extension)])=1]">SHALL contain exactly one [1..1] @extension (CONF:711172). Note: TIN is invalid length (must be 9-digit number) and/or format validation failed.</sch:assert-->
+		<sch:assert id="a-711172" test="cda:assignedEntity/cda:representedOrganization[count(cda:id[cda:validateSSN(@extension)])=1]">SHALL contain exactly one [1..1] @extension (CONF:711172). Note: TIN is invalid length (must be 9-digit number) and/or format validation failed.</sch:assert>
 		<sch:assert id="a-711249" test="not(../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7'][@extension ='PQRS_MU_GROUP']) or (count(../../../cda:informationRecipient/cda:intendedRecipient/cda:id[@root='2.16.840.1.113883.3.249.7'][@extension ='PQRS_MU_GROUP'])=1 and cda:assignedEntity[count(cda:id[@nullFlavor='NA'])&lt;2])">This assignedEntity SHALL contain exactly one [1..1] id (CONF:711167) such that it MAY contain zero or one [0..1] @nullFlavor="NA" (CONF:711249).</sch:assert>
 	</sch:rule>
 	<sch:rule id="r-pqrs-PERFORMER-2.16.840.1.113883.10.20.27.1.2-errors" context="cda:ClinicalDocument[cda:templateId/@root='2.16.840.1.113883.10.20.27.1.2']/cda:documentationOf/cda:serviceEvent/cda:performer">
@@ -133,9 +133,9 @@
 <sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.27.3.17-errors">
 	<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.27.3.17-errors-abstract" abstract="true">
 		<sch:extends rule="r-oid-2.16.840.1.113883.10.20.27.3.1-errors-abstract"/>
-		<sch:assert id="a-18425" test="count(count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.17'])=1) &gt;0">SHALL contain at least one [1..*] component (CONF:18425) such that it SHALL contain exactly one [1..1] Measure Data (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.16) (CONF:18428)-BLAH.</sch:assert>
+		<sch:assert id="a-18425" test="count(cda:component/cda:observation[count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.16'])=1]) &gt;0">SHALL contain at least one [1..*] component (CONF:18425) such that it SHALL contain exactly one [1..1] Measure Data (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.16) (CONF:18428).</sch:assert>
 		<sch:let name="measureID" value="cda:reference[@typeCode='REFR']/cda:externalDocument/cda:id[@root='2.16.840.1.113883.4.738']/@extension"/>
-		<!--sch:assert id="a-21159" test="cda:reference[@typeCode='REFR']/cda:externalDocument[count(cda:id[@root='2.16.840.1.113883.4.738'][@extension])=1] and cda:isValidMeasureVersionSpecificID('2015',lower-case($measureID)) ">SHALL contain exactly one [1..1] @extension (CONF:21159). Note: This @extension SHALL equal the version specific identifier for eMeasure (i.e. QualityMeasureDocument/id)</sch:assert-->
+		<sch:assert id="a-21159" test="cda:reference[@typeCode='REFR']/cda:externalDocument[count(cda:id[@root='2.16.840.1.113883.4.738'][@extension])=1] and cda:isValidMeasureVersionSpecificID('2015',lower-case($measureID)) ">SHALL contain exactly one [1..1] @extension (CONF:21159). Note: This @extension SHALL equal the version specific identifier for eMeasure (i.e. QualityMeasureDocument/id)</sch:assert>
 		<sch:assert id="a-711213" test="count(cda:component/cda:observation[count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.25'])=1]) &gt;0">SHALL contain one or more [1..*] component (CONF:711290) such that it SHALL contain exactly one [1..1] Performance Rate for Proportion Measure (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.25) (CONF:711213).</sch:assert>
 	</sch:rule>
 	<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.27.3.17-errors" context="cda:organizer[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.17']]">
@@ -216,7 +216,7 @@
 <sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.27.3.20-errors">
 	<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.27.3.20-errors-abstract" abstract="true">
 		<sch:extends rule="r-oid-2.16.840.1.113883.10.20.27.3.4-errors-abstract"/>
-		<sch:assert id="a-711197" test="count(cda:entryRelationship[@typeCode='SUBJ'][@inversionInd='true']/cda:observation[count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.20'])=1])=1">SHALL contain exactly one [1..1] entryRelationship (CONF:17581) such that it SHALL contain exactly one [1..1] @typeCode="SUBJ" (CONF:17582). SHALL contain exactly one [1..1] @inversionInd="true" (CONF:17583). SHALL contain exactly one [1..1] Aggregate Count (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.24) (CONF:711197).</sch:assert>
+		<sch:assert id="a-711197" test="count(cda:entryRelationship[@typeCode='SUBJ'][@inversionInd='true']/cda:observation[count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.24'])=1])=1">SHALL contain exactly one [1..1] entryRelationship (CONF:17581) such that it SHALL contain exactly one [1..1] @typeCode="SUBJ" (CONF:17582). SHALL contain exactly one [1..1] @inversionInd="true" (CONF:17583). SHALL contain exactly one [1..1] Aggregate Count (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.24) (CONF:711197).</sch:assert>
 		<sch:assert id="a-711210" test="cda:reference/cda:externalObservation[count(cda:id)=1]">This externalObservation SHALL contain exactly one [1..1] id (CONF:711210).</sch:assert>
 		<sch:assert id="a-711211" test="count(cda:entryRelationship/cda:observation[count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.26'])=1]) &gt;=0">MAY contain zero or more [0..*] entryRelationship (CONF:19511) such that it SHALL contain exactly one [1..1] Continuous Variable Measure Value (CMS EP) (templateId:2.16.840.1.113883.10.20.27.3.26) (CONF:711211).</sch:assert>
 		<sch:assert id="a-711232" test="not(tested)">This value SHALL be the same as the contents of the observation/code element in the referenced eMeasure (e.g., 21112-8 'Birth date') (CONF:711232).</sch:assert>
@@ -260,8 +260,8 @@
 <sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.27.3.23-errors">
 	<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.27.3.23-errors-abstract" abstract="true">
 		<sch:extends rule="r-oid-2.16.840.1.113883.10.20.17.3.8-errors-abstract"/>
-		<!--sch:assert id="a-711288" test="cda:isValidDate(cda:effectiveTime/cda:low)">SHALL be precise to day (CONF:711288).</sch:assert>
-		<sch:assert id="a-711289" test="cda:isValidDate(cda:effectiveTime/cda:high)">SHALL be precise to day (CONF:711289).</sch:assert-->
+		<sch:assert id="a-711288" test="cda:isValidDate(cda:effectiveTime/cda:low)">SHALL be precise to day (CONF:711288).</sch:assert>
+		<sch:assert id="a-711289" test="cda:isValidDate(cda:effectiveTime/cda:high)">SHALL be precise to day (CONF:711289).</sch:assert>
 	</sch:rule>
 	<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.27.3.23-errors" context="cda:act[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.23']]">
 		<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.27.3.23-errors-abstract"/>
@@ -380,10 +380,10 @@
 	</sch:rule>
 </sch:pattern>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.1.1-errors-abstract" abstract="true">
-	<!--sch:assert id="a-18189" test="cda:isValidDate(cda:effectiveTime)">The content SHALL be a conformant US Realm Date and Time (DTM.US.FIELDED) (2.16.840.1.113883.10.20.22.5.4) (CONF:18189).</sch:assert-->
+	<sch:assert id="a-18189" test="cda:isValidDate(cda:effectiveTime)">The content SHALL be a conformant US Realm Date and Time (DTM.US.FIELDED) (2.16.840.1.113883.10.20.22.5.4) (CONF:18189).</sch:assert>
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.1.1-warnings-abstract" abstract="true">
-	<!--sch:assert id="a-77-17238-v" test="cda:confidentialityCode[cda:isVOCCodeValid('2.16.840.1.113883.1.11.16926',  @code, @codeSystem)]">10710: //confidentialityCode/@code - SHALL Value set validation error.</sch:assert-->
+	<sch:assert id="a-77-17238-v" test="cda:confidentialityCode[cda:isVOCCodeValid('2.16.840.1.113883.1.11.16926',  @code, @codeSystem)]">10710: //confidentialityCode/@code - SHALL Value set validation error.</sch:assert>
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.2.1-errors-abstract" abstract="true">
 		<sch:assert id="a-711277" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.2.3'])=1">SHALL contain exactly one [1..1] templateId (CONF:711276) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.2.3" (CONF:711277).</sch:assert>
@@ -392,10 +392,10 @@
         <sch:assert id="a-711278" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.2.6'])=1">SHALL contain exactly one [1..1] templateId (CONF:711278) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.2.6" (CONF:711279).</sch:assert>
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.3.3-errors-abstract" abstract="true">
-	<sch:assert id="a-711263" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.3'])=1">SHALL contain exactly one [1..1] templateId (CONF:711262) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.3.24" (CONF:711263).</sch:assert>
+        <sch:assert id="a-711263" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.24'])=1">SHALL contain exactly one [1..1] templateId (CONF:711262) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.3.24" (CONF:711263).</sch:assert>
  </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.3.2-errors-abstract" abstract="true">
-	<!--sch:assert id="a-77-18242" test="cda:methodCode[cda:isVOCCodeValid('2.16.840.1.113883.1.11.20450',  @code, @codeSystem)]">10710: //component/observation/entryRelationship/observation/templateId[@root='2.16.840.1.113883.10.20.27.3.2']/../methodCode/@code - SHALL Value set validation error.</sch:assert-->
+	<sch:assert id="a-77-18242" test="cda:methodCode[cda:isVOCCodeValid('2.16.840.1.113883.1.11.20450',  @code, @codeSystem)]">10710: //component/observation/entryRelationship/observation/templateId[@root='2.16.840.1.113883.10.20.27.3.2']/../methodCode/@code - SHALL Value set validation error.</sch:assert>
 			<sch:assert id="a-711265" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.26'])=1">SHALL contain exactly one [1..1] templateId (CONF:711264) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.3.26" (CONF:711265).</sch:assert>
 	</sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.3.7-errors-abstract" abstract="true">
@@ -414,8 +414,8 @@
         <sch:assert id="p_19652_P01" test="not(cda:reference) or cda:reference[@typeCode='REFR']">The reference SHALL contain exactly one [1..1] @typeCode="REFR" refers to (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002) (CONF:19652_P01).</sch:assert>
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.17.3.8-errors-abstract" abstract="true">
-	<!--sch:assert id="a-3274" test="cda:effectiveTime/cda:isValidDate(cda:low)">10705: //act[templateId/@root='2.16.840.1.113883.10.20.17.3.8']/effectiveTime/low/@value - SHALL Invalid date and/or time format.</sch:assert>
-	<sch:assert id="a-3275" test="cda:effectiveTime/cda:isValidDate(cda:high)">10705: //act[templateId/@root='2.16.840.1.113883.10.20.17.3.8']/effectiveTime/high/@value - SHALL Invalid date and/or time format.</sch:assert-->
+        <sch:assert id="a-3274" test="cda:effectiveTime/cda:isValidDate(cda:low)">10705: //act[templateId/@root='2.16.840.1.113883.10.20.17.3.8']/effectiveTime/low/@value - SHALL Invalid date and/or time format.</sch:assert>
+        <sch:assert id="a-3275" test="cda:effectiveTime/cda:isValidDate(cda:high)">10705: //act[templateId/@root='2.16.840.1.113883.10.20.17.3.8']/effectiveTime/high/@value - SHALL Invalid date and/or time format.</sch:assert>
         <sch:assert id="a-711273" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.27.3.23'])=1">SHALL contain exactly one [1..1] templateId (CONF:711272) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.27.3.23" (CONF:711273).</sch:assert>
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.3.8-errors-abstract" abstract="true">
@@ -440,7 +440,7 @@
 </sch:rule>
 <sch:rule id="r-oid-2.16.840.1.113883.10.20.27.3.15-errors-abstract" abstract="true">
 </sch:rule>
-<!--sch:pattern id="document-errors">
+<sch:pattern id="document-errors">
 	<sch:rule context="cda:ClinicalDocument">
 		<sch:assert id="a-pqrs_0001" test="cda:checkLength(cda:versionNumber[1]/@value, 20, 'N')">10701: /ClinicalDocument/versionNumber value SHALL not exceed the maximum allowable length 20.</sch:assert>
 	</sch:rule>
@@ -463,5 +463,241 @@
 		<sch:assert id="a-pqrs_0007" test="cda:checkLength(cda:value[1]/@xsi:type, 16, 'N')">10701: /ClinicalDocument/component/structuredBody/component/section/entry/organizer/component/observation/entryRelationship/observation/templateId[@root='2.16.840.1.113883.10.20.27.3.2']/parent::observation/value/@xsi:type SHALL not exceed the maximum allowable length 16.</sch:assert>
 		<sch:assert id="a-pqrs_0008" test="cda:checkLength(cda:value[1]/@unit, 8, 'N')">10701: /ClinicalDocument/component/structuredBody/component/section/entry/organizer/component/observation/entryRelationship/observation/templateId[@root="2.16.840.1.113883.10.20.27.3.2"]/parent::observation/value/@unit SHALL not exceed the maximum allowable length 8.</sch:assert>
 	</sch:rule>
-</sch:pattern-->
+</sch:pattern>
 <!-- pqrs March 2015 Release changes, added new function to validate Version specific measure IDs -->
+<xsl:function name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+	<xsl:param name="pgmYear" as="xs:string?"/>
+	<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
+	<xsl:value-of select="true()"/>
+<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+	<xsl:param name="pgmYear" as="xs:string?"/>
+	<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
+	<xsl:choose>
+		<xsl:when test="javaClassName:isValidMeasureVersionSpecificID($pgmYear,$isValidMeasureVersionSpecificID)">
+			<xsl:value-of select="true()"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose-->
+</xsl:function>
+<!-- Added algorithm to check the string-length of NPI value(if greater than 10 digits - error triggered - for 2012 Phase 1 - 12/12/11) -->
+<xsl:function name="cda:isValidNPI" as="xs:boolean">
+	<xsl:param name="npi-string" as="xs:string?"/>
+	<xsl:choose>
+		<xsl:when test="matches(substring($npi-string,1,4),'1234')">
+			<xsl:value-of select="false()"/>
+		</xsl:when>
+		<xsl:when test="string-length($npi-string) &gt; 10">
+			<xsl:value-of select="false()"/>
+		</xsl:when>
+		<xsl:when test="matches($npi-string,'\d{10}')">
+			<xsl:variable name="step2" select="concat('80840',$npi-string)"/>
+			<xsl:variable name="step3" select="substring($step2,1,14)"/>
+			<xsl:variable name="checkDig" select="xs:integer(substring($step2,15,1))"/>
+			<xsl:analyze-string select="$step3" regex="(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)">
+				<xsl:matching-substring>
+					<xsl:variable name="d1" select="xs:integer(regex-group(1))"/>
+					<xsl:variable name="d2" select="xs:integer(regex-group(2))"/>
+					<xsl:variable name="d3" select="xs:integer(regex-group(3))"/>
+					<xsl:variable name="d4" select="xs:integer(regex-group(4))"/>
+					<xsl:variable name="d5" select="xs:integer(regex-group(5))"/>
+					<xsl:variable name="d6" select="xs:integer(regex-group(6))"/>
+					<xsl:variable name="d7" select="xs:integer(regex-group(7))"/>
+					<xsl:variable name="d8" select="xs:integer(regex-group(8))"/>
+					<xsl:variable name="d9" select="xs:integer(regex-group(9))"/>
+					<xsl:variable name="d10" select="xs:integer(regex-group(10))"/>
+					<xsl:variable name="d11" select="xs:integer(regex-group(11))"/>
+					<xsl:variable name="d12" select="xs:integer(regex-group(12))"/>
+					<xsl:variable name="d13" select="xs:integer(regex-group(13))"/>
+					<xsl:variable name="d14" select="xs:integer(regex-group(14))"/>
+					<xsl:variable name="d14s1" select="xs:integer(cda:sumDigits(xs:string($d14*2)))"/>
+					<xsl:variable name="d12s1" select="xs:integer(cda:sumDigits(xs:string($d12*2)))"/>
+					<xsl:variable name="d10s1" select="xs:integer(cda:sumDigits(xs:string($d10*2)))"/>
+					<xsl:variable name="d8s1" select="xs:integer(cda:sumDigits(xs:string($d8*2)))"/>
+					<xsl:variable name="d6s1" select="xs:integer(cda:sumDigits(xs:string($d6*2)))"/>
+					<xsl:variable name="d4s1" select="xs:integer(cda:sumDigits(xs:string($d4*2)))"/>
+					<xsl:variable name="d2s1" select="xs:integer(cda:sumDigits(xs:string($d2*2)))"/>
+					<xsl:variable name="digRigGrpTotal" select="$d14s1+$d12s1+$d10s1+$d8s1+$d6s1+$d4s1+$d2s1"/>
+					<xsl:variable name="step4" select="$digRigGrpTotal+($d1+$d3+$d5+$d7+$d9+$d11+$d13)"/>
+					<xsl:value-of select="cda:checkNPI($step4,$checkDig)"/>
+				</xsl:matching-substring>
+				<xsl:non-matching-substring>
+					<xsl:value-of select="false()"/>
+				</xsl:non-matching-substring>
+			</xsl:analyze-string>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<xsl:function name="cda:sumDigits" as="xs:string">
+	<xsl:param name="content" as="xs:string"/>
+	<xsl:choose>
+		<xsl:when test="string-length($content)=2">
+			<xsl:analyze-string select="$content" regex="(\d)(\d)">
+				<xsl:matching-substring>
+					<xsl:value-of select="xs:integer(regex-group(1)) + xs:integer(regex-group(2))"/>
+				</xsl:matching-substring>
+				<xsl:non-matching-substring>
+					<xsl:value-of select="0"/>
+				</xsl:non-matching-substring>
+			</xsl:analyze-string>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="xs:integer($content)"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<xsl:function name="cda:checkNPI" as="xs:boolean">
+	<xsl:param name="total" as="xs:double"/>
+	<xsl:param name="checkDigit" as="xs:integer"/>
+	<xsl:choose>
+		<xsl:when test="($total + $checkDigit) mod 10 = 0">
+			<xsl:value-of select="true()"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<xsl:function name="cda:validateSSN" as="xs:boolean">
+	<xsl:param name="ssn" as="xs:string?"/>
+	<xsl:choose>
+		<xsl:when test="$ssn != '999999999'">
+			<xsl:analyze-string select="$ssn" regex="^\d{{9}}$">
+				<xsl:matching-substring>
+					<xsl:value-of select="true()"/>
+				</xsl:matching-substring>
+				<xsl:non-matching-substring>
+					<xsl:value-of select="false()"/>
+				</xsl:non-matching-substring>
+			</xsl:analyze-string>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<!-- pqrs August 2014 Release changes, added new function used to validate date strings -->
+<xsl:function name="cda:isValidDate" as="xs:boolean">
+	<xsl:param name="date-stringT" as="node()*"/>
+	<xsl:value-of select="true()"/>
+<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean">
+	<xsl:param name="date-stringT" as="node()*"/>
+	<xsl:variable name="date-string" select="$date-stringT[1]/@value"/>
+	<xsl:choose>
+		<xsl:when test="javaClassName:isValidDate($date-string)">
+			<xsl:value-of select="true()"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose-->
+</xsl:function>
+<!-- Function to validate effective date, this functions is taken from EHRPROD sch file. -->
+<xsl:function xmlns="http://purl.oclc.org/dsdl/schematron" name="cda:isValidEffectiveTime" as="xs:boolean">
+	<xsl:param name="effectiveDateP" as="node()*"/>
+	<xsl:choose>
+		<xsl:when test="count($effectiveDateP/@value) = 1">
+			<xsl:choose>
+				<xsl:when test="cda:isValidDate($effectiveDateP)">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:when test="count($effectiveDateP/cda:low) = 1">
+			<xsl:variable name="low" select="$effectiveDateP/cda:low"/>
+			<xsl:choose>
+				<xsl:when test="cda:isValidDate($low)">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:when test="count($effectiveDateP/cda:center) = 1">
+			<xsl:variable name="center" select="$effectiveDateP/cda:center"/>
+			<xsl:choose>
+				<xsl:when test="cda:isValidDate($center)">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:when test="count($effectiveDateP/cda:high) = 1">
+			<xsl:variable name="high" select="$effectiveDateP/cda:high"/>
+			<xsl:choose>
+				<xsl:when test="cda:isValidDate($high)">
+					<xsl:value-of select="true()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="false()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<!-- Check Length Function -->
+<xsl:function name="cda:checkLength" as="xs:boolean">
+	<xsl:param name="content" as="xs:string?"/>
+	<xsl:param name="length" as="xs:integer"/>
+	<xsl:param name="isRequired" as="xs:string"/>
+	<xsl:choose>
+		<xsl:when test="string-length($content) &gt; $length">
+			<xsl:value-of select="false()"/>
+		</xsl:when>
+		<xsl:when test="string-length($content) = 0">
+			<xsl:choose>
+				<xsl:when test="$isRequired='Y'">
+					<xsl:value-of select="false()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="true()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="true()"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:function>
+<!-- pqrs August 2015 Release changes, added new function to validate VOC values -->
+<xsl:function name="cda:isVOCCodeValid" as="xs:boolean">
+	<xsl:param name="vsid" as="xs:string?"/>
+	<xsl:param name="code" as="xs:string?"/>
+	<xsl:param name="codesystem" as="xs:string?"/>
+	<xsl:value-of select="true()"/>
+<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean">
+	<xsl:param name="vsid" as="xs:string?"/>
+	<xsl:param name="code" as="xs:string?"/>
+	<xsl:param name="codesystem" as="xs:string?"/>
+	<xsl:choose>
+		<xsl:when test="javaClassName:isVOCCodeValid($vsid,$codesystem,$code)">
+			<xsl:value-of select="true()"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="false()"/>
+		</xsl:otherwise>
+	</xsl:choose-->
+</xsl:function>
+<!-- pqrs August 2015 Release changes, added new function to validate performance rates -->
+<xsl:function name="cda:isValidPerfRates" as="xs:boolean">
+	<xsl:param name="versionID" as="xs:string?"/>
+	<xsl:param name="numPerfRates" as="xs:integer?"/>
+	<xsl:value-of select="true()"/>
+<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidPerfRates" as="xs:boolean">
+	<xsl:param name="versionID" as="xs:string?"/>
+	<xsl:param name="numPerfRates" as="xs:integer?"/>
+	<xsl:value-of select="javaClassName:isValidPerfRates($versionID,$numPerfRates)"/-->
+</xsl:function>

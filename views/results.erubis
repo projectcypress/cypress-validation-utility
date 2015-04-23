@@ -1,26 +1,35 @@
 <div>
   <ul id="error_report_toc" class="nav nav-tabs">
-    <li class="active"><a href="#test_summary" data-toggle="tab">Summary</a></li>
-    <li class=""><a href="#test_measure_qrda_errors" data-toggle="tab">QRDA Errors</a></li>
+    <li class="active"><a href="#test_summary" data-toggle="tab">Summary </a></li>
+    <% @upload.grouped_errors.each_pair do |val, errors| %>
+      <li class=""><a href="#test_measure_<%= validator_slug(val) %>" data-toggle="tab"><%= validator_name(val) %> (<%= errors.count %>)</a></li>
+    <% end %>
   </ul>
   
   <div id="test_result_tabs" class="tab-content">
     <div class="tab-pane active" id="test_summary">
-      <h4>Summary</h4>
-      <% if @upload.program != "none" %>
-        <p>Validating against the CMS <%= @upload.program.upcase %> schematron.</p>
+      <h4> 
+      <% if @upload.errors.empty? %>
+        No
       <% else %>
-        <p>No submission program selected, validating against the base schematron only. </p>
+        <%= @upload.errors.count %>
+      <% end %>errors found</h4>
+      <p>Validating a QRDA <%= @upload.doc_type.upcase %> document against the
+      <% if @upload.program != "none" %>
+        CMS <%= @upload.program.upcase %> Combined IG.</p>
+      <% else %>
+        base QRDA standard. </p>
       <% end %>
-      <p>Validating a QRDA <%= @upload.doc_type.upcase %> document.</p>
+      
     </div>
 
     <% error_map, error_attributes = match_errors(@upload) %>
 
-    <div class="tab-pane" id="test_measure_qrda_errors">
-      <h4>QRDA Errors</h4>
-      <%= erb :'documents/_error_list', :locals=>{grouped_errors: group_errors(@upload), error_map: error_map } %>
+    <% @upload.grouped_errors.each do |validator,errs| %>
+    <div class="tab-pane" id="test_measure_<%= validator_slug(validator) %>">
+      <%= erb :'documents/_error_list', :locals=>{errors: errs, error_map: error_map } %>
     </div>
+    <% end %>
   </div><!-- end #test_result_tabs -->
 
 

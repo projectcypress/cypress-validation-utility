@@ -50,7 +50,7 @@ class CypressValidatorApp < Sinatra::Base
                        HealthDataStandards::Validate::Cat3 => "QRDA",
                        CypressValidationUtility::Validate::EPCat1 => "CMS",
                        CypressValidationUtility::Validate::EPCat3 => "CMS",
-                       HealthDataStandards::Validate::ValuesetValidator => "Value Sets",
+                       HealthDataStandards::Validate::DataValidator => "Value Sets",
                        HealthDataStandards::Validate::Cat1Measure => "Measures",
                        HealthDataStandards::Validate::Cat3Measure => "Measures"}
 
@@ -146,6 +146,9 @@ class DocumentUpload
     program = get_program if !program
     @program = program
 
+    measure_ids = get_measure_ids if !measure_ids
+    @measure_ids = measure_ids
+
     @errors = validators.inject({}) do |errors, v|
       errors[v] = v.validate(content_string)
       errors
@@ -179,7 +182,6 @@ class DocumentUpload
   def get_program 
     #xpath for informationRecipient, which is where CMS wants the code for the program
     prog = @content.at_xpath("//xmlns:informationRecipient/xmlns:intendedRecipient/xmlns:id/@extension")
-
     #If it's not there, raise an error
     if !prog
       return nil
@@ -197,6 +199,16 @@ class DocumentUpload
     end
   end
 
+  def get_measure_ids
+    measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" + 
+      "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" + 
+      "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value)
+    if !measure_ids
+      return nil
+    end
+    measure_ids
+  end
+
   def validators
     return @validators if @validators
 
@@ -204,7 +216,7 @@ class DocumentUpload
     val_class = case @doc_type
     when "cat1"
       bundle = HealthDataStandards::CQM::Bundle.first
-      @validators << HealthDataStandards::Validate::ValuesetValidator.new(bundle)
+      @validators << HealthDataStandards::Validate::DataValidator.new(bundle, @measure_ids)
       @validators << HealthDataStandards::Validate::Cat1Measure.instance
       if @program.downcase == "ep"
         CypressValidationUtility::Validate::EPCat1

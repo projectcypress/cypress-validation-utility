@@ -5,6 +5,7 @@ require 'sass_paths'
 require "sass"
 require "pry"
 require "health-data-standards"
+require "logger"
 require_relative "./lib/cms_validators"
 
 Mongoid.load!("mongoid.yml")
@@ -15,6 +16,21 @@ class CypressValidatorApp < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
+
+  ::Logger.class_eval { alias :write :'<<' }
+  access_log = ::File.join(::File.dirname(::File.expand_path(__FILE__)),'log','access.log')
+  access_logger = ::Logger.new(access_log)
+  error_logger = ::File.new(::File.join(::File.dirname(::File.expand_path(__FILE__)),'log','error.log'),"a+")
+  error_logger.sync = true
+
+  configure do
+    use ::Rack::CommonLogger, access_logger
+  end
+ 
+  before {
+    env["rack.errors"] =  error_logger
+  }
+ 
 
   SassPaths.append("#{CypressValidatorApp.root}/app/css")
   

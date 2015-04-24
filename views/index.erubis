@@ -15,7 +15,7 @@
       <span class="input-group-addon btn btn-default btn-file">
         <span class="fileinput-new">Select QRDA file</span>
         <span class="fileinput-exists">Change</span>
-        <input type="file" name="file" id="inputFile" required>
+	<input type="file" name="file" id="inputFile" required accept=".xml">
       </span>
       <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
     </div>

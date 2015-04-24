@@ -141,13 +141,19 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   get "/" do
-    erb :index
+    erubis :index
   end
 
   post "/validate" do
-    @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
-    # binding.pry
-    erb :results
+    begin
+      @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
+    rescue Nokogiri::XML::SyntaxError => e
+      status 400
+      @message = e.message
+      halt(400, erubis(:error_400))
+    end
+
+    erubis :results
   end
 
 class DocumentUpload
@@ -157,7 +163,6 @@ class DocumentUpload
   def initialize(file, doc_type, program=nil)
     content_string = File.read(file)
     @content = Nokogiri::XML(content_string)
-    
     #if the doc_type isn't passed in, see if we can find it in the document
     doc_type = get_doc_type if !doc_type
     @doc_type = doc_type

@@ -6,6 +6,7 @@ require "sass"
 require "pry"
 require "health-data-standards"
 require "logger"
+
 require_relative "./lib/cms_validators"
 require_relative "./lib/encounter_validator"
 

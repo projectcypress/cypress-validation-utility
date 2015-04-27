@@ -67,6 +67,14 @@
 window.onload = function() {
   H5F.setup(document.getElementById("upload_form"));
 
+  var loading = function() {
+    // add the overlay with loading image to the page
+    var over = '<div id="overlay">' +
+        '<img id="loading" src="images/loading.gif">' +
+        '</div>';
+    $(over).appendTo('body');
+  };
+
   $("[name=program]").change(function() {
     if ($(this).val() == "eh") {
       $("#cat3").parent().attr("disabled", true);
@@ -76,7 +84,8 @@ window.onload = function() {
       $("#cat3").parent().attr("disabled", false);
       $("#cat3").attr("disabled", false);
     }
-    console.log();
   });
+
+  $("#upload_form").submit(loading);
 }
 </script>

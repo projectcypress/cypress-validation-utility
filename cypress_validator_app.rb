@@ -166,7 +166,7 @@ class DocumentUpload
     @measure_ids = measure_ids
 
     @errors = validators.inject({}) do |errors, v|
-      errors[v] = v.validate(content_string)
+      errors[v] = v.validate(content_string, file_name: file)
       errors
     end
 

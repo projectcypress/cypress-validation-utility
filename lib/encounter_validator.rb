@@ -2,7 +2,7 @@ class EncounterValidator
   include HealthDataStandards::Validate::BaseValidator
   include Singleton
 
-    MP_START = Time.at("1/1/2015").to_i
+    MP_START = Time.parse("1/1/2015 00:00:00 UTC").to_i
 
     def validate(file, options={})
       doc = get_document(file)

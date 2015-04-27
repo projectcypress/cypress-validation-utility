@@ -2,7 +2,7 @@
 <!DOCTYPE schema [
 	<!ENTITY sch-qrda-r2-base SYSTEM 'QRDA_Category_I_lantana.sch'>
 ]>
-<sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<sch:ns prefix="voc" uri="http://www.lantanagroup.com/voc"/>
 	<sch:ns prefix="svs" uri="urn:ihe:iti:svs:2008"/>
 	<sch:ns prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance"/>
@@ -362,12 +362,10 @@
 			<sch:assert id="a-CMS_0010" test="not(count(cda:languageCode)=1) or ( count(cda:languageCode[@code='en'])=1 )">This languageCode SHALL contain exactly one [1..1] @code="en" English (CodeSystem: Language 2.16.840.1.113883.6.121)(CMS_0010).</sch:assert>
 			<sch:assert id="a-CMS_0011" test="count(cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode)=1">This patient SHALL contain exactly one [1..1] administrativeGenderCode, which SHALL be selected from either ValueSet ONC Administrative Sex 2.16.840.1.113762.1.4.1 or ValueSet Administrative Gender (HL7 V3) 2.16.840.1.113883.1.11.1 DYNAMIC (CONF:CMS_0011).</sch:assert>
 			<sch:assert id="a-CMS_0011a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode)=1) or (cda:recordTarget/cda:patientRole/cda:patient[count(cda:administrativeGenderCode[cda:isValidValueSetForQDMCategory('2.16.840.1.113762.1.4.1', @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.55') or cda:isVOCCodeValid('2.16.840.1.113883.1.11.1',  @code, @codeSystem)])=1])">PQRS_10710: /ClinicalDocument/recordTarget/patientRole/patient/administrativeGenderCode ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-CMS_0012" test="count(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime)=1">SHALL be precise to day (CONF:CMS_0012).</sch:assert>
-			<sch:assert id="a-CMS_0012a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime)=1) or (string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) &gt;= 8  and cda:isValidDate(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime))">PQRS_10705: /ClinicalDocument/recordTarget/patientRole/patient/birthTime Invalid date and/or time format.
-</sch:assert>
+			<sch:assert id="a-CMS_0012" test="(not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime)=1) or (string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) &gt;= 8))">SHALL be precise to day (CONF:CMS_0012).</sch:assert>
+			<sch:assert id="a-CMS_0012a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime)=1) or (string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) &gt;= 8  and cda:isValidDate(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime))">PQRS_10705: /ClinicalDocument/recordTarget/patientRole/patient/birthTime Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-CMS_0013" test="count(cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode)=1">This patient SHALL contain exactly one [1..1] raceCode, which SHALL be selected from ValueSet Race 2.16.840.1.114222.4.11.836 DYNAMIC (CONF:CMS_0013).</sch:assert>
-			<sch:assert id="a-CMS_0013a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode)=1) or (count(cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode[cda:isValidValueSetForQDMCategory('2.16.840.1.114222.4.11.836', @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.55') or @nullFlavor])=1)">PQRS_10710: /ClinicalDocument/recordTarget/patientRole/patient/raceCode ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.
-</sch:assert>
+			<sch:assert id="a-CMS_0013a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode)=1) or (count(cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode[cda:isValidValueSetForQDMCategory('2.16.840.1.114222.4.11.836', @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.55') or @nullFlavor])=1)">PQRS_10710: /ClinicalDocument/recordTarget/patientRole/patient/raceCode ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-CMS_0014a" test="not( count(cda:recordTarget/cda:patientRole/cda:patient/sdtc:raceCode)&gt;0 ) or (cda:recordTarget/cda:patientRole/cda:patient/sdtc:raceCode[cda:isValidValueSetForQDMCategory('2.16.840.1.114222.4.11.836', @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.55') or @nullFlavor])">PQRS_10710: /ClinicalDocument/recordTarget/patientRole/patient/sdtc:raceCode ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-CMS_0015" test="count(cda:recordTarget/cda:patientRole/cda:patient/cda:ethnicGroupCode)=1">This patient SHALL contain exactly one [1..1] ethnicGroupCode, which SHALL be selected from ValueSet Ethnicity Value 2.16.840.1.114222.4.11.837 DYNAMIC (CONF:CMS_0015).</sch:assert>
 			<sch:assert id="a-CMS_0015a" test="not(count(cda:recordTarget/cda:patientRole/cda:patient/cda:ethnicGroupCode)=1) or (count(cda:recordTarget/cda:patientRole/cda:patient/cda:ethnicGroupCode[cda:isValidValueSetForQDMCategory('2.16.840.1.114222.4.11.837', @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.55') or @nullFlavor])=1)">PQRS_10710: /ClinicalDocument/recordTarget/patientRole/patient/ethnicGroupCode ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
@@ -385,7 +383,7 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.22.4.16-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.22.4.16-errors-abstract" abstract="true">
 			<sch:assert id="a-7511a" test="not(count(cda:effectiveTime[count(cda:low)=1])=1) or (count(cda:effectiveTime[count(cda:low)=1])=1 and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //substanceAdministration[templateId/@root='2.16.840.1.113883.10.20.24.3.41']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-7512a" test="not(count(cda:effectiveTime[count(cda:high)=1])=1) or (count(cda:effectiveTime[count(cda:high)=1])=1 and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //substanceAdministration[templateId/@root='2.16.840.1.113883.10.20.24.3.41']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-7512a" test="not(count(cda:effectiveTime[count(cda:high)=1])=1) or (count(cda:effectiveTime[count(cda:high)=1])=1 and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //substanceAdministration[templateId/@root='2.16.840.1.113883.10.20.24.3.41']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.22.4.16-errors" context="cda:substanceAdministration[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.16']]">
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.16-errors-abstract"/>
@@ -708,7 +706,6 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.63-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.63-errors-abstract" abstract="true">
 			<sch:assert id="a-11101" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.63')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.63']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-63" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.63')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.63']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11596" test="not(cda:author[count(cda:time)=1]) or (cda:author[count(cda:time)=1] and cda:isValidDate(cda:author/cda:time))">PQRS_10705: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.63']/author/time -  SHALL Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.41-errors-abstract"/>
 		</sch:rule>
@@ -719,9 +716,8 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.66-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.66-errors-abstract" abstract="true">
 			<sch:assert id="a-11112" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.66')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.66']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-66" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.66')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.66']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11696" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.66']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11697" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.66']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-11697" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.66']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.14-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.66-errors" context="cda:procedure[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.66']]">
@@ -730,7 +726,6 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.2-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.2-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-2" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.2')])=1)">PQRS_10710: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.2']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-26946" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.2')])=1)">PQRS_10710: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.2']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11622" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.2']/effectiveTime Invalid date and/or time format.</sch:assert>
 		</sch:rule>
@@ -767,9 +762,8 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.62-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.62-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-62" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.62')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.62']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11444" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.62']/effectiveTime/low - Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11445" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.62']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-11445" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor])">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.62']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.24.3.104-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.62-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.62']]">
@@ -822,7 +816,7 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.38-errors-abstract" abstract="true">
 			<sch:assert id="a-11708" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.38')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.38']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11712" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.38']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11713" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.38']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-11713" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.38']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-11727_P01" test="not(@negationInd='true') or (@negationInd='true' and count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1)">SHALL contain exactly one [1..1] entryRelationship (CONF:11727_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:11728).SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:11729).</sch:assert>
 			<sch:assert id="a-11367-24-3-38" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.38')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.38']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 		</sch:rule>
@@ -842,7 +836,6 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.40-errors-abstract" abstract="true">
 			<sch:assert id="a-7133c" test="not(count(cda:code)=1) or cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.40')]">PQRS_10710: //observation[templateId[@root='2.16.840.1.113883.10.20.24.3.40']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-16698" test="not(count(cda:value) = 1) or not( cda:value[@xsi:type='PQ'] ) or  ((string-length(cda:value/@unit) &gt; 0) and (string-length(cda:value/@value) &gt; 0))">If xsi:type=PQ, then @units shall be drawn from Unified Code for Units of Measure (UCUM) 2.16.840.1.113883.6.8 code system. Additional constraint is dependent on criteria in the corresponding eMeasure (CONF:16698).</sch:assert>
-			<sch:assert id="a-11367-24-3-40" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.40')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.40']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.2-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.40-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.40']]">
@@ -867,7 +860,6 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.3-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.3-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-3" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.3')])=1)">PQRS_10710: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.3']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-26947" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.3')])=1)">PQRS_10710: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.3']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11847" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.3']/effectiveTime Invalid date and/or time format.</sch:assert>
 		</sch:rule>
@@ -879,8 +871,7 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.23-errors-abstract" abstract="true">
 			<sch:assert id="a-11864" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.23')])=1)">PQRS_10710: //encounter[templateId/@root='2.16.840.1.113883.10.20.24.3.23']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11877" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //encounter[templateId/@root='2.16.840.1.113883.10.20.24.3.23']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11878" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //encounter[templateId/@root='2.16.840.1.113883.10.20.24.3.23']/effectiveTime/high Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11367-24-3-23" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.23')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.23']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
+			<sch:assert id="a-11878" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //encounter[templateId/@root='2.16.840.1.113883.10.20.24.3.23']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.49-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.23-errors" context="cda:encounter[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]">
@@ -909,7 +900,6 @@
 			<!-- Lantana base file assertion is in error, below is the correct test that should be done. -->
 			<!--<sch:assert id="a-11938" test="count(cda:statusCode[@code='new'])=1">This statusCode SHALL contain exactly one [1..1] @code="new" (CodeSystem: ActStatus 2.16.840.1.113883.5.14 STATIC) (CONF:11938).</sch:assert>-->
 			<sch:assert id="a-11940" test="not(cda:author[count(cda:time)=1]) or (cda:author[count(cda:time)=1] and  cda:isValidDate(cda:author/cda:time))">PQRS_10705: //encounter[templateId/@root='2.16.840.1.113883.10.20.24.3.22']/author/time Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11367-24-3-22" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.22')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.22']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.40-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.22-errors" context="cda:encounter[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.22']]">
@@ -918,7 +908,6 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.37-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.37-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-37" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.37')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.37']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11957" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.37')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.37']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-11961" test="not(count(cda:author[count(cda:time)=1])=1) or (count(cda:author[count(cda:time)=1])=1 and cda:isValidDate(cda:author/cda:time))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.37']/author/time Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.44-errors-abstract"/>
@@ -930,9 +919,8 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.11-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.11-errors-abstract" abstract="true">
 			<sch:assert id="a-11984" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11985" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-11985" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-12008" test="not(count(cda:value[@xsi:type='CD'])=1) or (count(cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.11')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/value[@xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-11" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.11')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-PQRS_P0014" test="not(cda:priorityCode) or count(cda:priorityCode[@sdtc:valueSet])=1">The priorityCode, if present, SHALL contain the @sdtc:valueSet extension to reference the value set from which the supplied code was drawn (CONF:PQRS_P0014).</sch:assert>
 			<sch:assert id="a-PQRS_P0014-a" test="not(cda:priorityCode) or (count(cda:priorityCode[@sdtc:valueSet][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.88')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.11']/priorityCode[@sdtc:valueSet] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.4-errors-abstract"/>
@@ -945,8 +933,7 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.13-errors-abstract" abstract="true">
 			<sch:assert id="a-9058a" test="count(cda:value[@xsi:type='PQ'])=1 or (count(cda:value[not (@xsi:type='PQ')][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.13')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.13']/value[@xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-12029" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.13']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-12030" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.13']/effectiveTime/high Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11367-24-3-13" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.13')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.13']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
+			<sch:assert id="a-12030" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.13']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.4-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.13-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.13']]">
@@ -957,8 +944,7 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.14-errors-abstract" abstract="true">
 			<sch:assert id="a-9058b" test="count(cda:value[@xsi:type='PQ'])=1 or (count(cda:value[not (@xsi:type='PQ')][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.14')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.14']/value[@xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-12062" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.14']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-12063" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.14']/effectiveTime/high Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11367-24-3-14" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.14')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.14']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
+			<sch:assert id="a-12063" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.14']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.4-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.14-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.14']]">
@@ -967,7 +953,6 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.41-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.41-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-41" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.41')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.41']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.16-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.41-errors" context="cda:substanceAdministration[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.41']]">
@@ -1064,7 +1049,6 @@
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.7-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.7-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-7" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.7')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.7']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-12395" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.7'/effectiveTime Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-12402" test="not(count(cda:participant/cda:participantRole/cda:playingDevice/cda:code)=1) or (count(cda:participant/cda:participantRole/cda:playingDevice/cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.7')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.7'/participant/participantRole/playingDevice[@classCode="DEV"]/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.14-errors-abstract"/>
@@ -1142,7 +1126,6 @@
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.51-errors-abstract" abstract="true">
 			<sch:assert id="a-12536" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.51']/effectiveTime Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-16712" test="not(count(cda:value[@xsi:type='CD'])=1) or (count(cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.51')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.51']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-51" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.51')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.51']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.51-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.51']]">
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.24.3.51-errors-abstract"/>
@@ -1151,7 +1134,6 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.55-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.55-errors-abstract" abstract="true">
 			<sch:assert id="a-16710_P01" test="not(count(cda:value[@xsi:type='CD'])=1) or (count(cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory('2.16.840.1.114222.4.11.3591', @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.55')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.55']/value[@xsi:type='CD'] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-55" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.55')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.55']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 		</sch:rule>
 		<sch:let name="medicarePayer" value="//cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.55']/cda:value/@code"/>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.55-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.55']]">
@@ -1175,7 +1157,7 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.59-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.59-errors-abstract" abstract="true">
 			<sch:assert id="a-12652" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1] and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.59']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-12653" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.59']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-12653" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1] and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.59']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<!--<sch:assert id="a-12656_P01" test="not(@negationInd='true') or (@negationInd='true' and count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1 and cda:validateNegationType(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value,'2.16.840.1.113883.10.20.24.3.59'))">SHALL contain exactly one [1..1] entryRelationship (CONF:12656_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:12657).SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:12658).</sch:assert>-->
 			<sch:assert id="a-12656_P01" test="not(@negationInd='true') or (@negationInd='true' and count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1)">SHALL contain exactly one [1..1] entryRelationship (CONF:12656_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:12657).SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:12658).</sch:assert>
 			<sch:assert id="a-11367-24-3-59" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.59')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.59']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
@@ -1207,7 +1189,6 @@
 			<sch:assert id="a-7133d" test="not(count(cda:code)=1) or cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.57')]">PQRS_10710: //observation[templateId[@root='2.16.840.1.113883.10.20.24.3.57']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-16700" test="not(count(cda:value) = 1) or not( cda:value[@xsi:type='PQ'] ) or ((string-length(cda:value/@unit) &gt; 0) and (string-length(cda:value/@value) &gt; 0))">If xsi:type=PQ, then @units shall be drawn from Unified Code for Units of Measure (UCUM) 2.16.840.1.113883.6.8 code system. Additional constraint is dependent on criteria in the corresponding eMeasure (CONF:16700).</sch:assert>
 			<sch:assert id="a-16700a" test="not(count(cda:value) = 1) or (cda:value[@xsi:type='PQ']) or (count(cda:value[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.57')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.57']/value ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
-			<sch:assert id="a-11367-24-3-57" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.57')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.57']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.2-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.57-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.57']]">
@@ -1338,7 +1319,7 @@
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.18-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.18-errors-abstract" abstract="true">
 			<sch:assert id="a-12959" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1]  and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.18']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-12960" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.18']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-12960" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.18']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<!--<sch:assert id="a-12963_P01" test="not(@negationInd='true') or ((@negationInd='true') and ((count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1) and (cda:validateNegationType(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value, '2.16.840.1.113883.10.20.24.3.18')))
 )">SHALL contain exactly one [1..1] entryRelationship (CONF:12963_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:12964). SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:12965).</sch:assert>-->
 			<sch:assert id="a-12963_P01" test="not(@negationInd='true') or (@negationInd='true' and count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1)">SHALL contain exactly one [1..1] entryRelationship (CONF:12963_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:12964). SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:12965).</sch:assert>
@@ -1386,7 +1367,7 @@ and ($medicarePayer ='1' or $medicarePayer ='11' or $medicarePayer ='111' or $me
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.100-errors-abstract" abstract="true">
 			<sch:assert id="a-13378" test="not(cda:participantRole[count(cda:code)=1]) or (cda:participantRole[count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem, '2.16.840.1.113883.10.20.24.3.100')])=1])">PQRS_10710: //Participant[templateId/@root='2.16.840.1.113883.10.20.24.3.100']/ParticipantRole[@classCode="SDLOC"]/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-13384" test="not(cda:time[count(cda:low)=1]) or (cda:time[count(cda:low)=1] and cda:isValidDate(cda:time/cda:low))">PQRS_10705: //Participant[templateId/@root='2.16.840.1.113883.10.20.24.3.100'][@typeCode="LOC"]/time/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-13385" test="not(cda:time[count(cda:high)=1]) or (cda:time[count(cda:high)=1] and cda:isValidDate(cda:time/cda:high))">PQRS_10705: //Participant[templateId/@root='2.16.840.1.113883.10.20.24.3.100'][@typeCode="LOC"]/time/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-13385" test="not(cda:time[count(cda:high)=1]) or (cda:time[count(cda:high)=1] and (cda:isValidDate(cda:time/cda:high) or cda:time[cda:high/@nullFlavor]))">PQRS_10705: //Participant[templateId/@root='2.16.840.1.113883.10.20.24.3.100'][@typeCode="LOC"]/time/high Invalid date and/or time format.</sch:assert>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.100-errors" context="cda:participant[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.100']]">
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.24.3.100-errors-abstract"/>
@@ -1402,7 +1383,6 @@ and ($medicarePayer ='1' or $medicarePayer ='11' or $medicarePayer ='111' or $me
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.17-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.17-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-17" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.17')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.17']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-13415" test="not(count(cda:code)=1) or (count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.17')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.17']/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-13419" test="not(count(cda:author[count(cda:time)=1])=1) or (count(cda:author[count(cda:time)=1])=1 and cda:isValidDate(cda:author/cda:time))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.17']/author/time Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.44-errors-abstract"/>
@@ -1426,7 +1406,7 @@ and ($medicarePayer ='1' or $medicarePayer ='11' or $medicarePayer ='111' or $me
 			<sch:assert id="a-13604_P01" test="not(@negationInd='true') or (@negationInd='true' and count(cda:entryRelationship[@typeCode='RSON'][count(cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1])=1)">SHALL contain exactly one [1..1] entryRelationship (CONF:13604_P01) such that it SHALL contain exactly one [1..1] @typeCode="RSON" (CodeSystem: HL7ActRelationshipType 2.16.840.1.113883.5.1002 STATIC) (CONF:13605).SHALL contain exactly one [1..1] Reason (identifier: oid:2.16.840.1.113883.10.20.24.3.88) (CONF:13606).</sch:assert>
 			<sch:assert id="a-11367-24-3-32" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.32')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.32']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-13612" test="not(cda:effectiveTime[count(cda:low)=1]) or (cda:effectiveTime[count(cda:low)=1]  and cda:isValidDate(cda:effectiveTime/cda:low))">PQRS_10705: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.32']/effectiveTime/low Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-13613" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and cda:isValidDate(cda:effectiveTime/cda:high))">PQRS_10705: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.32']/effectiveTime/high Invalid date and/or time format.</sch:assert>
+			<sch:assert id="a-13613" test="not(cda:effectiveTime[count(cda:high)=1]) or (cda:effectiveTime[count(cda:high)=1]  and (cda:isValidDate(cda:effectiveTime/cda:high) or cda:effectiveTime[cda:high/@nullFlavor]))">PQRS_10705: //act[templateId/@root='2.16.840.1.113883.10.20.24.3.32']/effectiveTime/high Invalid date and/or time format.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.12-errors-abstract"/>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.32-errors" context="cda:act[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.32']]">
@@ -1527,7 +1507,6 @@ and ($medicarePayer ='1' or $medicarePayer ='11' or $medicarePayer ='111' or $me
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.46-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.46-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-46" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.46')])=1)">PQRS_10710: //procedure[templateId/@root='2.16.840.1.113883.10.20.24.3.46']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-14092" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //observation[templateId[@root='2.16.840.1.113883.10.20.24.3.46']]/effectiveTime Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-14099" test="not(cda:participant/cda:participantRole/cda:playingEntity[count(cda:code)=1]) or (cda:participant/cda:participantRole/cda:playingEntity[count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.46')])=1])">PQRS_10710: //observation[templateId[@root='2.16.840.1.113883.10.20.24.3.46']]/participant/participantRole/playingEntity/code ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.22.4.7-errors-abstract"/>
@@ -1546,7 +1525,6 @@ and ($medicarePayer ='1' or $medicarePayer ='11' or $medicarePayer ='111' or $me
 	</sch:pattern>
 	<sch:pattern id="p-pqrs-2.16.840.1.113883.10.20.24.3.44-errors">
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.44-errors-abstract" abstract="true">
-			<sch:assert id="a-11367-24-3-44" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.44')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.44']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-14142" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.44']/effectiveTime - Invalid date and/or time format.</sch:assert>
 			<sch:assert id="a-14148" test="not(cda:participant/cda:participantRole/cda:playingEntity[count(cda:code)=1]) or (cda:participant/cda:participantRole/cda:playingEntity[count(cda:code[cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.44')])=1])">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.44']/participant/
 participantRole/playingEntity/code - ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
@@ -1599,7 +1577,6 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.103-errors-abstract" abstract="true">
 			<sch:assert id="a-16541" test="not(count(cda:value[@xsi:type='CD'])=1) or (count(cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.103')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.103']/value[@xsi:type='CD'] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 			<sch:assert id="a-16540" test="not(count(cda:effectiveTime)=1) or (count(cda:effectiveTime)=1 and cda:isValidEffectiveTime(cda:effectiveTime))">PQRS_10705: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.103']/effectiveTime Invalid date and/or time format.</sch:assert>
-			<sch:assert id="a-11367-24-3-103" test="not(count(cda:entryRelationship[@typeCode='RSON']/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value[@xsi:type='CD'])=1) or (count(cda:entryRelationship[@typeCode='RSON']/cda:observation/cda:value[@xsi:type='CD'][cda:isValidValueSetForQDMCategory(@sdtc:valueSet, @code, @codeSystem,'2.16.840.1.113883.10.20.24.3.103')])=1)">PQRS_10710: //observation[templateId/@root='2.16.840.1.113883.10.20.24.3.103']/entryRelationship[@typeCode="RSON"]/observation[templateId/@root='2.16.840.1.113883.10.20.24.3.88']/value[xsi:type="CD"] ValueSet validation failed. The provided code, codeSystem, and valueSet are incompatible.</sch:assert>
 		</sch:rule>
 		<sch:rule id="r-pqrs-2.16.840.1.113883.10.20.24.3.103-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.24.3.103']]">
 			<sch:extends rule="r-pqrs-2.16.840.1.113883.10.20.24.3.103-errors-abstract"/>
@@ -2823,17 +2800,13 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
 	</xsl:function>
 	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
 	<xsl:function name="cda:isValidValueSetForQDMCategory" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidValueSetForQDMCategory" as="xs:boolean"-->
 		<xsl:param name="vsid" as="xs:string?"/>
 		<xsl:param name="code" as="xs:string?"/>
 		<xsl:param name="codesystem" as="xs:string?"/>
 		<xsl:param name="templateID" as="xs:string?"/>
 		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidValueSetForQDMCategory" as="xs:boolean">
-		<xsl:param name="vsid" as="xs:string?"/>
-		<xsl:param name="code" as="xs:string?"/>
-		<xsl:param name="codesystem" as="xs:string?"/>
-		<xsl:param name="templateID" as="xs:string?"/>
-		<xsl:choose>
+		<!--xsl:choose>
 			<xsl:when test="javaClassName:isValidValueSetForQDMCategory($templateID,$vsid,$codesystem,$code)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
@@ -2844,15 +2817,12 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
 	</xsl:function>
 	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
 	<xsl:function name="cda:isVOCCodeValid" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean"-->
 		<xsl:param name="vsid" as="xs:string?"/>
 		<xsl:param name="code" as="xs:string?"/>
 		<xsl:param name="codesystem" as="xs:string?"/>
 		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean">
-		<xsl:param name="vsid" as="xs:string?"/>
-		<xsl:param name="code" as="xs:string?"/>
-		<xsl:param name="codesystem" as="xs:string?"/>
-		<xsl:choose>
+		<!--xsl:choose>
 			<xsl:when test="javaClassName:isVOCCodeValid($vsid,$codesystem,$code)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
@@ -2894,11 +2864,10 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
 	</xsl:function>
 	<!-- DECC August 2014 Release changes, added new function used to validate date strings -->
 	<xsl:function name="cda:isValidDate" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean"-->
 		<xsl:param name="date-stringT" as="node()*"/>
 		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean">
-		<xsl:param name="date-stringT" as="node()*"/>
-		<xsl:variable name="date-string" select="$date-stringT[1]/@value"/>
+		<!--xsl:variable name="date-string" select="$date-stringT[1]/@value"/>
 		<xsl:choose>
 			<xsl:when test="javaClassName:isValidDate($date-string)">
 				<xsl:value-of select="true()"/>
@@ -3273,13 +3242,11 @@ participantRole/playingEntity/code - ValueSet validation failed. The provided co
 		</xsl:choose>
 	</xsl:function>
 	<xsl:function name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+		<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean"-->
 		<xsl:param name="pgmYear" as="xs:string?"/>
 		<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
 		<xsl:value-of select="true()"/>
-	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda1.service.Qrda1ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
-		<xsl:param name="pgmYear" as="xs:string?"/>
-		<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
-		<xsl:choose>
+		<!--xsl:choose>
 			<xsl:when test="javaClassName:isValidMeasureVersionSpecificID($pgmYear, $isValidMeasureVersionSpecificID)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>

@@ -1,0 +1,7 @@
+<div class="alert alert-danger" role="alert">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Error:</span>
+  Unable to evaluate file due to malformed XML content: <%= @message %>
+</div>
+
+<a href="/">Upload a different file</a>

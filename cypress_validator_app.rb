@@ -7,6 +7,7 @@ require "pry"
 require "health-data-standards"
 require "logger"
 require_relative "./lib/cms_validators"
+require_relative "./lib/encounter_validator"
 
 Mongoid.load!("mongoid.yml")
 
@@ -66,9 +67,11 @@ class CypressValidatorApp < Sinatra::Base
                        HealthDataStandards::Validate::Cat3 => "QRDA",
                        CypressValidationUtility::Validate::EPCat1 => "CMS",
                        CypressValidationUtility::Validate::EPCat3 => "CMS",
+                       CypressValidationUtility::Validate::EHCat1 => "CMS",
                        HealthDataStandards::Validate::DataValidator => "Value Sets",
                        HealthDataStandards::Validate::Cat1Measure => "Measures",
-                       HealthDataStandards::Validate::Cat3Measure => "Measures"}
+                       HealthDataStandards::Validate::Cat3Measure => "Measures",
+                       EncounterValidator => "Encounters"}
 
       NODE_TYPES ={ 1 => :element ,
                     2 => :attribute ,
@@ -166,7 +169,7 @@ class DocumentUpload
     @measure_ids = measure_ids
 
     @errors = validators.inject({}) do |errors, v|
-      errors[v] = v.validate(content_string)
+      errors[v] = v.validate(content_string, file_name: file)
       errors
     end
 
@@ -237,6 +240,7 @@ class DocumentUpload
       if @program.downcase == "ep"
         CypressValidationUtility::Validate::EPCat1
       elsif @program.downcase == "eh"
+        @validators << EncounterValidator.instance
         CypressValidationUtility::Validate::EHCat1
       else
         HealthDataStandards::Validate::Cat1
@@ -255,7 +259,7 @@ class DocumentUpload
     end
 
     @validators << val_class.instance
-    @validators << HealthDataStandards::Validate::CDA.instance  
+    @validators << HealthDataStandards::Validate::CDA.instance
   end
 
 end

@@ -1,4 +1,4 @@
-
+require_relative "./encounter_validator"
 
 module CypressValidationUtility
   module Validate
@@ -22,6 +22,11 @@ module CypressValidationUtility
 
       def initialize
         super("CMS EH Cat I Schematron Validator", File.join(BASE_DIR, CMS_EH_CAT1_SCHEMATRON))
+      end
+
+      def validate(file, options)
+        errors = EncounterValidator.instance.validate(file,options)
+        super(file,options) + errors
       end
     end
 

@@ -466,13 +466,11 @@
 </sch:pattern>
 <!-- pqrs March 2015 Release changes, added new function to validate Version specific measure IDs -->
 <xsl:function name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean"-->
 	<xsl:param name="pgmYear" as="xs:string?"/>
 	<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
 	<xsl:value-of select="true()"/>
-<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidMeasureVersionSpecificID" as="xs:boolean">
-	<xsl:param name="pgmYear" as="xs:string?"/>
-	<xsl:param name="isValidMeasureVersionSpecificID" as="xs:string?"/>
-	<xsl:choose>
+	<!--xsl:choose>
 		<xsl:when test="javaClassName:isValidMeasureVersionSpecificID($pgmYear,$isValidMeasureVersionSpecificID)">
 			<xsl:value-of select="true()"/>
 		</xsl:when>
@@ -582,12 +580,11 @@
 </xsl:function>
 <!-- pqrs August 2014 Release changes, added new function used to validate date strings -->
 <xsl:function name="cda:isValidDate" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean"-->
 	<xsl:param name="date-stringT" as="node()*"/>
+	<!--xsl:variable name="date-string" select="$date-stringT[1]/@value"/-->
 	<xsl:value-of select="true()"/>
-<!--xsl:function xmlns:javaClassName="java:gov.cms.pqri.ehrsevt.validators.ValidatorHelper" name="cda:isValidDate" as="xs:boolean">
-	<xsl:param name="date-stringT" as="node()*"/>
-	<xsl:variable name="date-string" select="$date-stringT[1]/@value"/>
-	<xsl:choose>
+	<!--xsl:choose>
 		<xsl:when test="javaClassName:isValidDate($date-string)">
 			<xsl:value-of select="true()"/>
 		</xsl:when>
@@ -674,15 +671,12 @@
 </xsl:function>
 <!-- pqrs August 2015 Release changes, added new function to validate VOC values -->
 <xsl:function name="cda:isVOCCodeValid" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean"-->
 	<xsl:param name="vsid" as="xs:string?"/>
 	<xsl:param name="code" as="xs:string?"/>
 	<xsl:param name="codesystem" as="xs:string?"/>
 	<xsl:value-of select="true()"/>
-<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isVOCCodeValid" as="xs:boolean">
-	<xsl:param name="vsid" as="xs:string?"/>
-	<xsl:param name="code" as="xs:string?"/>
-	<xsl:param name="codesystem" as="xs:string?"/>
-	<xsl:choose>
+	<!--xsl:choose>
 		<xsl:when test="javaClassName:isVOCCodeValid($vsid,$codesystem,$code)">
 			<xsl:value-of select="true()"/>
 		</xsl:when>
@@ -693,11 +687,9 @@
 </xsl:function>
 <!-- pqrs August 2015 Release changes, added new function to validate performance rates -->
 <xsl:function name="cda:isValidPerfRates" as="xs:boolean">
+	<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidPerfRates" as="xs:boolean"-->
 	<xsl:param name="versionID" as="xs:string?"/>
 	<xsl:param name="numPerfRates" as="xs:integer?"/>
 	<xsl:value-of select="true()"/>
-<!--xsl:function xmlns:javaClassName="java:gov.cms.pqrs.qrda3.service.Qrda3ValidationsUtil" name="cda:isValidPerfRates" as="xs:boolean">
-	<xsl:param name="versionID" as="xs:string?"/>
-	<xsl:param name="numPerfRates" as="xs:integer?"/>
-	<xsl:value-of select="javaClassName:isValidPerfRates($versionID,$numPerfRates)"/-->
+	<!--xsl:value-of select="javaClassName:isValidPerfRates($versionID,$numPerfRates)"/-->
 </xsl:function>

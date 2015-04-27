@@ -1,7 +1,7 @@
 <!--<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 -->
 <!-- Schematron generated from Trifolia on 8/1/2014 -->
-<!--sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<!--<sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
   <sch:ns prefix="voc" uri="http://www.lantanagroup.com/voc" />
   <sch:ns prefix="svs" uri="urn:ihe:iti:svs:2008" />
   <sch:ns prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance" />
@@ -4057,4 +4057,4 @@ This representedOrganization SHOULD contain zero or one [0..1] id (CONF:16595) s
       <sch:extends rule="r-oid-2.16.840.1.113883.10.20.22.4.86-warnings-abstract" />
     </sch:rule>
   </sch:pattern>
-<!--/sch:schema-->
+<!--</sch:schema>-->

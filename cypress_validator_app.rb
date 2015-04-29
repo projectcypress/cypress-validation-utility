@@ -150,6 +150,8 @@ class CypressValidatorApp < Sinatra::Base
       status 400
       @message = e.message
       halt(400, erubis(:error_400))
+    ensure
+      File.delete(params[:file][:tempfile])
     end
 
     erb :results
@@ -162,6 +164,8 @@ class DocumentUpload
   def initialize(file, doc_type, program=nil)
     content_string = File.read(file)
     @content = Nokogiri::XML(content_string)
+    @content.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
+    @content.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
     #if the doc_type isn't passed in, see if we can find it in the document
     doc_type = get_doc_type if !doc_type
     @doc_type = doc_type

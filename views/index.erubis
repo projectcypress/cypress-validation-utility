@@ -20,18 +20,18 @@
       <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
     </div>
 
-    <legend>Reporting Program</legend>
+    <legend>2015 Reporting Program</legend>
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="program" value="none" id="none">
-        None
+        None (Base IG Only)
       </label>
       <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> EP
+        <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> PQRS
       </label>
       <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="program" value="eh" id="eh"> EH
+        <input required type="radio" class="form-control radio" name="program" value="eh" id="eh"> HQR
       </label>
     </div>
     <div class="help-block with-errors"></div>
@@ -40,10 +40,10 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat1" class="form-control" id="cat1"> Cat I
+        <input type="radio" required name="file_type" value="cat1" class="form-control" id="cat1"> QRDA Cat I
       </label>
       <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> Cat III
+        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> QRDA Cat III
       </label>
     </div>
     <div class="help-block with-errors"></div>

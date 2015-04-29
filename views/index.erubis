@@ -51,7 +51,7 @@
     <legend>PHI Confirmation</legend>
     <div class="form-group">
       <div class="radio">
-        <label for="warning" class="text-danger">This file does not contain any PHI or PII:</label>
+        <label for="warning" class="text-danger">Please check the box to acknowledge that you've read and understand the warning, and to the best of your knowledge, the submitted files will contain neither PII nor PHI:</label>
         <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
       </div>
     </div>

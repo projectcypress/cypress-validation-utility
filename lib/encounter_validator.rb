@@ -13,8 +13,19 @@ class EncounterValidator
       encounter_times = doc.xpath("//cda:encounter/cda:effectiveTime")
       errors = []
       encounter_times.each do |encounter|
-        low = get_time_value(encounter, "low")
-        high = get_time_value(encounter, "high")
+        begin
+          low = get_time_value(encounter, "low")
+        rescue ArgumentError => ae
+          errors << build_error("Encounter start time invalid. #{ae.message}", encounter.path, options[:file_name])
+          next
+        end
+        begin
+          high = get_time_value(encounter, "high")
+        rescue ArgumentError => ae
+          errors << build_error("Encounter end time invalid. #{ae.message}", encounter.path, options[:file_name])
+          next
+        end
+
         current_time = Time.now.to_i
         if low > high
           # encounter ends before start time

@@ -1,7 +1,5 @@
-GIT
-  remote: https://github.com/ssayer/health-data-standards.git
-  revision: 10d907746cda155c2461fc5d4f3c44d77891539e
-  branch: java_uri_resolver
+PATH
+  remote: ../health-data-standards
   specs:
     health-data-standards (3.5.3)
       activesupport (~> 4.1.1)

@@ -71,8 +71,7 @@ class CypressValidatorApp < Sinatra::Base
                        CypressValidationUtility::Validate::EHCat1 => "CMS",
                        HealthDataStandards::Validate::DataValidator => "Value Sets",
                        HealthDataStandards::Validate::Cat1Measure => "Measures",
-                       HealthDataStandards::Validate::Cat3Measure => "Measures",
-                       EncounterValidator => "Encounters"}
+                       HealthDataStandards::Validate::Cat3Measure => "Measures"}
 
       NODE_TYPES ={ 1 => :element ,
                     2 => :attribute ,
@@ -141,7 +140,7 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   get "/" do
-    erubis :index
+    erb :index
   end
 
   post "/validate" do
@@ -153,7 +152,7 @@ class CypressValidatorApp < Sinatra::Base
       halt(400, erubis(:error_400))
     end
 
-    erubis :results
+    erb :results
   end
 
 class DocumentUpload
@@ -246,7 +245,6 @@ class DocumentUpload
       if @program.downcase == "ep"
         CypressValidationUtility::Validate::EPCat1
       elsif @program.downcase == "eh"
-        @validators << EncounterValidator.instance
         CypressValidationUtility::Validate::EHCat1
       else
         HealthDataStandards::Validate::Cat1

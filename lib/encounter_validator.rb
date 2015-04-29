@@ -18,17 +18,22 @@ class EncounterValidator
         current_time = Time.now.to_i
         if low > high
           # encounter ends before start time
-          errors << build_error("Encounter ends before start time", encounter.parent.path, options[:file_name])
+          errors << build_error("Encounter ends (#{format_time(high)}) before start time (#{format_time(low)})", encounter.parent.path, options[:file_name])
         elsif low < MP_START
           # encounter starts before submission period
-          errors << build_error("Encounter starts before submission period", encounter.parent.path, options[:file_name])
+          errors << build_error("Encounter starts (#{format_time(low)}) before submission period (#{format_time(MP_START)})", encounter.parent.path, options[:file_name])
         elsif low > current_time || high > current_time
           # encounter occurs in the future
-          errors << build_error("Encounter occurs in the future", encounter.parent.path, options[:file_name])
+          errors << build_error("Encounter occurs in the future (#{format_time(low)})", encounter.parent.path, options[:file_name])
         end
           
       end
       errors
+    end
+
+    def format_time(time_i)
+      time = Time.at(time_i).utc
+      time.strftime("%-m/%-d/%Y %k:%M")
     end
 
     def get_time_value(time_el, value_el)

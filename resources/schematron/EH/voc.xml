@@ -21999,18 +21999,4 @@
     <code value="STPSIB" displayName="step sibling" codeSystemName="RoleCode" codeSystem="2.16.840.1.113883.5.111" />
     <code value="UNCLE" displayName="uncle" codeSystemName="RoleCode" codeSystem="2.16.840.1.113883.5.111" />
   </system>
-  <!-- Added for HL7 Cat III -->
-  <system valueSetOid="2.16.840.1.113883.1.11.20450" valueSetName="ObservationMethodAggregate">
-    <code value="AVERAGE" displayName="Average" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="COUNT" displayName="Count" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="MAX" displayName="Maxima" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="MEDIAN" displayName="Median" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="MIN" displayName="Minima" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="MODE" displayName="Mode" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="STDEV.P" displayName="Population Standard Deviation" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="STDEV.S" displayName="Sample Standard Deviation" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="SUM" displayName="Sum" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="VARIANCE.P" displayName="Population Variance" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-    <code value="VARIANCE.S" displayName="Sample Variance" codeSystemName="ObservationMethod" codeSystem="2.16.840.1.113883.5.84" />
-  </system>
 </systems>

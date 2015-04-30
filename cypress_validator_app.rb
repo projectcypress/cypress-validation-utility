@@ -7,6 +7,8 @@ require "pry"
 require "health-data-standards"
 require "logger"
 
+Encoding.default_external = 'utf-8'  if defined?(::Encoding)
+
 require_relative "./lib/cms_validators"
 require_relative "./lib/encounter_validator"
 

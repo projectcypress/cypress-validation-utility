@@ -152,11 +152,17 @@ class CypressValidatorApp < Sinatra::Base
       status 400
       @message = e.message
       halt(400, erubis(:error_400))
+    rescue Exception => e
+      @message = e.message
     ensure
       File.delete(params[:file][:tempfile])
     end
 
     erb :results
+  end
+
+  error 500 do
+    erb :error_500
   end
 
 class DocumentUpload

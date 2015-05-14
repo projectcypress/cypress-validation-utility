@@ -10,7 +10,7 @@ class EncounterValidator
 
     def validate(file, options={})
       doc = get_document(file)
-      encounter_times = doc.xpath("//cda:encounter/cda:effectiveTime")
+      encounter_times = doc.xpath("//cda:entry/cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime")
       errors = []
       encounter_times.each do |encounter|
         begin
@@ -18,11 +18,21 @@ class EncounterValidator
         rescue ArgumentError => ae
           errors << build_error("Encounter start time invalid. #{ae.message}", encounter.path, options[:file_name])
           next
+        rescue NoMethodError => nme
+          if (!encounter.at_xpath("./cda:low/@nullFlavor"))
+            errors << build_error("No encounter start time found.", encounter.path, options[:file_name])
+          end
+          next
         end
         begin
           high = get_time_value(encounter, "high")
         rescue ArgumentError => ae
           errors << build_error("Encounter end time invalid. #{ae.message}", encounter.path, options[:file_name])
+          next
+        rescue NoMethodError => nme
+          if (!encounter.at_xpath("./cda:high/@nullFlavor"))
+            errors << build_error("No encounter end time found.", encounter.path, options[:file_name])
+          end
           next
         end
 
@@ -30,9 +40,6 @@ class EncounterValidator
         if low > high
           # encounter ends before start time
           errors << build_error("Encounter ends (#{format_time(high)}) before start time (#{format_time(low)})", encounter.parent.path, options[:file_name])
-        elsif low < MP_START
-          # encounter starts before submission period
-          errors << build_error("Encounter starts (#{format_time(low)}) before submission period (#{format_time(MP_START)})", encounter.parent.path, options[:file_name])
         elsif low > current_time || high > current_time
           # encounter occurs in the future
           errors << build_error("Encounter occurs in the future (#{format_time(low)})", encounter.parent.path, options[:file_name])

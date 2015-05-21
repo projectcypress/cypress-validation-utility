@@ -170,7 +170,7 @@ class DocumentUpload
   attr_reader :doc_type, :program, :content
 
   def initialize(file, doc_type, program=nil)
-    content_string = File.read(file)
+    content_string = File.open(file,"rb:bom|utf-8").read
     @content = Nokogiri::XML(content_string)
     @content.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
     @content.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')

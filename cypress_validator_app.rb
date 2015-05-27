@@ -238,7 +238,7 @@ class DocumentUpload
   def get_measure_ids
     measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" + 
       "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" + 
-      "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value)
+      "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
     if !measure_ids
       return nil
     end

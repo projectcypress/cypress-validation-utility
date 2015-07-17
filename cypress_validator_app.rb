@@ -265,15 +265,15 @@ class DocumentUpload
     end
     if @program.downcase == "ep"
       if @program_year == "2015"
-        CypressValidationUtility::Validate::EPCat1
+        @validators << CypressValidationUtility::Validate::EPCat1.instance
       elsif @program_year == "2016"
-        CypressValidationUtility::Validate::EPCat1_2016
+        @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
       end
     elsif @program.downcase == "eh"
       if @program_year == "2015"
-        CypressValidationUtility::Validate::EHCat1
+        @validators << CypressValidationUtility::Validate::EHCat1.instance
       elsif @program_year == "2016"
-        CypressValidationUtility::Validate::EHCat1_2016
+        @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
       end
     end
   end

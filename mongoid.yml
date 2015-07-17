@@ -1,7 +1,7 @@
 development:
   sessions:
     default:
-      database: cypress_validation_utility_development
+      database: cypress_development
       hosts:
         - localhost:27017
   options:

@@ -20,7 +20,20 @@
       <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
     </div>
 
-    <legend>2015 Reporting Program</legend>
+    <legend>Reporting Program Year</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="2015" id="2015">
+        2015
+      </label>
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="2016" id="2016"> 2016
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>Reporting Program</legend>
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
@@ -40,7 +53,10 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat1" class="form-control" id="cat1"> QRDA Cat I
+        <input type="radio" required name="file_type" value="cat1_r2" class="form-control" id="cat1_r2"> QRDA Cat I (R2)
+      </label>
+      <label type="button" class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat1_r3" class="form-control" id="cat1_r3"> QRDA Cat I (R3)
       </label>
       <label type="button" class="btn btn-default">
         <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> QRDA Cat III
@@ -75,16 +91,83 @@ window.onload = function() {
     $(over).appendTo('body');
   };
 
-  $("[name=program]").change(function() {
-    if ($(this).val() == "eh") {
-      $("#cat3").parent().attr("disabled", true);
-      $("#cat3").attr("disabled", true);
-      $("#cat1").click();
-    } else {
-      $("#cat3").parent().attr("disabled", false);
-      $("#cat3").attr("disabled", false);
+  // to store year and program for functions below
+  var year;
+  var program;
+
+  // when year changes
+  $("[name=year]").change(function() {
+    year = ($(this).val());
+    if ($(this).val() == "2016") { 
+      if (program == "eh") {
+        eh_2016();
+      } else {
+        none_ep_2016();
+      }
+    } else { // 2015
+      if (program == "eh") {
+        eh_2015();
+      } else {
+        none_ep_2015();
+      }
     }
-  });
+  }); 
+
+  // when program changes
+  $("[name=program]").change(function() {
+    program = ($(this).val());
+    if ($(this).val() == "eh") { 
+      if (year == "2015") {
+        eh_2015();
+      } else {
+        eh_2016();
+      }
+    } else { // ep OR none
+      if (year == "2015") {
+        none_ep_2015();
+      } else {
+        none_ep_2016();
+      }
+    }
+  }); 
+
+  function eh_2015() { // helper that disables/enables
+    $("#cat1_r2").parent().attr("disabled", false);
+    $("#cat1_r2").attr("disabled", false);
+    $("#cat1_r3").parent().attr("disabled", true);
+    $("#cat1_r3").attr("disabled", true);
+    $("#cat3").parent().attr("disabled", true);
+    $("#cat3").attr("disabled", true);
+    $("#cat1_r2").click();
+  };
+
+  function none_ep_2015() { // helper that disables/enables
+    $("#cat1_r2").parent().attr("disabled", false);
+    $("#cat1_r2").attr("disabled", false);
+    $("#cat1_r3").parent().attr("disabled", true);
+    $("#cat1_r3").attr("disabled", true);
+    $("#cat3").parent().attr("disabled", false);
+    $("#cat3").attr("disabled", false);
+  };
+
+  function eh_2016() { // helper that disables/enables
+    $("#cat1_r2").parent().attr("disabled", true);
+    $("#cat1_r2").attr("disabled", true);
+    $("#cat1_r3").parent().attr("disabled", false);
+    $("#cat1_r3").attr("disabled", false);
+    $("#cat3").parent().attr("disabled", true);
+    $("#cat3").attr("disabled", true);
+    $("#cat1_r3").click();
+  };
+
+  function none_ep_2016() { // helper that disables/enables
+    $("#cat1_r2").parent().attr("disabled", true);
+    $("#cat1_r2").attr("disabled", true);
+    $("#cat1_r3").parent().attr("disabled", false);
+    $("#cat1_r3").attr("disabled", false);
+    $("#cat3").parent().attr("disabled", false);
+    $("#cat3").attr("disabled", false);
+  };
 
   $("#upload_form").submit(loading);
 }

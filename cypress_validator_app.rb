@@ -67,13 +67,18 @@ class CypressValidatorApp < Sinatra::Base
 
     VALIDATOR_NAMES = {HealthDataStandards::Validate::CDA => "CDA",
                        HealthDataStandards::Validate::Cat1 => "QRDA",
+                       HealthDataStandards::Validate::Cat1R2 => "QRDA",
                        HealthDataStandards::Validate::Cat3 => "QRDA",
                        CypressValidationUtility::Validate::EPCat1 => "CMS",
                        CypressValidationUtility::Validate::EPCat3 => "CMS",
                        CypressValidationUtility::Validate::EHCat1 => "CMS",
+                       CypressValidationUtility::Validate::EPCat1_2016 => "CMS",
+                       CypressValidationUtility::Validate::EPCat3_2016 => "CMS",
+                       CypressValidationUtility::Validate::EHCat1_2016 => "CMS",
                        HealthDataStandards::Validate::DataValidator => "Value Sets",
                        HealthDataStandards::Validate::Cat1Measure => "Measures",
-                       HealthDataStandards::Validate::Cat3Measure => "Measures"}
+                       HealthDataStandards::Validate::Cat3Measure => "Measures",
+                       HealthDataStandards::Validate::Cat3PerformanceRate => "Performance Rate"}
 
       NODE_TYPES ={ 1 => :element ,
                     2 => :attribute ,
@@ -136,10 +141,15 @@ class CypressValidatorApp < Sinatra::Base
   end
 
   before do
-    unless HealthDataStandards::CQM::Bundle.first
-      raise "Please install a bundle in order to use the Cypress Validation Utility"
+    unless BUNDLE2016 && BUNDLE2015
+      raise "Please install a Cypress 2.7.0 and Cypress 2.6.0 bundle in order to use the Cypress Validation Utility"
     end
   end
+
+  BUNDLE2016 = HealthDataStandards::CQM::Bundle.find_by(version: "2.7.0")
+  BUNDLE2015 = HealthDataStandards::CQM::Bundle.find_by(version: "2.6.0")
+  CAT1_VALIDATORS = [HealthDataStandards::Validate::Cat1Measure.instance]
+  CAT3_VALIDATORS = [HealthDataStandards::Validate::Cat3Measure.instance, HealthDataStandards::Validate::Cat3PerformanceRate.instance]
 
   get "/" do
     erb :index
@@ -147,7 +157,7 @@ class CypressValidatorApp < Sinatra::Base
 
   post "/validate" do
     begin
-      @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program])
+      @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program], params[:year])
     rescue Nokogiri::XML::SyntaxError => e
       status 400
       @message = e.message
@@ -169,7 +179,7 @@ class DocumentUpload
 
   attr_reader :doc_type, :program, :content
 
-  def initialize(file, doc_type, program=nil)
+  def initialize(file, doc_type, program=nil, year)
     content_string = File.open(file,"rb:bom|utf-8").read
     @content = Nokogiri::XML(content_string)
     @content.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
@@ -185,6 +195,7 @@ class DocumentUpload
     measure_ids = get_measure_ids if !measure_ids
     @measure_ids = measure_ids
 
+    @program_year = year
     @errors = validators.inject({}) do |errors, v|
       errors[v] = v.validate(content_string, file_name: file)
       errors
@@ -245,26 +256,47 @@ class DocumentUpload
     measure_ids
   end
 
+  def cat1_validator
+    @validators.concat CAT1_VALIDATORS
+    if @program_year == "2015"
+        @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLE2015, @measure_ids)
+    elsif @program_year == "2016"
+        @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLE2016, @measure_ids)
+    end
+    if @program.downcase == "ep"
+      if @program_year == "2015"
+        @validators << CypressValidationUtility::Validate::EPCat1.instance
+      elsif @program_year == "2016"
+        @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
+      end
+    elsif @program.downcase == "eh"
+      if @program_year == "2015"
+        @validators << CypressValidationUtility::Validate::EHCat1.instance
+      elsif @program_year == "2016"
+        @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
+      end
+    end
+  end
+
   def validators
     return @validators if @validators
-
     @validators = []
-    val_class = case @doc_type
-    when "cat1"
-      bundle = HealthDataStandards::CQM::Bundle.first
-      @validators << HealthDataStandards::Validate::DataValidator.new(bundle, @measure_ids)
-      @validators << HealthDataStandards::Validate::Cat1Measure.instance
-      if @program.downcase == "ep"
-        CypressValidationUtility::Validate::EPCat1
-      elsif @program.downcase == "eh"
-        CypressValidationUtility::Validate::EHCat1
-      else
-        HealthDataStandards::Validate::Cat1
-      end
+    cms_validator = case @doc_type
+      
+    when "cat1_r2"
+      cat1_validator
+      HealthDataStandards::Validate::Cat1R2
+    when "cat1_r3"
+      cat1_validator
+      HealthDataStandards::Validate::Cat1
     when "cat3"
-      @validators << HealthDataStandards::Validate::Cat3Measure.instance
+      @validators.concat CAT3_VALIDATORS
       if @program.downcase == "ep"
-        CypressValidationUtility::Validate::EPCat3
+        if @program_year == "2015"
+          CypressValidationUtility::Validate::EPCat3
+        elsif @program_year == "2016"
+          CypressValidationUtility::Validate::EPCat3_2016
+        end
       elsif @program.downcase == "none"
         HealthDataStandards::Validate::Cat3
       else
@@ -273,8 +305,7 @@ class DocumentUpload
     else
       raise "Invalid doc_type param: Must be one of (cat1, cat3)"
     end
-
-    @validators << val_class.instance
+    @validators << cms_validator.instance if cms_validator
     @validators << HealthDataStandards::Validate::CDA.instance
   end
 

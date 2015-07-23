@@ -173,8 +173,6 @@ window.onload = function() {
   function disable(el) { toggle(el, false); }
 
   function toggle(el, bool) {
-    console.log(el)
-    console.log(bool)
     $("#" + el).parent().attr("disabled", !bool);
     $("#" + el).attr("disabled", !bool);
   }

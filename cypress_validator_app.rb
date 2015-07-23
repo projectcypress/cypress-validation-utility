@@ -30,14 +30,14 @@ class CypressValidatorApp < Sinatra::Base
   configure do
     use ::Rack::CommonLogger, access_logger
   end
- 
+
   before {
     env["rack.errors"] =  error_logger
   }
- 
+
 
   SassPaths.append("#{CypressValidatorApp.root}/app/css")
-  
+
 
   assets do
     serve '/fonts/',  from: 'app/fonts/'
@@ -157,6 +157,7 @@ class CypressValidatorApp < Sinatra::Base
 
   post "/validate" do
     begin
+      puts params
       @upload = DocumentUpload.new(params[:file][:tempfile], params[:file_type], params[:program], params[:year])
     rescue Nokogiri::XML::SyntaxError => e
       status 400
@@ -177,7 +178,7 @@ class CypressValidatorApp < Sinatra::Base
 
 class DocumentUpload
 
-  attr_reader :doc_type, :program, :content
+  attr_reader :doc_type, :program, :program_year, :content
 
   def initialize(file, doc_type, program=nil, year)
     content_string = File.open(file,"rb:bom|utf-8").read
@@ -226,12 +227,12 @@ class DocumentUpload
     end
   end
 
-  def get_program 
+  def get_program
     #xpath for informationRecipient, which is where CMS wants the code for the program
-    prog = @content.at_xpath("//xmlns:informationRecipient/xmlns:intendedRecipient/xmlns:id/@extension")
+    prog = @content.at_xpath("//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension")
     #If it's not there, raise an error
     if !prog
-      return nil
+      return "none"
     end
 
     #Figure out if the program is EP or EH
@@ -242,13 +243,13 @@ class DocumentUpload
       "eh"
     else
       #If the program name doesn't exist, return nil
-      nil
+      "none"
     end
   end
 
   def get_measure_ids
-    measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" + 
-      "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" + 
+    measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" +
+      "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" +
       "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
     if !measure_ids
       return nil
@@ -282,7 +283,7 @@ class DocumentUpload
     return @validators if @validators
     @validators = []
     cms_validator = case @doc_type
-      
+
     when "cat1_r2"
       cat1_validator
       HealthDataStandards::Validate::Cat1R2

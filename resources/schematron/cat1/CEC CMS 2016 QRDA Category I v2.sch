@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
-
 THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL LANTANA CONSULTING GROUP LLC, OR ANY OF THEIR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Schematron generated from Trifolia on 7/2/2015
+Schematron generated from Trifolia on 7/16/2015
+-->
+<!-- 
+2016 CMS QRDA Category I Schematron for Comprehensive End-Stage Renal Disease Care Initiative (CEC), Version 2
 -->
 <sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
   <sch:ns prefix="voc" uri="http://www.lantanagroup.com/voc" />
@@ -21,6 +23,7 @@ Schematron generated from Trifolia on 7/2/2015
     <sch:active pattern="p-validate_INT" />
     <sch:active pattern="p-validate_NPI_format" />
     <sch:active pattern="p-validate_TIN_format" />
+    <sch:active pattern="p-validate_TS" />
     <sch:active pattern="p-DOCUMENT-TEMPLATE" />
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.17.3.8-errors" />
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.17.2.1-errors" />
@@ -177,6 +180,7 @@ Schematron generated from Trifolia on 7/2/2015
     <sch:active pattern="p-urn-hl7ii-2.16.840.1.113883.10.20.24.2.1-2015-07-01-errors" />
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.22.4.147-errors" />
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.22.4.147-CLOSEDTEMPLATE" />
+    <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.22.4.145-errors" />
   </sch:phase>
   <sch:phase id="warnings">
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.17.3.8-warnings" />
@@ -333,6 +337,7 @@ Schematron generated from Trifolia on 7/2/2015
     <sch:active pattern="p-urn-hl7ii-2.16.840.1.113883.10.20.17.2.1-2015-07-01-warnings" />
     <sch:active pattern="p-urn-hl7ii-2.16.840.1.113883.10.20.24.2.1-2015-07-01-warnings" />
     <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.22.4.147-warnings" />
+    <sch:active pattern="p-urn-oid-2.16.840.1.113883.10.20.22.4.145-warnings" />
   </sch:phase>
   <sch:pattern id="p-validate_CD_CE">
     <sch:rule id="r-validate_CD_CE-errors-abstract" abstract="true">
@@ -413,7 +418,7 @@ Schematron generated from Trifolia on 7/2/2015
       <sch:let name="sum" value="24 + (number(substring($s, $n - 1, 1))*2) mod 10 + floor(number(substring($s, $n - 1,1))*2 div 10) + number(substring($s, $n - 2, 1)) +(number(substring($s, $n - 3, 1))*2) mod 10 + floor(number(substring($s, $n - 3,1))*2 div 10) + number(substring($s, $n - 4, 1)) + (number(substring($s, $n - 5, 1))*2) mod 10 + floor(number(substring($s, $n - 5,1))*2 div 10) + number(substring($s, $n - 6, 1)) + (number(substring($s, $n - 7, 1))*2) mod 10 + floor(number(substring($s, $n - 7,1))*2 div 10) + number(substring($s, $n - 8, 1)) + (number(substring($s, $n - 9, 1))*2) mod 10 + floor(number(substring($s, $n - 9,1))*2 div 10)" />
       <sch:assert test="not(@extension) or $n = 10">The NPI should have 10 digits. (Rule: p-validate_NPI_format)</sch:assert>
       <sch:assert test="not(@extension) or number($s)=$s">The NPI should be composed of all digits. (Rule: p-validate_NPI_format)</sch:assert>
-      <sch:assert test="not(@extension) or number(substring($s, $n, 1)) = 10 - ($sum mod 10)">
+      <sch:assert test="not(@extension) or number(substring($s, $n, 1)) = (10 - ($sum mod 10)) mod 10">
           The NPI should have a correct checksum, using the Luhn algorithm. (Rule: p-validate_NPI_format)
       </sch:assert>
       <sch:assert test="count(@extension|@nullFlavor)=1">The NPI should have @extension or @nullFlavor, but not both. (Rule: p-validate_NPI_format)</sch:assert>
@@ -430,6 +435,15 @@ Schematron generated from Trifolia on 7/2/2015
     </sch:rule>
     <sch:rule id="r-errors-validate_TIN_format" context="//cda:id[@root='2.16.840.1.113883.4.2']">
       <sch:extends rule="r-validate_TIN_format-errors-abstract" />
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p-validate_TS">
+    <sch:rule id="r-validate_TS-errors-abstract" abstract="true">
+      <sch:assert id="a-validate_TS-c" test="count(@value | @nullFlavor)&lt;2">
+        Data types of TS SHALL have either @value or @nullFlavor but SHALL NOT have @value and @nullFlavor. (Rule: validate_TS)</sch:assert>
+    </sch:rule>
+    <sch:rule id="r-errors-validate_TS" context="//cda:birthTime | //cda:time | //cda:effectiveTime | //cda:time/cda:low | //cda:time/cda:high | //cda:effectiveTime/cda:low | //cda:effectiveTime/cda:high">
+      <sch:extends rule="r-validate_TS-errors-abstract" />
     </sch:rule>
   </sch:pattern>
   <sch:pattern id="p-DOCUMENT-TEMPLATE">
@@ -3177,6 +3191,21 @@ Schematron generated from Trifolia on 7/2/2015
       <sch:extends rule="r-urn-oid-2.16.840.1.113883.10.20.22.4.147-errors-CL-abstract" />
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p-urn-oid-2.16.840.1.113883.10.20.22.4.145-errors">
+    <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-errors-abstract" abstract="true">
+      <sch:assert id="a-1198-32919" test="count(cda:code)=1">SHALL contain exactly one [1..1] code (CONF:1198-32919).</sch:assert>
+      <sch:assert id="a-1198-32920" test="count(cda:statusCode)=1">SHALL contain exactly one [1..1] statusCode (CONF:1198-32920).</sch:assert>
+      <sch:assert id="a-1198-32921" test="@classCode='OBS'">SHALL contain exactly one [1..1] @classCode="OBS" Observation (CodeSystem: HL7ActClass urn:oid:2.16.840.1.113883.5.6 STATIC) (CONF:1198-32921).</sch:assert>
+      <sch:assert id="a-1198-32922" test="@moodCode='EVN'">SHALL contain exactly one [1..1] @moodCode="EVN" Event (CodeSystem: ActMood urn:oid:2.16.840.1.113883.5.1001 STATIC) (CONF:1198-32922).</sch:assert>
+      <sch:assert id="a-1198-32925" test="cda:code[@code='NEW-LOINC-CRITICALITY']">This code SHALL contain exactly one [1..1] @code="NEW-LOINC-CRITICALITY" Criticality (CONF:1198-32925).</sch:assert>
+      <sch:assert id="a-1198-32927" test="cda:statusCode[@code='completed']">This statusCode SHALL contain exactly one [1..1] @code="completed" Completed (CodeSystem: ActStatus urn:oid:2.16.840.1.113883.5.14 STATIC) (CONF:1198-32927).</sch:assert>
+      <sch:assert id="a-1198-32928" test="count(cda:value[@xsi:type='CD' and @code=document('voc.xml')/voc:systems/voc:system[@valueSetOid='2.16.840.1.113883.13.275']/voc:code/@value or @nullFlavor])=1">SHALL contain exactly one [1..1] value with @xsi:type="CD", where the code SHALL be selected from ValueSet Criticality Observation urn:oid:2.16.840.1.113883.13.275 STATIC 2015-08-01 (CONF:1198-32928).</sch:assert>
+    </sch:rule>
+    <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-errors" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.145']]">
+      <sch:extends rule="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-errors-abstract" />
+      <sch:assert id="a-1198-32918" test="count(cda:templateId[@root='2.16.840.1.113883.10.20.22.4.145'])=1">SHALL contain exactly one [1..1] templateId (CONF:1198-32918) such that it SHALL contain exactly one [1..1] @root="2.16.840.1.113883.10.20.22.4.145" (CONF:1198-32923).</sch:assert>
+    </sch:rule>
+  </sch:pattern>
   <sch:pattern id="p-urn-oid-2.16.840.1.113883.10.20.17.3.8-warnings">
     <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.17.3.8-warnings-abstract" abstract="true">
       <sch:assert test="."></sch:assert>
@@ -3574,7 +3603,9 @@ Schematron generated from Trifolia on 7/2/2015
     <sch:rule id="r-urn-hl7ii-2.16.840.1.113883.10.20.22.4.7-2014-06-09-warnings-abstract" abstract="true">
       <sch:extends rule="r-urn-hl7ii-2.16.840.1.113883.10.20.24.3.90-2014-06-09-warnings-abstract" />
       <sch:assert id="a-1098-7447" test="count(cda:entryRelationship[@typeCode='MFST'][@inversionInd='true'][count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.9' and @extension = '2014-06-09']])=1]) &gt; 0">SHOULD contain zero or more [0..*] entryRelationship (CONF:1098-7447) such that it SHALL contain exactly one [1..1] @typeCode="MFST" Is Manifestation of (CodeSystem: HL7ActRelationshipType urn:oid:2.16.840.1.113883.5.1002 STATIC) (CONF:1098-7907). SHALL contain exactly one [1..1] @inversionInd="true" True (CONF:1098-7449). SHALL contain exactly one [1..1] Reaction Observation (V2) (identifier: urn:hl7ii:2.16.840.1.113883.10.20.22.4.9:2014-06-09) (CONF:1098-15955).</sch:assert>
+      <sch:assert id="a-1098-9961" test="not(count(cda:entryRelationship[@typeCode='SUBJ'][@inversionInd='true'][count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.8' and @extension = '2014-06-09']])=1])=1)">SHOULD NOT contain zero or one [0..1] entryRelationship (CONF:1098-9961) such that it SHALL contain exactly one [1..1] @typeCode="SUBJ" Has Subject (CodeSystem: HL7ActRelationshipType urn:oid:2.16.840.1.113883.5.1002 STATIC) (CONF:1098-9962). SHALL contain exactly one [1..1] @inversionInd="true" True (CONF:1098-9964). SHALL contain exactly one [1..1] Severity Observation (V2) (identifier: urn:hl7ii:2.16.840.1.113883.10.20.22.4.8:2014-06-09) (CONF:1098-15956).</sch:assert>
       <sch:assert id="a-1098-31143" test="count(cda:author[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.119']]) &gt; 0">SHOULD contain zero or more [0..*] Author Participation (identifier: urn:oid:2.16.840.1.113883.10.20.22.4.119) (CONF:1098-31143).</sch:assert>
+      <sch:assert id="a-1098-32910" test="count(cda:entryRelationship[@typeCode='SUBJ'][count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.145']])=1])=1">SHOULD contain zero or one [0..1] entryRelationship (CONF:1098-32910) such that it SHALL contain exactly one [1..1] @typeCode="SUBJ" Has Subject (CodeSystem: HL7ActRelationshipType urn:oid:2.16.840.1.113883.5.1002) (CONF:1098-32911). SHOULD contain exactly one [1..1] Criticality Observation  (identifier: urn:oid:2.16.840.1.113883.10.20.22.4.145) (CONF:1098-32913).</sch:assert>
     </sch:rule>
     <sch:rule id="r-urn-hl7ii-2.16.840.1.113883.10.20.22.4.7-2014-06-09-warnings" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.7' and @extension = '2014-06-09']]">
       <sch:extends rule="r-urn-hl7ii-2.16.840.1.113883.10.20.22.4.7-2014-06-09-warnings-abstract" />
@@ -4664,6 +4695,14 @@ Schematron generated from Trifolia on 7/2/2015
     </sch:rule>
     <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.22.4.147-warnings" context="cda:substanceAdministration[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.147']]">
       <sch:extends rule="r-urn-oid-2.16.840.1.113883.10.20.22.4.147-warnings-abstract" />
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p-urn-oid-2.16.840.1.113883.10.20.22.4.145-warnings">
+    <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-warnings-abstract" abstract="true">
+      <sch:assert test="."></sch:assert>
+    </sch:rule>
+    <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-warnings" context="cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.22.4.145']]">
+      <sch:extends rule="r-urn-oid-2.16.840.1.113883.10.20.22.4.145-warnings-abstract" />
     </sch:rule>
   </sch:pattern>
 </sch:schema>

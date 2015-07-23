@@ -24,6 +24,10 @@
 
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="none" id="none">
+        None (Base IG Only)
+      </label>
+      <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="year" value="2015" id="2015">
         2015
       </label>
@@ -36,10 +40,6 @@
     <legend>Reporting Program</legend>
 
     <div class="btn-group" data-toggle="buttons">
-      <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="program" value="none" id="none">
-        None (Base IG Only)
-      </label>
       <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> PQRS
       </label>
@@ -98,76 +98,86 @@ window.onload = function() {
   // when year changes
   $("[name=year]").change(function() {
     year = ($(this).val());
-    if ($(this).val() == "2016") { 
+    if ($(this).val() == "2016") {
       if (program == "eh") {
         eh_2016();
       } else {
-        none_ep_2016();
+        ep_2016();
       }
-    } else { // 2015
+    } else if ($(this).val() == "2015"){
       if (program == "eh") {
         eh_2015();
       } else {
-        none_ep_2015();
+        ep_2015();
       }
+    } else {
+      disable_program();
     }
-  }); 
+  });
 
   // when program changes
   $("[name=program]").change(function() {
     program = ($(this).val());
-    if ($(this).val() == "eh") { 
+    if ($(this).val() == "eh") {
       if (year == "2015") {
         eh_2015();
       } else {
         eh_2016();
       }
-    } else { // ep OR none
+    } else if (year == "2016 "){ // ep
       if (year == "2015") {
-        none_ep_2015();
+        ep_2015();
       } else {
-        none_ep_2016();
+        ep_2016();
       }
     }
-  }); 
+  });
+
+  function disable_program() {
+    console.log('disabled')
+    toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["eh", "ep"])
+  }
 
   function eh_2015() { // helper that disables/enables
-    $("#cat1_r2").parent().attr("disabled", false);
-    $("#cat1_r2").attr("disabled", false);
-    $("#cat1_r3").parent().attr("disabled", true);
-    $("#cat1_r3").attr("disabled", true);
-    $("#cat3").parent().attr("disabled", true);
-    $("#cat3").attr("disabled", true);
-    $("#cat1_r2").click();
+    cmsToggleAll(["cat1_r2"], ["cat1_r3", "cat3"])
   };
 
-  function none_ep_2015() { // helper that disables/enables
-    $("#cat1_r2").parent().attr("disabled", false);
-    $("#cat1_r2").attr("disabled", false);
-    $("#cat1_r3").parent().attr("disabled", true);
-    $("#cat1_r3").attr("disabled", true);
-    $("#cat3").parent().attr("disabled", false);
-    $("#cat3").attr("disabled", false);
+  function ep_2015() { // helper that disables/enables
+    cmsToggleAll(["cat1_r2", "cat3"], ["cat1_r3"])
   };
 
   function eh_2016() { // helper that disables/enables
-    $("#cat1_r2").parent().attr("disabled", true);
-    $("#cat1_r2").attr("disabled", true);
-    $("#cat1_r3").parent().attr("disabled", false);
-    $("#cat1_r3").attr("disabled", false);
-    $("#cat3").parent().attr("disabled", true);
-    $("#cat3").attr("disabled", true);
-    $("#cat1_r3").click();
+    cmsToggleAll(["cat1_r3"], ["cat1_r2", "cat3"])
   };
 
-  function none_ep_2016() { // helper that disables/enables
-    $("#cat1_r2").parent().attr("disabled", true);
-    $("#cat1_r2").attr("disabled", true);
-    $("#cat1_r3").parent().attr("disabled", false);
-    $("#cat1_r3").attr("disabled", false);
-    $("#cat3").parent().attr("disabled", false);
-    $("#cat3").attr("disabled", false);
+  function ep_2016() { // helper that disables/enables
+    cmsToggleAll(["cat1_r3", "cat3"], ["cat1_r2"])
   };
+
+  function toggleAll(enabled, disabled) {
+    for (var i = 0; i < enabled.length; i++) {
+      enable(enabled[i])
+    }
+    for (var i = 0; i < disabled.length; i++) {
+      disable(disabled[i])
+    }
+  }
+
+  function cmsToggleAll(enabled, disabled) {
+    toggleAll(["eh", "ep"].concat(enabled),disabled);
+    if (enabled.length == 1) {
+      $("#" + enabled[0]).click()
+    }
+  }
+  function enable(el) { toggle(el, true); }
+  function disable(el) { toggle(el, false); }
+
+  function toggle(el, bool) {
+    console.log(el)
+    console.log(bool)
+    $("#" + el).parent().attr("disabled", !bool);
+    $("#" + el).attr("disabled", !bool);
+  }
 
   $("#upload_form").submit(loading);
 }

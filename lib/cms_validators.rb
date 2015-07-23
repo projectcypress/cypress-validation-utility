@@ -8,9 +8,9 @@ module CypressValidationUtility
     CMS_EP_CAT1_SCHEMATRON = 'resources/schematron/EP/QRDA_Category_I_pqrs.sch'
     CMS_EH_CAT1_SCHEMATRON = 'resources/schematron/EH/HRQRDACat1R2ValidationChecks.sch'
     CMS_EP_CAT3_SCHEMATRON = 'resources/schematron/EP/QRDA_Category_III_main.sch'
-    CMS_EP_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/PQRS CMS 2016 QRDA Category 1.sch'
-    CMS_EH_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/HQR CMS 2016 QRDA Category 1.sch'
-    CMS_EP_CAT3_SCHEMATRON_2016 = 'resources/schematron/cat3/CMS EP QRDA Category III Schematron.sch'
+    CMS_EP_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/PQRS CMS 2016 QRDA Category I v2.sch'
+    CMS_EH_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/HQR CMS 2016 QRDA Category I v2.sch'
+    CMS_EP_CAT3_SCHEMATRON_2016 = 'resources/schematron/cat3/EP CMS 2016 QRDA Category III v2.sch'
 
     class EPCat1 < HealthDataStandards::Validate::Schematron::Validator
       include Singleton

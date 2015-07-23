@@ -5,22 +5,23 @@
       <li class=""><a href="#test_measure_<%= validator_slug(val) %>" data-toggle="tab"><%= validator_name(val) %> (<%= errors.count %>)</a></li>
     <% end %>
   </ul>
-  
+
   <div id="test_result_tabs" class="tab-content">
     <div class="tab-pane active" id="test_summary">
-      <h4> 
+      <h4>
       <% if @upload.errors.empty? %>
         No
       <% else %>
         <%= @upload.errors.count %>
       <% end %>errors found</h4>
-      <p>Validating a QRDA <%= @upload.doc_type.upcase %> document against the
+      <p>Validating a QRDA <%= @upload.doc_type.titleize.gsub("_", " ") %> document against the
       <% if @upload.program != "none" %>
+        <%= @upload.program_year%>
         CMS <%= @upload.program.upcase %> Combined IG.</p>
       <% else %>
         base QRDA standard. </p>
       <% end %>
-      
+
     </div>
 
     <% error_map, error_attributes = match_errors(@upload) %>
@@ -34,7 +35,7 @@
 
 
   <div id="xml_frame">
-    <%= erb :'documents/subnav', layout: false%>  
+    <%= erb :'documents/subnav', layout: false%>
     <h3>Vendor Generated XML</h3>
     <%= erb :"documents/node" , :locals=>{:doc=>@upload.content, :error_map=>error_map, :error_attributes=>error_attributes}%>
   </div>

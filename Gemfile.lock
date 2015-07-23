@@ -1,9 +1,8 @@
 GIT
-  remote: https://github.com/ssayer/health-data-standards.git
-  revision: 641a39027400ea3b00bfbfde846b3a8c261f1f36
-  branch: qrda_r3
+  remote: https://github.com/projectcypress/health-data-standards.git
+  revision: ef1e2b5191903e8b59cfa1b7449397be01244828
   specs:
-    health-data-standards (3.5.3)
+    health-data-standards (3.6.1)
       activesupport (~> 4.1.1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
@@ -31,8 +30,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     backports (3.6.4)
-    bson (3.1.2)
-    bson (3.1.2-java)
+    bson (3.2.0)
+    bson (3.2.0-java)
     builder (3.2.2)
     coderay (1.1.0)
     connection_pool (2.2.0)

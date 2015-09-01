@@ -1,0 +1,167 @@
+
+<div id="wrapper">
+
+<% if @upload.count > 1 %>
+<div id="filename-list" class="col-xs-3">
+
+  <ul class="list-group">
+  <% for i in 0...@upload.count %>
+      
+
+    <%  err_count = @upload[i].errors.count %>
+
+    <li class="list-group-item filename-list-entry" data-index="<%= i %>">
+
+    <% if err_count > 0 %>
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+    <% else %>
+      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+    <% end %>
+
+    <%= @upload[i].filename %>
+
+    <% if err_count > 0 %>
+      <span class="badge"><%= err_count %></span> 
+    <% end %>
+    </li>
+
+  <% end %>
+  </ul>
+
+</div>
+<% end %>
+
+<div id="all-files" class="<%= "col-xs-9" if @upload.count > 1 %>">
+<% for i in 0...@upload.count %>
+
+<div id="file_<%= i %>" class="file-summary">
+  <ul id="error_report_toc" class="nav nav-tabs">
+    <li class="active"><a href="#test_summary_<%= i %>" data-toggle="tab">Summary </a></li>
+    <% @upload[i].grouped_errors.each_pair do |val, errors| %>
+      <li class=""><a href="#test_measure_<%= i %>_<%= validator_slug(val) %>" data-toggle="tab"><%= validator_name(val) %> (<%= errors.count %>)</a></li>
+    <% end %>
+  </ul>
+
+  <div id="test_result_tabs" class="tab-content">
+    <div class="tab-pane active" id="test_summary_<%= i %>">
+      <h4>
+      <% if @upload[i].errors.empty? %>
+        No
+      <% else %>
+        <%= @upload[i].errors.count %>
+      <% end %>errors found</h4>
+      <p>Validating a QRDA <%= @upload[i].doc_type.titleize.gsub("_", " ") %> document against the
+      <% if @upload[i].program != "none" %>
+        <%= @upload[i].program_year%>
+        CMS <%= @upload[i].program.upcase %> Combined IG.</p>
+      <% else %>
+        base QRDA standard. </p>
+      <% end %>
+
+    </div>
+
+    <% error_map, error_attributes = match_errors(@upload[i]) %>
+
+    <% @upload[i].grouped_errors.each do |validator,errs| %>
+    <div class="tab-pane" id="test_measure_<%= i %>_<%= validator_slug(validator) %>">
+      <%= render partial: 'error_list', locals: {errors: errs, error_map: error_map, file_num: i } %>
+    </div>
+    <% end %>
+  </div><!-- end #test_result_tabs -->
+
+
+  <div id="xml_frame_<%= i %>" class="xml_frame">
+    <%= render partial:'subnav', layout: false %>
+    <h3>Vendor Generated XML</h3>
+    <%= render partial: "node" , locals: {:upload=>@upload[i], :doc=>@upload[i].content, :error_map=>error_map, :error_attributes=>error_attributes} %>
+  </div>
+</div>
+<% end %>
+</div>
+</div>
+
+<script>
+window.onload=function() {
+function showErrorPopup(anchor) {
+    if ($(anchor)) {
+      $('span.error_popup').popover('hide')
+      $('span'+anchor).popover('show');
+      jumpToElement(anchor);
+    }
+  }
+
+
+  function resetNavigation(index) {
+      var navigation =  $("#xml_frame_"+index+" .subnav").show().navigator({targets:"a.qrda_error_link.file_"+index,action:showErrorPopup});
+      $("#xml_frame_"+index).fixedHeader();
+
+      $("a.qrda_error_link.file_"+index).on('click',function() {
+        showErrorPopup($(this).attr('href'));
+        navigation.data('navigator').setIndex($(this).attr('href'));
+        return false;
+      });
+
+      $("section.execution").on('click','.error i.icon',function() {
+        //('span.error_popup',$(this)).popover('toggle')
+        var anyVisible = false;
+        var possibilities = $('span.error_popup', $('div#x'+$(this).data('error')));
+        for(var i =0;i<possibilities.length;i++){
+          if($(possibilities[i]).data('popover') && $(possibilities[i]).data('popover').tip().hasClass('in')){
+            anyVisible = true;
+            break;
+          }
+        }
+        if(anyVisible || possibilities.length == 0){
+          $('span.error_popup').popover('hide');
+        }else{
+          var href = '#'+$(possibilities[0]).attr('id');
+          showErrorPopup(href);
+          navigation.data('navigator').setIndex(href);
+        }
+
+      });
+  }
+
+
+    $("li.filename-list-entry").on('click',function() {
+
+      // is there a better way to do all this?
+
+        if ($(this).hasClass("active")) {
+          // it's already active so just ignore the click
+          return;
+        }
+
+        // deselect the active entry in the file list
+        $("li.filename-list-entry.active").removeClass("active");
+
+        // hide the main div for the one we just deselected
+        $("div.file-summary.active").removeClass("active").hide();
+
+        $(this).addClass("active");
+
+        // show the main div for the one we just selected
+        var selected_index = $(this).data('index');
+        $("#file_" + selected_index).addClass('active').show();
+        resetNavigation(selected_index);
+    });
+
+
+    resetNavigation(0);
+
+
+<% if @upload.count > 1 %>
+
+  // auto-select the first entry
+  $("li.filename-list-entry").first().addClass("active");
+
+  // hide all of the file details except the first one 
+  $("div.file-summary").slice(1).hide();
+
+  // the first one is active
+  $("div.file-summary").first().addClass("active");
+
+<% end %>
+
+}
+  </script>

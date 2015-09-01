@@ -1,0 +1,185 @@
+<div class="alert alert-danger">
+  <p class="text-danger strong"><span class="angry">WARNING</span>:  This utility is meant for synthetic patient records only.  <span class="angry">DO NOT</span> upload documents containing <a href="http://www.hipaa.com/the-definition-of-protected-health-information/">Protected Health Information (PHI)</a> or <a href="http://www.gsa.gov/portal/content/104256">Personally Identifiable Information (PII)</a>. </p>
+
+  <p>The Cypress QRDA Validation Utility is intended as a development tool for EHR vendors who are testing synthetic QRDA Category I and Category III documents for conformance to CMS submission requirements. Files submitted for validation must not contain PHI or PII.</p>
+</div>
+
+<form action="/uploads" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
+
+
+  <legend>Document</legend>
+
+    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+      <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+      <label for="inputFile" class="sr-only">QRDA File</label>
+      <span class="input-group-addon btn btn-default btn-file">
+        <span class="fileinput-new">Select QRDA file</span>
+        <span class="fileinput-exists">Change</span>
+	<input type="file" name="file" id="inputFile" required accept=".xml,.zip">
+      </span>
+      <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+    </div>
+
+    <legend>Reporting Program Year</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="none" id="none">
+        None (Base IG Only)
+      </label>
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="2015" id="2015">
+        2015
+      </label>
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="year" value="2016" id="2016"> 2016
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>Reporting Program</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> PQRS
+      </label>
+      <label class="btn btn-default">
+        <input required type="radio" class="form-control radio" name="program" value="eh" id="eh"> HQR
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>Document Type</legend>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label type="button" class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat1_r2" class="form-control" id="cat1_r2"> QRDA Cat I (R2)
+      </label>
+      <label type="button" class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat1_r3" class="form-control" id="cat1_r3"> QRDA Cat I (R3)
+      </label>
+      <label type="button" class="btn btn-default">
+        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> QRDA Cat III
+      </label>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <legend>PHI Confirmation</legend>
+    <div class="form-group">
+      <div class="radio">
+        <label for="warning" class="text-danger">Please check the box to acknowledge that you've read and understand the warning, and to the best of your knowledge, the submitted files will contain neither PII nor PHI:</label>
+        <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
+      </div>
+    </div>
+    <div class="help-block with-errors"></div>
+
+    <hr>
+
+    <input class="btn btn-primary form-control" type="submit" value="Submit">
+
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+
+
+</form>
+
+<script>
+window.onload = function() {
+  H5F.setup(document.getElementById("upload_form"));
+
+  var loading = function() {
+    // add the overlay with loading image to the page
+    var over = '<div id="overlay">' +
+        '<img id="loading" src="images/loading.gif">' +
+        '</div>';
+    $(over).appendTo('body');
+  };
+
+  // to store year and program for functions below
+  var year;
+  var program;
+
+  // when year changes
+  $("[name=year]").change(function() {
+    year = ($(this).val());
+    if ($(this).val() == "2016") {
+      if (program == "eh") {
+        eh_2016();
+      } else {
+        ep_2016();
+      }
+    } else if ($(this).val() == "2015"){
+      if (program == "eh") {
+        eh_2015();
+      } else {
+        ep_2015();
+      }
+    } else {
+      disable_program();
+    }
+  });
+
+  // when program changes
+  $("[name=program]").change(function() {
+    program = ($(this).val());
+    if ($(this).val() == "eh") {
+      if (year == "2015") {
+        eh_2015();
+      } else {
+        eh_2016();
+      }
+    } else if (year == "2016 "){ // ep
+      if (year == "2015") {
+        ep_2015();
+      } else {
+        ep_2016();
+      }
+    }
+  });
+
+  function disable_program() {
+    console.log('disabled')
+    toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["eh", "ep"])
+  }
+
+  function eh_2015() { // helper that disables/enables
+    cmsToggleAll(["cat1_r2"], ["cat1_r3", "cat3"])
+  };
+
+  function ep_2015() { // helper that disables/enables
+    cmsToggleAll(["cat1_r2", "cat3"], ["cat1_r3"])
+  };
+
+  function eh_2016() { // helper that disables/enables
+    cmsToggleAll(["cat1_r3"], ["cat1_r2", "cat3"])
+  };
+
+  function ep_2016() { // helper that disables/enables
+    cmsToggleAll(["cat1_r3", "cat3"], ["cat1_r2"])
+  };
+
+  function toggleAll(enabled, disabled) {
+    for (var i = 0; i < enabled.length; i++) {
+      enable(enabled[i])
+    }
+    for (var i = 0; i < disabled.length; i++) {
+      disable(disabled[i])
+    }
+  }
+
+  function cmsToggleAll(enabled, disabled) {
+    toggleAll(["eh", "ep"].concat(enabled),disabled);
+    if (enabled.length == 1) {
+      $("#" + enabled[0]).click()
+    }
+  }
+  function enable(el) { toggle(el, true); }
+  function disable(el) { toggle(el, false); }
+
+  function toggle(el, bool) {
+    $("#" + el).parent().attr("disabled", !bool);
+    $("#" + el).attr("disabled", !bool);
+  }
+
+  $("#upload_form").submit(loading);
+}
+</script>

@@ -1,8 +1,6 @@
-require "mongoid"
-require "health-data-standards"
-require "health-data-standards/tasks"
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
+require File.expand_path('../config/application', __FILE__)
 
-task :environment do
-  Mongoid.load!("mongoid.yml")
-end
+Rails.application.load_tasks

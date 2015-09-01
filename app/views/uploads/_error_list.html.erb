@@ -1,0 +1,11 @@
+<ol>
+  <% errors.each do |e| eid = error_map[e.location] %>   
+    <li>
+      <% if eid %>
+        <a class="<%= (eid) ? 'qrda_error_link' : '' %> file_<%= file_num %>" href="#<%= (eid) ? 'error_'+e.object_id.to_s : '' %>" ><%= e.message %></a>
+        <% else %>
+          <%= e.message %>
+        <% end %>
+    </li>
+  <% end %>
+</ol>

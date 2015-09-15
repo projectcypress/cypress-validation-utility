@@ -33,3 +33,6 @@ gem 'rubyzip'
 
 #clean up the stdout logs, doesn't affect the log/access.log and log/error.log
 gem "lograge"
+
+# necessary to prevent cache-busting of the bootstrap fonts
+gem "non-stupid-digest-assets"

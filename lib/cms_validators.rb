@@ -57,7 +57,6 @@ module CypressValidationUtility
       end
 
       def validate(file, options)
-        binding.pry
         errors = EncounterValidator.instance.validate(file,options)
         super(file,options) + errors
       end

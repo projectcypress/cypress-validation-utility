@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -27,7 +27,7 @@ gem 'puma'
 
 
 
-gem 'health-data-standards', git: "https://github.com/projectcypress/health-data-standards.git"
+gem 'health-data-standards', git: "https://github.com/projectcypress/health-data-standards.git", branch: 'master'
 
 gem 'rubyzip'
 
@@ -36,3 +36,9 @@ gem "lograge"
 
 # necessary to prevent cache-busting of the bootstrap fonts
 gem "non-stupid-digest-assets"
+
+group :development, :test do
+
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+end

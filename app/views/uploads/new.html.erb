@@ -28,10 +28,6 @@
         None (Base IG Only)
       </label>
       <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="year" value="2015" id="2015">
-        2015
-      </label>
-      <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="year" value="2016" id="2016"> 2016
       </label>
     </div>
@@ -107,12 +103,6 @@ window.onload = function() {
       } else {
         ep_2016();
       }
-    } else if ($(this).val() == "2015"){
-      if (program == "eh") {
-        eh_2015();
-      } else {
-        ep_2015();
-      }
     } else {
       disable_program();
     }
@@ -121,16 +111,12 @@ window.onload = function() {
   // when program changes
   $("[name=program]").change(function() {
     program = ($(this).val());
-    if ($(this).val() == "eh") {
-      if (year == "2015") {
-        eh_2015();
-      } else {
+    if (program == "eh") {
+      if (year == "2016") {
         eh_2016();
       }
-    } else if (year == "2016 "){ // ep
-      if (year == "2015") {
-        ep_2015();
-      } else {
+    } else if (program == "ep"){ // ep
+      if (year == "2016") {
         ep_2016();
       }
     }
@@ -140,14 +126,6 @@ window.onload = function() {
     console.log('disabled')
     toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["eh", "ep"])
   }
-
-  function eh_2015() { // helper that disables/enables
-    cmsToggleAll(["cat1_r2"], ["cat1_r3", "cat3"])
-  };
-
-  function ep_2015() { // helper that disables/enables
-    cmsToggleAll(["cat1_r2", "cat3"], ["cat1_r3"])
-  };
 
   function eh_2016() { // helper that disables/enables
     cmsToggleAll(["cat1_r3"], ["cat1_r2", "cat3"])

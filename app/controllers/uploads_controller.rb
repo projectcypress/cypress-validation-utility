@@ -1,22 +1,17 @@
 require "rubygems"
 require "zip/zip"
 
-
 class UploadsController < ApplicationController
-
   before_action :require_bundles
 
-
   def require_bundles
-    unless BUNDLES["2016"] && BUNDLES["2015"]
-      raise "Please install a Cypress 2.7.0 and Cypress 2.6.0 bundle in order to use the Cypress Validation Utility"
+    unless BUNDLES["2016"]
+      raise "Please install a 2016 Cypress bundle in order to use the Cypress Validation Utility"
     end
   end
 
   def new
-
   end
-
 
   def create
     begin
@@ -31,14 +26,10 @@ class UploadsController < ApplicationController
 
       if file_extn == ".zip"  
 
-        file_count = 0
         Zip::ZipFile.open(uploaded_file.path) do |zipfile|
           zipfile.glob("*.xml",File::FNM_CASEFOLD|::File::FNM_PATHNAME|::File::FNM_DOTMATCH).each do |entry|
-          
-          content_string = zipfile.read(entry.name)
-
-          @upload.push Upload.new(entry.name, content_string, params[:file_type], params[:program], params[:year])
-
+            content_string = zipfile.read(entry.name)
+            @upload.push Upload.new(entry.name, content_string, params[:file_type], params[:program], params[:year])
           end
         end
 
@@ -49,7 +40,6 @@ class UploadsController < ApplicationController
 
       else
         content_string = File.open(uploaded_file,"rb:bom|utf-8").read
-
         @upload.push Upload.new(uploaded_filename, content_string, params[:file_type], params[:program], params[:year]) 
       end
 
@@ -59,9 +49,5 @@ class UploadsController < ApplicationController
     ensure
       File.delete(params[:file].tempfile)
     end
-
   end
-
-
-
 end

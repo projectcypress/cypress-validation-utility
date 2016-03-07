@@ -4,8 +4,7 @@ require_relative "../../lib/cms_validators"
 require_relative "../../lib/encounter_validator"
 
 BUNDLES = {
-  "2016" => HealthDataStandards::CQM::Bundle.find_by(version: "2.7.0"),
-  "2015" => HealthDataStandards::CQM::Bundle.find_by(version: "2.6.0")
+  "2016" => HealthDataStandards::CQM::Bundle.find_by(version: "2.7.0")
 }
 
 
@@ -17,9 +16,6 @@ VALIDATOR_NAMES = {HealthDataStandards::Validate::CDA => "CDA",
                    HealthDataStandards::Validate::Cat1 => "QRDA",
                    HealthDataStandards::Validate::Cat1R2 => "QRDA",
                    HealthDataStandards::Validate::Cat3 => "QRDA",
-                   CypressValidationUtility::Validate::EPCat1 => "CMS",
-                   CypressValidationUtility::Validate::EPCat3 => "CMS",
-                   CypressValidationUtility::Validate::EHCat1 => "CMS",
                    CypressValidationUtility::Validate::EPCat1_2016 => "CMS",
                    CypressValidationUtility::Validate::EPCat3_2016 => "CMS",
                    CypressValidationUtility::Validate::EHCat1_2016 => "CMS",

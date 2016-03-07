@@ -1,15 +1,14 @@
 require 'nokogiri'
 
 class Upload
-
   attr_reader :doc_type, :program, :program_year, :content, :filename
 
   def initialize(file, content_string, doc_type, program=nil, year)
-
     @filename = file
-    @content = Nokogiri::XML(content_string)
+    @content = Nokogiri::XML(content_string) { |config| config.strict }
     @content.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
     @content.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
+
     #if the doc_type isn't passed in, see if we can find it in the document
     doc_type = get_doc_type if !doc_type
     @doc_type = doc_type
@@ -23,12 +22,10 @@ class Upload
 
     @program_year = year
     @errors = validators.inject({}) do |errors, v|
-      errors[v] = v.validate(content_string, file_name: file)
+      errors[v] = v.validate(@content, file_name: file)
       errors
     end
-    
   end
-
 
   def grouped_errors
     @errors
@@ -85,19 +82,15 @@ class Upload
 
   def cat1_validator
     @validators.concat CAT1_VALIDATORS
-    if @program_year == "2015" || @program_year == "2016"
-        @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLES[@program_year], @measure_ids)
+    if @program_year == '2016'
+      @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLES['2016'], @measure_ids)
     end
     if @program.downcase == "ep"
-      if @program_year == "2015"
-        @validators << CypressValidationUtility::Validate::EPCat1.instance
-      elsif @program_year == "2016"
+      if @program_year == "2016"
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
       end
     elsif @program.downcase == "eh"
-      if @program_year == "2015"
-        @validators << CypressValidationUtility::Validate::EHCat1.instance
-      elsif @program_year == "2016"
+      if @program_year == "2016"
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
       end
     end
@@ -117,9 +110,7 @@ class Upload
     when "cat3"
       @validators.concat CAT3_VALIDATORS
       if @program.downcase == "ep"
-        if @program_year == "2015"
-          CypressValidationUtility::Validate::EPCat3
-        elsif @program_year == "2016"
+        if @program_year == "2016"
           CypressValidationUtility::Validate::EPCat3_2016
         end
       elsif @program.downcase == "none"
@@ -133,6 +124,4 @@ class Upload
     @validators << cms_validator.instance if cms_validator
     @validators << HealthDataStandards::Validate::CDA.instance
   end
-
-
 end

@@ -1,76 +1,49 @@
-a:hover {
-  color: inherit;
-  text-decoration: inherit;
-}
- 
-a.cmd, input.cmd {
-  @include bordered($btnBorderColor);
-  background-color: $btnBkgColor;
-  color: $btnColor;
-  font-size: $btnFontSize;
-  padding: 3px 10px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
+@mixin darker-hover($border-color, $name) {
+  $darker-border-color: darken($border-color, 15%);
+  border-color: darken($border-color, 5%);
 
-  
-}
-a.cmd:hover, input.cmd:hover {
-  background-color: $btnHoverBkg;
-}
-a.mailing_list {
-  color:$mailing_listColor;
-  font-weight:bold;
-}
-
-a.del {
-  @include bordered($dltColor);
-  color: $dltColor;
-}
-td a.cmd, td input.cmd {
-  display:inline-block;
-  margin:2px 0;
-  padding:0px 8px;
-  font-size:85%;
-}
-
-a.del:hover {
-background-color: $dltHoverBkg;
-}
-
-
-.ui-formwizard-button {
-background-color:transparent;
-border-color:transparent;
-
-box-shadow:none;
-}
-
-.ui-formwizard-button:disabled {
-background-color:transparent;
-border-color:transparent;
-box-shadow:none;
-}
-
-#download_menu {
-    width:100px;
-  }
-#share_menu {
-    width:100px;
-  }
-#results_menu {
-    width:100px;
+  // for the buttons with dark backgrounds, add a shadow to text
+  @if $name != 'danger' {
+    @if $name != 'default' {
+      text-shadow: 1px 1px 2px transparentize($darker-border-color, .5),
+                  -1px -1px 2px transparentize($darker-border-color, .5);
+    }
   }
 
-ul#download_options {
-font-size:$fontSize*.8;
-  
+  &:hover,
+  &:focus {
+    // create namespaced animation for the background-color
+    @keyframes pulsate-#{$name} {
+      50% { background-color: $border-color; }
+    }
+
+    @include animation-name(pulsate-#{$name});
+    @include animation-duration(2s);
+    @include animation-delay(100);
+    @include animation-timing-function(linear);
+    @include animation-iteration-count(infinite);
+    color: $btn-default-bg;
+    background-color: $darker-border-color;
+    border-color: $darker-border-color;
+  }
 }
-ul#share_options {
-font-size:$fontSize*.8;
-  
+
+.btn {
+  @include transition-property(color, background-color);
+  @include transition-duration(.3s);
+  font-family: 'Ubuntu';
+  letter-spacing: .05em;
+  box-shadow: 0 1px 1px $navbar-shadow;
+
+  &.btn-primary { @include darker-hover($btn-primary-border, 'primary'); }
+  &.btn-success { @include darker-hover($btn-success-border, 'success'); }
+  &.btn-info { @include darker-hover($btn-info-border, 'info'); }
+  &.btn-warning { @include darker-hover($btn-warning-border, 'warning'); }
+  &.btn-danger { @include darker-hover($btn-danger-border, 'danger'); }
+  &.btn-default { @include darker-hover($btn-default-border, 'default'); }
 }
-ul#results_options {
-font-size:$fontSize*.8;
-  
+
+.btn-default.active {
+  color: darken($btn-default-border, 15%);
+  font-weight: bold;
 }

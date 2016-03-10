@@ -1,3 +1,10 @@
+@mixin alert-border($color) {
+  border-left: 5px solid $color;
+}
+
 .alert {
-  font-weight:normal;
+  &.alert-success { @include alert-border($state-success-text); }
+  &.alert-info { @include alert-border($state-info-text); }
+  &.alert-warning { @include alert-border($state-warning-text); }
+  &.alert-danger { @include alert-border($state-danger-text); }
 }

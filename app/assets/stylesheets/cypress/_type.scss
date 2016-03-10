@@ -1,69 +1,66 @@
-h1 {
-font-size: $fontSize*2;
-font-weight:$fontWeight;
+a:not(.btn) {
+  font-weight: bold;
 }
 
-
-h2{
-font-size: $fontSize*2;
-font-weight:$fontWeight;
+.list-group {
+  box-shadow: none;
 }
 
-.dl-horizontal {
+.list-group-item {
+  border: none;
+  border-right: 2px solid #000;
+  border-radius: none;
+  overflow: hidden;
+}
 
-   dt {
-    float:left;
-    width: 120px;
-    overflow: hidden;
-    clear: left;
-    text-align: right;
-    white-space: nowrap;
-    color:#666;
-    font-weight: $fontWeight;
-    display:table-cell;
-    height:21px;
-  }
-  &.wide {
-    width:420px;
-    dt {
-     width:240px;
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  background-color: #AAA;
+  background-image: none;
+  text-shadow: none;
+  border-right: 2px solid #000;
+
+}
+
+/* add a little triangle to the right of the active item */
+.list-group-item.active:after {
+content: "";
+position:absolute;
+right:0;
+top:12px;
+border-top: 8px solid transparent;
+border-bottom: 8px solid transparent;
+border-right: 8px solid #000;
+
+}
+
+.list-group-item:hover, .list-group-item:focus {
+    background-color: #EEE;
+}
+
+/* Test execution details */
+.xml_frame {
+  font-family: $font-family-monospace;
+  .subnav {
+    .container {width:805px;}
+    .brand i {
+    position:relative;
+    top:4px;
+    }
+  ul.nav {
+    margin-top:3px;
+    &>li>a {
+      cursor:pointer;
+      &:active {
+        position:relative;
+        top:1px;
+        left:1px;
+      }
+      }
     }
   }
-  dd { 
-    padding-left:10px;
-    font-size: $fontSize;
-    text-overflow:ellipsis;
-    display:table-cell;
-    text-align:left;
-    height:21px;
+  .no-select { user-select: none; -o-user-select:none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+  span.error_popup {
+    position:relative;
+    left:240px;
   }
-  
-}
-
-dl.measure {
-  display:inline-block;
-  width:658px;
-  margin: 0px;
-  padding:0px;
-  dt {
-    width:120px;
-  }
- dd {
-    width:540px;
-  }
-  dd.measure_definition {cursor: pointer;}
-
-  dd.measure_desc {
-  font-size:$fontSize*10/9;
-  }
-}
-
-.patient dt {
-width: 50px;
-}
-
-
-.inline-span {
-  font-size:$fontSize;
-font-weight:$fontWeight;
 }

@@ -10,9 +10,12 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_self
- *= require cypress_new
- *= require bootstrap-theme
  *= require vendor/jasny-bootstrap
- *= require main
  */
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap-variables';
+@import 'bootstrap';
+
+// Cypress specific component styles and overrides
+@import "cypress/*";

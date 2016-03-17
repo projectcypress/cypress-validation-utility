@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 
-<html class="no-js">
+<html class="no-js" lang="en">
 <!--<![endif]-->
 
 <head>
@@ -37,21 +37,15 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-  <nav class="navbar navbar-default navbar-static-top">
+  <nav class="navbar navbar-inverse">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="./">
-         <%= image_tag("cypress_logo.png", class: "pull-left", style: "height: 25px;") %>
-
-          <span class="pull-right" style="color:black">
-            validation utility
-          </span>
-        </a>
+        <%= link_to root_path do %>cypress <small>validation utility</small><% end %>
       </div>
     </div>
   </nav>
 
-  <div class="container">
+  <main aria-label="main section" id="main-content" class="container" role="main">
       <%= yield %>
     <hr>
 
@@ -60,7 +54,7 @@
 
       <p><a href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p>
     </footer>
-  </div><!-- /container -->
+  </main><!-- /container -->
 
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </body>

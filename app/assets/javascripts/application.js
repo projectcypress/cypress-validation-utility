@@ -11,10 +11,9 @@
 // about supported directives.
 //
 //= require vendor/jquery-1.11.1.min
-//= require vendor/bootstrap
+//= require bootstrap-sprockets
 //= require vendor/modernizr-2.6.2-respond-1.1.0.min
 //= require vendor/jasny-bootstrap
 //= require cypress-navigator
 //= require vendor/h5f.min
 //= require main
-

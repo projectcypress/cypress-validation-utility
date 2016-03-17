@@ -1,8 +1,21 @@
-span.required {
-  display: inline-block;
-  padding: .2em;
-  font-size: 1.2em;
-  font-weight: bold;
-  color:red;
+.form-control[data-trigger="fileinput"] {
+  min-width: 200px;
 }
 
+// need to overwrite .input-group-addon colors when buttons are involved
+@each $state in primary, success, danger, warning, info, default {
+  .input-group-addon.btn-#{$state} {
+    @extend .btn-#{$state};
+  }
+}
+
+fieldset {
+  margin: 1em auto;
+}
+
+.form-inline legend.control-label {
+  font-size: 1em;
+  font-weight: 700;
+  border-bottom: none;
+  margin-bottom: .5em;
+}

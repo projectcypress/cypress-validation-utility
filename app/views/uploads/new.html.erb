@@ -1,27 +1,27 @@
 <div class="alert alert-danger">
-  <p class="text-danger strong"><span class="angry">WARNING</span>:  This utility is meant for synthetic patient records only.  <span class="angry">DO NOT</span> upload documents containing <a href="http://www.hipaa.com/the-definition-of-protected-health-information/">Protected Health Information (PHI)</a> or <a href="http://www.gsa.gov/portal/content/104256">Personally Identifiable Information (PII)</a>. </p>
+  <p class="text-danger"><strong><span class="angry">WARNING</span>:  This utility is meant for synthetic patient records only.  <span class="angry">DO NOT</span> upload documents containing <a href="http://www.hipaa.com/the-definition-of-protected-health-information/">Protected Health Information (PHI)</a> or <a href="http://www.gsa.gov/portal/content/104256">Personally Identifiable Information (PII)</a>.</strong> </p>
 
   <p>The Cypress QRDA Validation Utility is intended as a development tool for EHR vendors who are testing synthetic QRDA Category I and Category III documents for conformance to CMS submission requirements. Files submitted for validation must not contain PHI or PII.</p>
 </div>
 
 <form action="/uploads" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
 
-
-  <legend>Document</legend>
-
+  <fieldset>
+    <legend class="control-label">Document</legend>
     <div class="fileinput fileinput-new input-group" data-provides="fileinput">
       <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
       <label for="inputFile" class="sr-only">QRDA File</label>
       <span class="input-group-addon btn btn-default btn-file">
         <span class="fileinput-new">Select QRDA file</span>
         <span class="fileinput-exists">Change</span>
-	<input type="file" name="file" id="inputFile" required accept=".xml,.zip">
+        <input type="file" name="file" id="inputFile" required accept=".xml,.zip">
       </span>
-      <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+      <a href="#" class="input-group-addon btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
     </div>
+  </fieldset>
 
-    <legend>Reporting Program Year</legend>
-
+  <fieldset>
+    <legend class="control-label">Reporting Program Year</legend>
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="year" value="none" id="none">
@@ -32,9 +32,10 @@
       </label>
     </div>
     <div class="help-block with-errors"></div>
+  </fieldset>
 
-    <legend>Reporting Program</legend>
-
+  <fieldset>
+    <legend class="control-label">Reporting Program</legend>
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> PQRS
@@ -44,9 +45,10 @@
       </label>
     </div>
     <div class="help-block with-errors"></div>
+  </fieldset>
 
-    <legend>Document Type</legend>
-
+  <fieldset>
+    <legend class="control-label">Document Type</legend>
     <div class="btn-group" data-toggle="buttons">
       <label type="button" class="btn btn-default">
         <input type="radio" required name="file_type" value="cat1_r2" class="form-control" id="cat1_r2"> QRDA Cat I (R2)
@@ -59,21 +61,26 @@
       </label>
     </div>
     <div class="help-block with-errors"></div>
+  </fieldset>
 
-    <legend>PHI Confirmation</legend>
-    <div class="form-group">
-      <div class="radio">
-        <label for="warning" class="text-danger">Please check the box to acknowledge that you've read and understand the warning, and to the best of your knowledge, the submitted files will contain neither PII nor PHI:</label>
-        <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
+
+    <fieldset>
+      <div class="alert alert-danger">
+      <legend class="control-label">PHI Confirmation</legend>
+      <div class="form-group">
+        <div class="radio">
+          <label for="warning" class="text-danger">Please check the box to acknowledge that you've read and understand the warning, and to the best of your knowledge, the submitted files will contain neither PII nor PHI:</label>
+          <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
+        </div>
       </div>
-    </div>
-    <div class="help-block with-errors"></div>
+      </div>
+      <div class="help-block with-errors"></div>
+    </fieldset>
 
-    <hr>
 
-    <input class="btn btn-primary form-control" type="submit" value="Submit">
+  <input class="btn btn-primary form-control" type="submit" value="Submit">
 
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
 
 
 </form>
@@ -85,8 +92,8 @@ window.onload = function() {
   var loading = function() {
     // add the overlay with loading image to the page
     var over = '<div id="overlay">' +
-        '<img id="loading" src="images/loading.gif">' +
-        '</div>';
+    '<img id="loading" src="images/loading.gif">' +
+    '</div>';
     $(over).appendTo('body');
   };
 

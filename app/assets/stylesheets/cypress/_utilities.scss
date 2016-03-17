@@ -1,29 +1,31 @@
-// Alignments
-.align-left { text-align: left; }
-.align-right { text-align: right; }
-.align-center { text-align: center; }
-.strong { font-weight:bold;}
+span.angry {
+    font-size: 1.3em;
+    text-decoration: underline;
+    font-weight: bold;
+}
 
-// Passing, failing, incomplete persistent styles
-.fail { color: $failColor;}
-.warn { color: $warnColor;}
-.pass { color: $passColor; font-weight:$fontWeight; }
-.incomplete { color: $incompleteColor; font-weight:$fontWeight;}
-a.incomplete {color : #333}
-.result { color: $resultColor; font-weight:$fontWeight; }
+#overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  z-index: 1000;
+}
 
-.fail-icon, .pass-icon, .incomplete-icon , .failed-icon, .passed-icon, .pending-icon{ padding-left: 20px; }
-.fail-icon{ background: url(/assets/fail.png) 0 0.4em no-repeat; }
-.failed-icon{ background: url(/assets/fail.png) 0 0.4em no-repeat; }
-.pass-icon { background: url(/assets/pass.png) 0 0.4em no-repeat; }
-.passed-icon { background: url(/assets/pass.png) 0 0.4em no-repeat; }
-.incomplete-icon { background: url(/assets/insufficient.png) 0 0.4em no-repeat; }
-.pending-icon { background: url(/assets/insufficient.png) 0 0.4em no-repeat; }
+#loading {
+  width: 50px;
+  height: 57px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -25px;
+  z-index: 1001;
+}
 
-
-// Small widgets
-.expander {
-  cursor: pointer;
-  background: url(/assets/closed.gif) 4px 9px no-repeat;
-  &.open {background:url(/assets/open.gif) 4px 9px no-repeat;}
+#wrapper, #all-files {
+  display: inline-block;
 }

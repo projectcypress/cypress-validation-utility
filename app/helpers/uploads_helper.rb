@@ -16,6 +16,11 @@ module UploadsHelper
       validator.class.name.underscore.gsub("/", "_")
     end
 
+    def get_result_value(results, measure, population)
+      result_value = results.where('value.measure_id' => measure.hqmf_id).where('value.sub_id' => measure.sub_id)
+      result_value.first.value[population].to_i if result_value.first
+    end
+
     def match_errors(upload)
       doc = upload.content
       uuid = UUID.new

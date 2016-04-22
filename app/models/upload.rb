@@ -2,6 +2,7 @@ require 'nokogiri'
 
 class Upload
   attr_reader :doc_type, :program, :program_year, :content, :filename
+  attr_accessor :record
 
   def initialize(file, content_string, doc_type, program=nil, year)
     @filename = file
@@ -33,6 +34,16 @@ class Upload
 
   def errors
     @errors.values.flatten
+  end
+
+  def get_measure_ids
+    measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" +
+      "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" +
+      "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
+    if !measure_ids
+      return nil
+    end
+    measure_ids
   end
 
   private
@@ -68,16 +79,6 @@ class Upload
       #If the program name doesn't exist, return nil
       "none"
     end
-  end
-
-  def get_measure_ids
-    measure_ids = @content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" +
-      "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" +
-      "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
-    if !measure_ids
-      return nil
-    end
-    measure_ids
   end
 
   def cat1_validator

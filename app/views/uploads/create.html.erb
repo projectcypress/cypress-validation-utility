@@ -1,4 +1,3 @@
-
 <div id="wrapper">
 
 <% if @upload.count > 1 %>
@@ -7,8 +6,7 @@
   <ul class="list-group">
   <% for i in 0...@upload.count %>
       
-
-    <%  err_count = @upload[i].errors.count %>
+    <% err_count = @upload[i].errors.count %>
 
     <li class="list-group-item filename-list-entry" data-index="<%= i %>">
 
@@ -58,7 +56,41 @@
         base QRDA standard. </p>
       <% end %>
 
+    <% if @calculated_results %>
+    <br/>
+    <h4>Calculation Results</h4>
+      <% record = @records[i] %>
+      <% msr_popl_ids = @measures.collect { |m| m.population_ids.keys()  }.flatten.uniq %>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+            <th scope="col">Measure Name</th>
+              <% msr_popl_ids.each do |population| %>
+                <th scope="col" class="text-center">
+                  <%= population %>
+                </th>
+              <% end %>
+            </tr>
+            </thead>
+          <tbody>
+            <% @measures.each do |measure| %>
+              <tr>
+                <td><%= measure.name %></td>
+                <!-- will show calculation results for product test records -->
+                  <% msr_popl_ids.each do |population| %>
+                    <td class="text-center">
+                      <%= render partial: 'calculation_result_icon', locals: { result: get_result_value(record.calculation_results, measure, population) } %>
+                    </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+    <% end %>
+
     </div>
+
+
 
     <% error_map, error_attributes = match_errors(@upload[i]) %>
 
@@ -69,12 +101,13 @@
     <% end %>
   </div><!-- end #test_result_tabs -->
 
-
+  
   <div id="xml_frame_<%= i %>" class="xml_frame">
     <%= render partial:'subnav', layout: false %>
     <h3>Vendor Generated XML</h3>
     <%= render partial: "node" , locals: {:upload=>@upload[i], :doc=>@upload[i].content, :error_map=>error_map, :error_attributes=>error_attributes} %>
   </div>
+
 </div>
 <% end %>
 </div>

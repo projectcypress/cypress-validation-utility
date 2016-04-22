@@ -3,8 +3,7 @@ require 'test_helper'
 class UploadsControllerTest < ActionController::TestCase
   setup do
     unzip_if_necessary('measures')
-    collection_fixtures('measures', "_id", "bundle_id")
-    collection_fixtures('bundles', "_id")
+    collection_fixtures('measures', 'bundles')
     BUNDLES["2016"] ||= HealthDataStandards::CQM::Bundle.find_by(version: "2.7.0")
   end
 

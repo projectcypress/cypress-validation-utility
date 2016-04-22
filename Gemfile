@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.11'
+gem 'rails', '~> 4.2.5.2'
 # Use Bootstrap via this gem
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '~> 5.0.4'
@@ -28,7 +28,14 @@ gem 'puma'
 
 
 
-gem 'health-data-standards', git: "https://github.com/projectcypress/health-data-standards.git", branch: 'master'
+gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'bump_mongoid'
+gem 'quality-measure-engine',
+    git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
+
+gem "bson"
+gem "moped", github: "mongoid/moped"
+
+gem 'font-awesome-sass'
 
 gem 'rubyzip'
 

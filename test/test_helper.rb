@@ -1,36 +1,34 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require "rubygems"
-require "zip/zip"
+require 'rubygems'
+require 'zip/zip'
 require 'sucker_punch/testing/inline'
 
 class ActiveSupport::TestCase
 
-
-  def unzip_if_necessary(zipped_collection)
-
-  	zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + ".zip")
-
-  	folder = File.join(Rails.root, 'test', 'fixtures', zipped_collection)
-
-  	return if Dir.exists? folder
-
-  	Dir.mkdir folder
-
-  	Zip::ZipFile.open(zipfile) do |content|
-  		content.each do |file_entry|
-
-  			dest_file = File.join(folder , file_entry.name)
-
-  			file_entry.extract(dest_file)
-
-  		end
-  	end
-
-
+  def drop_database
+    Mongoid::Config.purge!
+    # purge the database instead of dropping it
+    # because dropping it literally deletes the file
+    # which then has to be recreated (which is slow)
   end
 
+  def unzip_if_necessary(zipped_collection)
+    zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + ".zip")
+    folder = File.join(Rails.root, 'test', 'fixtures', zipped_collection)
+
+    return if Dir.exist? folder
+
+    Dir.mkdir folder
+
+    Zip::ZipFile.open(zipfile) do |content|
+      content.each do |file_entry|
+        dest_file = File.join(folder , file_entry.name)
+        file_entry.extract(dest_file)
+      end
+    end
+  end
 
   def value_or_bson(v)
     if v.is_a? Hash
@@ -75,6 +73,4 @@ class ActiveSupport::TestCase
       end
     end
   end
-
-
 end

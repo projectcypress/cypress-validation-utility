@@ -24,8 +24,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'carrierwave'
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 
-gem 'puma'
-#thin doesn't work with JRuby
+gem 'thin'
 # webrick has an issue with content-length and it breaks the JS in safari
 
 gem 'sucker_punch', '~> 2.0'
@@ -50,7 +49,6 @@ gem "lograge"
 gem "non-stupid-digest-assets"
 
 group :development, :test do
-
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end

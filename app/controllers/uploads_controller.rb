@@ -1,8 +1,4 @@
-require "rubygems"
-require "zip/zip"
-require "cypress/cat_3_calculator"
-require "ext/record"
-require "ext/artifact"
+require 'ext/artifact'
 
 class UploadsController < ApplicationController
   before_action :require_bundles
@@ -23,7 +19,8 @@ class UploadsController < ApplicationController
       program = params[:program] || 'none'
       year = params[:year]
 
-      @upload = Upload.new(artifact: artf, file_type: file_type, program: program, year: year)
+      @upload = Upload.new(artifact: artf, file_type: file_type, 
+                           program: program, year: year)
       @upload.save!(validate: false)
       # TODO: rename errors on the Upload class, so we can remove this validate: false stuff
 
@@ -40,6 +37,7 @@ class UploadsController < ApplicationController
     @upload = Upload.find(params[:id])
 
     redirect_to(root_path) and return unless @upload
+    return unless @upload.completed?
 
     measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
 

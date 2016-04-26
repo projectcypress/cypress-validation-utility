@@ -5,7 +5,7 @@ class QrdaFile
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  belongs_to :upload
+  belongs_to :upload, index: true
   has_one :record
 
   field :doc_type, type: String

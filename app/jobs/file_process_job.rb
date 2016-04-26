@@ -1,11 +1,9 @@
-require "ext/artifact"
-require "ext/record"
-require "cypress/cat_3_calculator"
+require 'cypress/cat_3_calculator'
 
 class FileProcessJob
   include SuckerPunch::Job
 
-  def perform(upload_id, options = {})
+  def perform(upload_id, _options = {})
     upload = Upload.find(upload_id)
 
     upload.state = :processing
@@ -17,18 +15,18 @@ class FileProcessJob
       end
 
       if upload.qrda_files.count == 0
-         upload.fail('Uploaded Zip file contained no XML files')
-         return
+        upload.fail('Uploaded Zip file contained no XML files')
+        return
       end
     else
       content_string = upload.artifact.file.read
       process_single_file('', content_string, upload)
     end
 
-    if upload.can_calculate && upload.qrda_files.all? { |file| file.errors.empty? }
-      measure_ids = upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
+    if upload.can_calculate
+      measure_ids = upload.qrda_files.collect(&:get_measure_ids).flatten.uniq
 
-      @bundle = BUNDLES["2016"] # TODO figure out what bundle
+      @bundle = BUNDLES['2016'] # TODO: figure out what bundle
       @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
 
       calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle)
@@ -49,10 +47,10 @@ class FileProcessJob
   end
 
   def process_single_file(uploaded_filename, content_string, parent_upload)
-    curr_file = parent_upload.qrda_files.build(filename: uploaded_filename, 
-                                               content_string: content_string, 
-                                               doc_type: parent_upload.file_type, 
-                                               program: parent_upload.program, 
+    curr_file = parent_upload.qrda_files.build(filename: uploaded_filename,
+                                               content_string: content_string,
+                                               doc_type: parent_upload.file_type,
+                                               program: parent_upload.program,
                                                program_year: parent_upload.year)
 
     curr_file.process

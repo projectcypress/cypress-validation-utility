@@ -16,4 +16,5 @@
 //= require vendor/jasny-bootstrap
 //= require cypress-navigator
 //= require vendor/h5f.min
+//= require turbolinks
 //= require main

@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "rubygems"
 require "zip/zip"
+require 'sucker_punch/testing/inline'
 
 class ActiveSupport::TestCase
 

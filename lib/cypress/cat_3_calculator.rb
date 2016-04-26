@@ -76,6 +76,8 @@ module Cypress
       record.medical_record_number = rand(1_000_000_000_000_000)
       record.save
       record
+    rescue
+      nil
     end
 
     def generate_cat3

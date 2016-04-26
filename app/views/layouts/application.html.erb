@@ -30,6 +30,7 @@
       ga('send', 'pageview');
     </script>
   <% end %>
+ <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </head>
 <body>
 
@@ -50,12 +51,12 @@
     <hr>
 
     <footer>
-      <p>This project is sponsored by the <a href="http://cms.hhs.gov/">Centers for Medicare & Medicaid Services (CMS)</a> and the <a href="http://healthit.hhs.gov">Office of the National Coordinator for Health Information Technology (ONC)</a> and has been developed by <a href="http://www.mitre.org/">The MITRE Corporation</a>.</p>
+      <p>This project is sponsored by the <a href="http://cms.hhs.gov/">Centers for Medicare &amp; Medicaid Services (CMS)</a> and the <a href="http://healthit.hhs.gov">Office of the National Coordinator for Health Information Technology (ONC)</a> and has been developed by <a href="http://www.mitre.org/">The MITRE Corporation</a>.</p>
 
       <p><a href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p>
     </footer>
   </main><!-- /container -->
 
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+     
 </body>
 </html>

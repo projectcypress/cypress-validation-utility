@@ -12,7 +12,8 @@ class UploadsControllerTest < ActionController::TestCase
 
     post "create", :file => file, :year => "none" , :file_type => "cat1_r2", :program => "none" 
 
-    assert_response :success
+    assert_response :redirect
+    get "show", :id => redirect_to_url.split('/')[-1]
 
     #replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')
@@ -25,7 +26,8 @@ class UploadsControllerTest < ActionController::TestCase
 
     post "create", :file => file, :year => "none" , :file_type => "cat1_r2", :program => "none" 
 
-    assert_response :success
+    assert_response :redirect
+    get "show", :id => redirect_to_url.split('/')[-1]
 
     #replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')
@@ -38,10 +40,10 @@ class UploadsControllerTest < ActionController::TestCase
 
     post "create", :file => file, :year => "none" , :file_type => "cat1_r2", :program => "none"
 
-    assert_response(400 , "Invalid XML page response not 400 status")
-    assert_not_empty( flash[:notice] , "No flash notice in 400 page")
+    assert_response :redirect
+    get "show", :id => redirect_to_url.split('/')[-1]
 
-    assert( @response.body.include?("Unable to evaluate file due to malformed XML content:") , "Response for broken XML does not include invalid XML notice." )
+    assert( @response.body.include?("Unable to evaluate file due to error parsing XML:") , "Response for broken XML does not include invalid XML notice." )
   end
 
   test "upload zip file" do
@@ -49,7 +51,8 @@ class UploadsControllerTest < ActionController::TestCase
 
     post "create", :file => file, :year => "none" , :file_type => "cat1_r2", :program => "none"
 
-    assert_response :success
+    assert_response :redirect
+    get "show", :id => redirect_to_url.split('/')[-1]
 
     #replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')

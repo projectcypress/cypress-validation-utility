@@ -36,13 +36,10 @@ module CypressValidationUtilityRails
 
     Mongoid.load!("config/mongoid.yml")
 
-
     config.assets.paths << "#{Rails.root}/app/assets/fonts"  
 
     config.exceptions_app = self.routes
 
     config.lograge.enabled = true
-
-    
   end
 end

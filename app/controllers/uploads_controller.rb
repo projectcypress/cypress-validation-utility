@@ -2,10 +2,10 @@ require "rubygems"
 require "zip/zip"
 require "cypress/cat_3_calculator"
 require "ext/record"
+require "ext/artifact"
 
 class UploadsController < ApplicationController
   before_action :require_bundles
-  after_action :clean_up, only: :create
 
   def require_bundles
     unless BUNDLES["2016"]
@@ -18,70 +18,34 @@ class UploadsController < ApplicationController
 
   def create
     begin
-      uploaded_file = params[:file].tempfile
-      uploaded_filename = params[:file].original_filename
+      artf = Artifact.new(file: params[:file])
+      file_type = params[:file_type]
+      program = params[:program] || 'none'
+      year = params[:year]
 
-      should_calculate = params[:file_type] == "cat1_r2" || params[:file_type] == "cat1_r3"
+      @upload = Upload.new(artifact: artf, file_type: file_type, program: program, year: year)
+      @upload.save!(validate: false)
+      # TODO: rename errors on the Upload class, so we can remove this validate: false stuff
 
-      # the upload is an array of Document objects
-      # so we can handle single xml --> single file or a zip --> multiple files
-      @upload = []
+      FileProcessJob.perform_async(@upload.id.to_s)
 
-      @measure_ids = []
-
-      file_extn = File.extname(uploaded_filename).downcase
-
-      if file_extn == ".zip"
-
-        Zip::ZipFile.open(uploaded_file.path) do |zipfile|
-          zipfile.glob("*.xml",File::FNM_CASEFOLD|::File::FNM_PATHNAME|::File::FNM_DOTMATCH).each do |entry|
-            content_string = zipfile.read(entry.name)
-            process_single_file(entry.name, content_string)
-          end
-        end
-        if @upload.count == 0
-           flash[:notice] = "Uploaded Zip file contained no XML files"
-           render template:"errors/400", status: 400 and return
-        end
-      else
-        content_string = File.open(uploaded_file,"rb:bom|utf-8").read
-        process_single_file(uploaded_filename, content_string)
-      end
-
-      if should_calculate
-        @bundle = BUNDLES["2016"]
-        @measures = @bundle.measures.top_level.in(hqmf_id: @measure_ids)
-
-        @calculator = Cypress::Cat3Calculator.new(@measure_ids,@bundle)
-        @correlation_id = @calculator.correlation_id
-
-        @upload.each do |upl|
-          upl.record = @calculator.import_cat1_file(upl.content)
-        end
-
-        @calculated_results = @calculator.generate_cat3
-        @records = Record.where(test_id: @correlation_id)
-      end
-
-    rescue Nokogiri::XML::SyntaxError => e
-      flash[:notice] = e.message
-      render template:"errors/400", status: 400 and return
+      redirect_to upload_path(@upload)
     ensure
       File.delete(params[:file].tempfile)
+      RecordCleanupJob.perform_in(600) # run the cleanup job in 10 mins (600 sec)
     end
   end
 
-  def process_single_file(uploaded_filename, content_string)
-    curr_file = Upload.new(uploaded_filename, content_string, params[:file_type], params[:program], params[:year]) 
-    @measure_ids.concat curr_file.get_measure_ids
-    @upload.push curr_file
-  end
+  def show
+    @upload = Upload.find(params[:id])
 
-  def clean_up
-    if @correlation_id
-      Record.where(test_id: @correlation_id).destroy_all
-      QME::PatientCache.where(test_id: @correlation_id).destroy_all
-      HealthDataStandards::CQM::QueryCache.where(test_id: @correlation_id).destroy_all
-    end
+    redirect_to(root_path) and return unless @upload
+
+    measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
+
+    @bundle = BUNDLES["2016"] # TODO pick the bundle by measure ids
+    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+
+    @files = @upload.qrda_files
   end
 end

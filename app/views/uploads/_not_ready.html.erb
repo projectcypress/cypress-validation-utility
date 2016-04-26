@@ -1,0 +1,10 @@
+<h4>Your file is being processed. This page will automatically refresh once results are ready</h4> 
+<img id="loading" src="/images/loading.gif">
+
+
+<script>
+setTimeout(function(){
+      // reload the page every 2 seconds until the job is done
+      Turbolinks.visit(window.location.href)
+    }, 2000);
+</script>

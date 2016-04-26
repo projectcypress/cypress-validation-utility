@@ -21,11 +21,15 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
+gem 'carrierwave'
+gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 
 gem 'puma'
 #thin doesn't work with JRuby
 # webrick has an issue with content-length and it breaks the JS in safari
 
+gem 'sucker_punch', '~> 2.0'
+# sucker punch for running jobs async, in-process
 
 
 gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'bump_mongoid'

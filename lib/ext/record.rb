@@ -6,25 +6,8 @@ class Record
   field :bundle_id
   field :measures, type: Hash
   index test_id: 1
-  index bundle_id: 1
 
-  def product_test
-    ProductTest.where('_id' => test_id).first
-  end
-
-  def bundle
-    if !self['bundle_id'].nil?
-      HealthDataStandards::CQM::Bundle.find(self['bundle_id'])
-    elsif !self['test_id'].nil?
-      ProductTest.find(self['test_id']).bundle
-    end
-  end
-
-  def original_record
-    if self['original_medical_record_number']
-      return bundle.records.where('medical_record_number' => self['original_medical_record_number']).first
-    end
-  end
+  belongs_to :qrda_file
 
   def calculation_results
     HealthDataStandards::CQM::PatientCache.where('value.patient_id' => id).where('value.IPP'.to_sym.gt => 0)

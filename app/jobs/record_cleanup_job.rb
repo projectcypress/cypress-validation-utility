@@ -1,4 +1,4 @@
-class RecordCleanupJob
+class RecordCleanupJob < ActiveJob::Base
   include SuckerPunch::Job
 
   DEFAULT_TIME_CUTOFF = 600 # seconds, == 10 minutes
@@ -19,9 +19,11 @@ class RecordCleanupJob
     uploads.each do |upload|
       correlation_id = upload.correlation_id
       upload.destroy
-      Record.where(test_id: correlation_id).destroy_all
-      QME::PatientCache.where(test_id: correlation_id).destroy_all
-      HealthDataStandards::CQM::QueryCache.where(test_id: correlation_id).destroy_all
+      if correlation_id
+        Record.where(test_id: correlation_id).destroy_all
+        QME::PatientCache.where(test_id: correlation_id).destroy_all
+        HealthDataStandards::CQM::QueryCache.where(test_id: correlation_id).destroy_all
+      end
     end
   end
 end

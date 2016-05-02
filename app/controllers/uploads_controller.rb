@@ -24,11 +24,14 @@ class UploadsController < ApplicationController
       @upload.save!(validate: false)
       # TODO: rename errors on the Upload class, so we can remove this validate: false stuff
 
-      FileProcessJob.perform_async(@upload.id.to_s)
+      FileProcessJob.perform_later(@upload.id.to_s)
 
       redirect_to upload_path(@upload)
     ensure
       File.delete(params[:file].tempfile)
+      # rails 4 activejob adapter is not fully implemented
+      #  wrt the run at a specific time later with sucker_punch
+      # RecordCleanupJob.set(wait: 10.minutes).perform_later
       RecordCleanupJob.perform_in(600) # run the cleanup job in 10 mins (600 sec)
     end
   end

@@ -1,8 +1,6 @@
 require 'cypress/cat_3_calculator'
 
-class FileProcessJob
-  include SuckerPunch::Job
-
+class FileProcessJob < ActiveJob::Base
   def perform(upload_id, _options = {})
     upload = Upload.find(upload_id)
 

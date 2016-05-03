@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.11'
+gem 'rails', '~> 4.2.5.2'
 # Use Bootstrap via this gem
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '~> 5.0.4'
@@ -21,14 +21,24 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
+gem 'carrierwave'
+gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 
-gem 'puma'
-#thin doesn't work with JRuby
+gem 'thin'
 # webrick has an issue with content-length and it breaks the JS in safari
 
+gem 'sucker_punch', '~> 2.0'
+# sucker punch for running jobs async, in-process
 
 
-gem 'health-data-standards', git: "https://github.com/projectcypress/health-data-standards.git", branch: 'master'
+gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'bump_mongoid'
+gem 'quality-measure-engine',
+    git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
+
+gem "bson"
+gem "moped", github: "mongoid/moped"
+
+gem 'font-awesome-sass'
 
 gem 'rubyzip'
 
@@ -39,7 +49,6 @@ gem "lograge"
 gem "non-stupid-digest-assets"
 
 group :development, :test do
-
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end

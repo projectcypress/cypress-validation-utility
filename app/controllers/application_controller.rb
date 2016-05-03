@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     error_logger.error exception.backtrace.join("\n")
 
     flash[:notice] = exception.message
-    render template:"errors/500", status: 500 and return
+    render(template:"errors/500", status: 500) and return
   end
 
 end

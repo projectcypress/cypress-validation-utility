@@ -1,14 +1,18 @@
+<% if !@upload.completed? %>
+  <%= render(partial: 'not_ready') %>
+<% elsif @upload.state == :failed %>
+  <%= render(partial: 'failed') %>
+<% else %>
 
 <div id="wrapper">
 
-<% if @upload.count > 1 %>
+<% if @files.count > 1 %>
 <div id="filename-list" class="col-xs-3">
 
   <ul class="list-group">
-  <% for i in 0...@upload.count %>
+  <% for i in 0...@files.count %>
       
-
-    <%  err_count = @upload[i].errors.count %>
+    <% err_count = @files[i].errors.count %>
 
     <li class="list-group-item filename-list-entry" data-index="<%= i %>">
 
@@ -18,7 +22,7 @@
       <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
     <% end %>
 
-    <%= @upload[i].filename %>
+    <%= @files[i].filename %>
 
     <% if err_count > 0 %>
       <span class="badge"><%= err_count %></span> 
@@ -31,13 +35,13 @@
 </div>
 <% end %>
 
-<div id="all-files" class="<%= "col-xs-9" if @upload.count > 1 %>">
-<% for i in 0...@upload.count %>
+<div id="all-files" <%= (@files.count > 1 ? 'class="col-xs-9"' : 'style="width:100%"').html_safe %> >
+<% for i in 0...@files.count %>
 
 <div id="file_<%= i %>" class="file-summary">
   <ul id="error_report_toc" class="nav nav-tabs">
     <li class="active"><a href="#test_summary_<%= i %>" data-toggle="tab">Summary </a></li>
-    <% @upload[i].grouped_errors.each_pair do |val, errors| %>
+    <% @files[i].grouped_errors.each_pair do |val, errors| %>
       <li class=""><a href="#test_measure_<%= i %>_<%= validator_slug(val) %>" data-toggle="tab"><%= validator_name(val) %> (<%= errors.count %>)</a></li>
     <% end %>
   </ul>
@@ -45,43 +49,92 @@
   <div id="test_result_tabs" class="tab-content">
     <div class="tab-pane active" id="test_summary_<%= i %>">
       <h4>
-      <% if @upload[i].errors.empty? %>
+      <% if @files[i].errors.empty? %>
         No
       <% else %>
-        <%= @upload[i].errors.count %>
+        <%= @files[i].errors.count %>
       <% end %>errors found</h4>
-      <p>Validating a QRDA <%= @upload[i].doc_type.titleize.gsub("_", " ") %> document against the
-      <% if @upload[i].program != "none" %>
-        <%= @upload[i].program_year%>
-        CMS <%= @upload[i].program.upcase %> Combined IG.</p>
+      <p>Validating a QRDA <%= @files[i].doc_type.titleize.gsub("_", " ") %> document against the
+      <% if @files[i].program != "none" %>
+        <%= @files[i].program_year%>
+        CMS <%= @files[i].program.upcase %> Combined IG.</p>
       <% else %>
         base QRDA standard. </p>
       <% end %>
 
+    <% if @upload.can_calculate %>
+    <br/>
+    <h4>Calculation Results</h4>
+      <% record = @files[i].record %>
+
+      <% if record %>
+
+      <% msr_popl_ids = @measures.collect { |m| m.population_ids.keys()  }.flatten.uniq %>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+            <th scope="col">Measure Name</th>
+              <% msr_popl_ids.each do |population| %>
+                <th scope="col" class="text-center">
+                  <%= population %>
+                </th>
+              <% end %>
+            </tr>
+            </thead>
+          <tbody>
+            <% @measures.each do |measure| %>
+              <tr>
+                <td><%= measure.name %></td>
+                <!-- will show calculation results for product test records -->
+                  <% msr_popl_ids.each do |population| %>
+                    <td class="text-center">
+                      <%= render partial: 'calculation_result_icon', locals: { result: get_result_value(record.calculation_results, measure, population) } %>
+                    </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <% else  # record is nil %>
+
+        <p> Record failed to calculate </p>
+
+        <% end %>
+
+    <% end %>
+
     </div>
 
-    <% error_map, error_attributes = match_errors(@upload[i]) %>
 
-    <% @upload[i].grouped_errors.each do |validator,errs| %>
+
+    <% error_map, error_attributes = match_errors(@files[i]) %>
+
+    <% @files[i].grouped_errors.each do |validator,errs| %>
     <div class="tab-pane" id="test_measure_<%= i %>_<%= validator_slug(validator) %>">
       <%= render partial: 'error_list', locals: {errors: errs, error_map: error_map, file_num: i } %>
     </div>
     <% end %>
   </div><!-- end #test_result_tabs -->
 
-
+  
   <div id="xml_frame_<%= i %>" class="xml_frame">
     <%= render partial:'subnav', layout: false %>
+    <% unless @files[i].errors.empty? %>
     <h3>Vendor Generated XML</h3>
-    <%= render partial: "node" , locals: {:upload=>@upload[i], :doc=>@upload[i].content, :error_map=>error_map, :error_attributes=>error_attributes} %>
+    <%= render partial: "node" , locals: {:upload=>@files[i], :doc=>@files[i].content, :error_map=>error_map, :error_attributes=>error_attributes} %>
+    <%end %>
   </div>
+
 </div>
 <% end %>
 </div>
 </div>
 
 <script>
-window.onload=function() {
+var showReady;
+
+showReady = function() {
 function showErrorPopup(anchor) {
     if ($(anchor)) {
       $('span.error_popup').popover('hide')
@@ -150,7 +203,7 @@ function showErrorPopup(anchor) {
     resetNavigation(0);
 
 
-<% if @upload.count > 1 %>
+<% if @files.count > 1 %>
 
   // auto-select the first entry
   $("li.filename-list-entry").first().addClass("active");
@@ -164,4 +217,11 @@ function showErrorPopup(anchor) {
 <% end %>
 
 }
+
+$(document).ready(showReady);
+$(document).on('page:load', showReady);
+
   </script>
+
+<% end %>
+

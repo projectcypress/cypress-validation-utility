@@ -1,5 +1,4 @@
-require "rubygems"
-require "zip/zip"
+require 'ext/artifact'
 
 class UploadsController < ApplicationController
   before_action :require_bundles
@@ -15,39 +14,39 @@ class UploadsController < ApplicationController
 
   def create
     begin
-      uploaded_file = params[:file].tempfile
-      uploaded_filename = params[:file].original_filename
+      artf = Artifact.new(file: params[:file])
+      file_type = params[:file_type]
+      program = params[:program] || 'none'
+      year = params[:year]
 
-      # the upload is an array of Document objects
-      # so we can handle single xml --> single file or a zip --> multiple files
-      @upload = []
+      @upload = Upload.new(artifact: artf, file_type: file_type, 
+                           program: program, year: year)
+      @upload.save!(validate: false)
+      # TODO: rename errors on the Upload class, so we can remove this validate: false stuff
 
-      file_extn = File.extname(uploaded_filename).downcase
+      FileProcessJob.perform_later(@upload.id.to_s)
 
-      if file_extn == ".zip"  
-
-        Zip::ZipFile.open(uploaded_file.path) do |zipfile|
-          zipfile.glob("*.xml",File::FNM_CASEFOLD|::File::FNM_PATHNAME|::File::FNM_DOTMATCH).each do |entry|
-            content_string = zipfile.read(entry.name)
-            @upload.push Upload.new(entry.name, content_string, params[:file_type], params[:program], params[:year])
-          end
-        end
-
-        if @upload.count == 0
-           flash[:notice] = "Uploaded Zip file contained no XML files"
-           render template:"errors/400", status: 400 and return
-        end
-
-      else
-        content_string = File.open(uploaded_file,"rb:bom|utf-8").read
-        @upload.push Upload.new(uploaded_filename, content_string, params[:file_type], params[:program], params[:year]) 
-      end
-
-    rescue Nokogiri::XML::SyntaxError => e
-      flash[:notice] = e.message
-      render template:"errors/400", status: 400 and return
+      redirect_to upload_path(@upload)
     ensure
       File.delete(params[:file].tempfile)
+      # rails 4 activejob adapter is not fully implemented
+      #  wrt the run at a specific time later with sucker_punch
+      # RecordCleanupJob.set(wait: 10.minutes).perform_later
+      RecordCleanupJob.perform_in(600) # run the cleanup job in 10 mins (600 sec)
     end
+  end
+
+  def show
+    @upload = Upload.find(params[:id])
+
+    redirect_to(root_path) and return unless @upload
+    return unless @upload.completed?
+
+    measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
+
+    @bundle = BUNDLES["2016"] # TODO pick the bundle by measure ids
+    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+
+    @files = @upload.qrda_files
   end
 end

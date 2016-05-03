@@ -12,17 +12,17 @@ CAT1_VALIDATORS = [HealthDataStandards::Validate::Cat1Measure.instance]
 CAT3_VALIDATORS = [HealthDataStandards::Validate::Cat3Measure.instance, HealthDataStandards::Validate::Cat3PerformanceRate.instance]
 
 
-VALIDATOR_NAMES = {HealthDataStandards::Validate::CDA => "CDA",
-                   HealthDataStandards::Validate::Cat1 => "QRDA",
-                   HealthDataStandards::Validate::Cat1R2 => "QRDA",
-                   HealthDataStandards::Validate::Cat3 => "QRDA",
-                   CypressValidationUtility::Validate::EPCat1_2016 => "CMS",
-                   CypressValidationUtility::Validate::EPCat3_2016 => "CMS",
-                   CypressValidationUtility::Validate::EHCat1_2016 => "CMS",
-                   HealthDataStandards::Validate::DataValidator => "Value Sets",
-                   HealthDataStandards::Validate::Cat1Measure => "Measures",
-                   HealthDataStandards::Validate::Cat3Measure => "Measures",
-                   HealthDataStandards::Validate::Cat3PerformanceRate => "Performance Rate"}
+VALIDATOR_NAMES = {"HealthDataStandards::Validate::CDA" => "CDA",
+                   "HealthDataStandards::Validate::Cat1" => "QRDA",
+                   "HealthDataStandards::Validate::Cat1R2" => "QRDA",
+                   "HealthDataStandards::Validate::Cat3" => "QRDA",
+                   "CypressValidationUtility::Validate::EPCat1_2016" => "CMS",
+                   "CypressValidationUtility::Validate::EPCat3_2016" => "CMS",
+                   "CypressValidationUtility::Validate::EHCat1_2016" => "CMS",
+                   "HealthDataStandards::Validate::DataValidator" => "Value Sets",
+                   "HealthDataStandards::Validate::Cat1Measure" => "Measures",
+                   "HealthDataStandards::Validate::Cat3Measure" => "Measures",
+                   "HealthDataStandards::Validate::Cat3PerformanceRate" => "Performance Rate"}
 
 NODE_TYPES ={ 1 => :element ,
               2 => :attribute ,

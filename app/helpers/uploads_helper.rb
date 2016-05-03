@@ -3,17 +3,21 @@ require_relative "../../lib/encounter_validator"
 
 module UploadsHelper
 
-
     def node_type(type)
       return NODE_TYPES[type]
     end
 
     def validator_name(validator)
-      VALIDATOR_NAMES[validator.class]
+      VALIDATOR_NAMES[validator]
     end
 
     def validator_slug(validator)
-      validator.class.name.underscore.gsub("/", "_")
+      validator.underscore.gsub("/", "_")
+    end
+
+    def get_result_value(results, measure, population)
+      result_value = results.where('value.measure_id' => measure.hqmf_id).where('value.sub_id' => measure.sub_id)
+      result_value.first.value[population].to_i if result_value.first
     end
 
     def match_errors(upload)
@@ -22,7 +26,7 @@ module UploadsHelper
       error_map = {}
       error_id = 0
       error_attributes = []
-      locs = upload.errors.collect{|e| e.location}
+      locs = upload.errors.collect{|e| e['location']}
       locs.compact!
 
       locs.each do |location|

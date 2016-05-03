@@ -86,16 +86,9 @@
 </form>
 
 <script>
-window.onload = function() {
+var ready;
+ready = function() {
   H5F.setup(document.getElementById("upload_form"));
-
-  var loading = function() {
-    // add the overlay with loading image to the page
-    var over = '<div id="overlay">' +
-    '<img id="loading" src="images/loading.gif">' +
-    '</div>';
-    $(over).appendTo('body');
-  };
 
   // to store year and program for functions below
   var year;
@@ -165,6 +158,9 @@ window.onload = function() {
     $("#" + el).attr("disabled", !bool);
   }
 
-  $("#upload_form").submit(loading);
 }
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
+
 </script>

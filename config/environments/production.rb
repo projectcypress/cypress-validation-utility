@@ -20,7 +20,7 @@ Rails.application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -75,6 +75,6 @@ Rails.application.configure do
 
 
   #allow requests to run concurrently
-  config.allow_concurrency = true 
-  
+  config.allow_concurrency = true
+
 end

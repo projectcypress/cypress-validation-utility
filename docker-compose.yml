@@ -1,7 +1,7 @@
 cypress_validation_utility:
   build: ./
   ports:
-    - "3000:3000"
+    - "3030:3000"
   command: /rails/cypress-validation-utility/rails-entrypoint.sh
   links:
     - mongodb:mongo

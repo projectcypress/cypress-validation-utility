@@ -1,6 +1,7 @@
 require 'nokogiri'
 require "ext/record"
 require 'cat3_population_validator'
+require 'measure_period_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -38,7 +39,7 @@ class QrdaFile
     validators.each do |v|
       errs = v.validate(content, file_name: @filename)
       self.validation_errors[v.class.name] = errs.map { |e| e.instance_values }
-      # the validation errors are a their own class, for simplicity this turns it into just a hash
+      # the validation errors are their own class, for simplicity this turns it into just a hash
     end
   end
 
@@ -139,5 +140,6 @@ class QrdaFile
     end
     @validators << cms_validator.instance if cms_validator
     @validators << HealthDataStandards::Validate::CDA.instance
+    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program, program_year, doc_type)
   end
 end

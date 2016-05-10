@@ -1,5 +1,6 @@
 require 'nokogiri'
 require "ext/record"
+require 'cat3_population_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -123,6 +124,7 @@ class QrdaFile
       HealthDataStandards::Validate::Cat1
     when "cat3"
       @validators.concat CAT3_VALIDATORS
+      @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
       if program.downcase == "ep"
         if program_year == "2016"
           CypressValidationUtility::Validate::EPCat3_2016

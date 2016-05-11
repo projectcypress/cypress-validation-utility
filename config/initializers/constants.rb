@@ -24,6 +24,7 @@ VALIDATOR_NAMES = {"HealthDataStandards::Validate::CDA" => "CDA",
                    "HealthDataStandards::Validate::Cat3Measure" => "Measures",
                    "HealthDataStandards::Validate::Cat3PerformanceRate" => "Performance Rate",
                    "CypressValidationUtility::Validate::Cat3PopulationValidator" => "Populations",
+                   "CypressValidationUtility::Validate::CCNValidator" => "Reporting",
                    "CypressValidationUtility::Validate::MeasurePeriodValidator" => "Measure Period"}
 
 NODE_TYPES ={ 1 => :element ,

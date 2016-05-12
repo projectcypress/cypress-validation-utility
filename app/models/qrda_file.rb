@@ -2,6 +2,7 @@ require 'nokogiri'
 require "ext/record"
 require 'cat3_population_validator'
 require 'measure_period_validator'
+require 'ccn_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -139,6 +140,7 @@ class QrdaFile
       raise "Invalid doc_type param: Must be one of (cat1, cat3)"
     end
     @validators << cms_validator.instance if cms_validator
+    @validators << CypressValidationUtility::Validate::CCNValidator.instance if program.downcase == "eh"
     @validators << HealthDataStandards::Validate::CDA.instance
     @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program, program_year, doc_type)
   end

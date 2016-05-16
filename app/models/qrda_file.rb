@@ -4,6 +4,7 @@ require 'cat3_population_validator'
 require 'measure_period_validator'
 require 'ccn_validator'
 require 'program_validator'
+require 'valueset_category_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -80,10 +81,12 @@ class QrdaFile
     if program_type == "ep"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
+        @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, BUNDLES['2016'].id)
       end
     elsif program_type == "eh"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
+        @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, BUNDLES['2016'].id)
       end
     end
   end

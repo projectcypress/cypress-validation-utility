@@ -63,4 +63,29 @@ class UploadsControllerTest < ActionController::TestCase
 
     assert( response_body.include?("No errors found") , "Reponse for zip file does not include \"No errors found\"" )
   end
+
+  test "upload single xml with category error" do
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/wrong_categories.xml"), "text/xml")
+
+    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'ep'
+
+    assert_response :redirect
+    get 'show', id: redirect_to_url.split('/')[-1]
+    #replace all whitespace with single spaces for validation
+    response_body = @response.body.gsub(/\s+/, ' ')
+    assert( response_body.include?("has a different category than Templates") , "Response for valid XML does not include \"has a different category than Templates\"" )
+  end
+
+  test "upload single xml without category error" do
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/correct_categories.xml"), "text/xml")
+
+    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'ep'
+
+    assert_response :redirect
+    get 'show', id: redirect_to_url.split('/')[-1]
+    #replace all whitespace with single spaces for validation
+    response_body = @response.body.gsub(/\s+/, ' ')
+    assert( response_body.include?("has a different category than Templates") , "Response for valid XML does not include \"has a different category than Templates\"" )
+  end
+
 end

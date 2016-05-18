@@ -7,13 +7,13 @@
 <form action="/uploads" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
 
   <fieldset>
-    <legend class="control-label">Document</legend>
+    <legend class="control-label">Upload File</legend>
     <div class="fileinput fileinput-new input-group" data-provides="fileinput">
       <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
       <label for="inputFile" class="sr-only">QRDA File</label>
       <span class="input-group-addon btn btn-default btn-file">
-        <span class="fileinput-new">Select QRDA file</span>
-        <span class="fileinput-exists">Change</span>
+      <span class="fileinput-new"><i class="fa fa-fw fa-mouse-pointer"></i> Select file</span>
+      <span class="fileinput-exists"><i class="fa fa-fw fa-refresh"></i> Change</span>
         <input type="file" name="file" id="inputFile" required accept=".xml,.zip">
       </span>
       <a href="#" class="input-group-addon btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
@@ -21,7 +21,7 @@
   </fieldset>
 
   <fieldset>
-    <legend class="control-label">Reporting Program Year</legend>
+    <legend class="control-label">Reporting Year</legend>
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
         <input required type="radio" class="form-control radio" name="year" value="none" id="none">
@@ -36,14 +36,23 @@
 
   <fieldset>
     <legend class="control-label">Reporting Program</legend>
-    <div class="btn-group" data-toggle="buttons">
-      <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="program" value="ep" id="ep"> PQRS
-      </label>
-      <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="program" value="eh" id="eh"> HQR
-      </label>
-    </div>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input required type="radio" class="form-control radio" name="program" data-program="ep" value="pqrs_mu_individual" id="pqrs_mu_individual"> PQRS - Individual
+        </label>
+        <label class="btn btn-default">
+          <input required type="radio" class="form-control radio" name="program" data-program="ep" value="pqrs_mu_group" id="pqrs_mu_group"> PQRS - Group
+        </label>
+        <label class="btn btn-default">
+          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_ehr" id="hqr_ehr"> HQR - EHR
+        </label>
+        <label class="btn btn-default">
+          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_iqr" id="hqr_iqr"> HQR - IQR
+        </label>
+        <label class="btn btn-default">
+          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_ehr_iqr" id="hqr_ehr_iqr"> HQR - CDAC
+        </label>
+      </div>
     <div class="help-block with-errors"></div>
   </fieldset>
 
@@ -97,7 +106,7 @@ ready = function() {
   // when year changes
   $("[name=year]").change(function() {
     year = ($(this).val());
-    if ($(this).val() == "2016") {
+    if (year == "2016") {
       if (program == "eh") {
         eh_2016();
       } else {
@@ -110,7 +119,7 @@ ready = function() {
 
   // when program changes
   $("[name=program]").change(function() {
-    program = ($(this).val());
+    program = ($(this).data('program'));
     if (program == "eh") {
       if (year == "2016") {
         eh_2016();
@@ -124,7 +133,7 @@ ready = function() {
 
   function disable_program() {
     console.log('disabled')
-    toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["eh", "ep"])
+    toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"])
   }
 
   function eh_2016() { // helper that disables/enables
@@ -145,7 +154,7 @@ ready = function() {
   }
 
   function cmsToggleAll(enabled, disabled) {
-    toggleAll(["eh", "ep"].concat(enabled),disabled);
+    toggleAll(["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"].concat(enabled),disabled);
     if (enabled.length == 1) {
       $("#" + enabled[0]).click()
     }

@@ -3,6 +3,7 @@ require "ext/record"
 require 'cat3_population_validator'
 require 'measure_period_validator'
 require 'ccn_validator'
+require 'program_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -28,12 +29,6 @@ class QrdaFile
   end
 
   def process
-    #if the doc_type isn't passed in, see if we can find it in the document
-    self.doc_type = get_doc_type if !self.doc_type
-
-    #if the program isn't passed in, see if we can find it in the document
-    self.program = get_program if !self.program
-
     @measure_ids = get_measure_ids
 
     self.validation_errors = {}
@@ -64,29 +59,9 @@ class QrdaFile
 
   private
 
-  def get_doc_type
-    # check to see if there's a node with the templateId for a QRDA Cat I
-    if content.at_xpath("//xmlns:templateId[@root='2.16.840.1.113883.10.20.24.1.1']")
-      return "cat1"
-    #if it's not a cat1, check to see if there's a node with the templateId for a Cat 3
-    elsif content.at_xpath("//xmlns:templateId[@root='2.16.840.1.113883.10.20.27.1.1']")
-      return "cat3"
-    #if it's neither of these, something's probably wrong
-    else
-      raise "Document doesn't appear to be a QRDA Cat 1 or Cat 3"
-    end
-  end
-
-  def get_program
-    #xpath for informationRecipient, which is where CMS wants the code for the program
-    prog = content.at_xpath("//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension")
-    #If it's not there, raise an error
-    if !prog
-      return "none"
-    end
-
+  def program_type
     #Figure out if the program is EP or EH
-    return case prog.value
+    case program.upcase
     when "CPC","PQRS_MU_INDIVIDUAL","PQRS_MU_GROUP","MU_ONLY"
       "ep"
     when "HQR_EHR","HQR_IQR","HQR_EHR_IQR"
@@ -102,11 +77,11 @@ class QrdaFile
     if program_year == '2016'
       @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLES['2016'], @measure_ids)
     end
-    if program.downcase == "ep"
+    if program_type == "ep"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
       end
-    elsif program.downcase == "eh"
+    elsif program_type == "eh"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
       end
@@ -127,11 +102,11 @@ class QrdaFile
     when "cat3"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
-      if program.downcase == "ep"
+      if program_type == "ep"
         if program_year == "2016"
           CypressValidationUtility::Validate::EPCat3_2016
         end
-      elsif program.downcase == "none"
+      elsif program_type == "none"
         HealthDataStandards::Validate::Cat3
       else
         raise "Cannot validate an EH QRDA Category III file"
@@ -142,6 +117,9 @@ class QrdaFile
     @validators << cms_validator.instance if cms_validator
     @validators << CypressValidationUtility::Validate::CCNValidator.instance if program.downcase == "eh"
     @validators << HealthDataStandards::Validate::CDA.instance
-    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program, program_year, doc_type)
+    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program_type, program_year, doc_type)
+    @validators << CypressValidationUtility::Validate::ProgramValidator.new(program) unless program == 'none'
+
+    @validators
   end
 end

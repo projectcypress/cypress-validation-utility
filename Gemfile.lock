@@ -1,16 +1,7 @@
 GIT
-  remote: git://github.com/mongoid/moped.git
-  revision: cf817ca58a85ed567c2711e4eada163018bde3cf
-  specs:
-    moped (2.0.7)
-      bson (~> 3.0)
-      connection_pool (~> 2.0)
-      optionable (~> 0.2.0)
-
-GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 3e748b0d3e879702a01a300db15c132687730472
-  branch: bump_mongoid
+  revision: 9ba4bf002da042cddff4dc2275da75adf064bd90
+  branch: mongoid5
   specs:
     health-data-standards (3.6.1)
       activesupport (~> 4.2.0)
@@ -30,10 +21,10 @@ GIT
 
 GIT
   remote: https://github.com/projectcypress/quality-measure-engine.git
-  revision: d07dc1657afd633ea12499e170baef4796858aad
+  revision: 284bd90f8fc00e650630c0d6567f05f8a63347ad
   branch: bump_mongoid
   specs:
-    quality-measure-engine (3.1.1)
+    quality-measure-engine (3.1.2)
       delayed_job_mongoid (~> 2.2.0)
       mongoid (~> 5.0.0)
       rubyzip (>= 1.0.0)
@@ -78,15 +69,14 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
-    autoprefixer-rails (6.3.6)
+    autoprefixer-rails (6.3.6.1)
       execjs
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bson (3.2.6)
-    bson (3.2.6-java)
+    bson (4.1.1)
     builder (3.2.2)
-    byebug (8.2.4)
+    byebug (9.0.3)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -103,12 +93,10 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    concurrent-ruby (1.0.1)
-    concurrent-ruby (1.0.1-java)
-    connection_pool (2.2.0)
+    concurrent-ruby (1.0.2)
     daemons (1.2.3)
-    delayed_job (4.1.1)
-      activesupport (>= 3.0, < 5.0)
+    delayed_job (4.1.2)
+      activesupport (>= 3.0, < 5.1)
     delayed_job_mongoid (2.2.0)
       delayed_job (>= 3.0, < 5)
       mongoid (>= 3.0, < 6)
@@ -116,10 +104,9 @@ GEM
     domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
-    eventmachine (1.0.7)
-    eventmachine (1.0.7-java)
+    eventmachine (1.2.0.1)
     execjs (2.6.0)
-    font-awesome-sass (4.5.0)
+    font-awesome-sass (4.6.2)
       sass (>= 3.2)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -135,7 +122,6 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.3)
-    json (1.8.3-java)
     kgio (2.10.0)
     log4r (1.1.10)
     lograge (0.3.6)
@@ -151,9 +137,9 @@ GEM
     memoist (0.9.3)
     mime-types (2.99.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
-    mongo (2.1.2)
-      bson (~> 3.0)
+    minitest (5.9.0)
+    mongo (2.2.5)
+      bson (~> 4.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
       mongo (~> 2.1)
@@ -167,14 +153,12 @@ GEM
       mongoid (>= 3.0, < 6.0)
     mongoid-tree (2.0.1)
       mongoid (>= 4.0, < 6.0)
-    multi_json (1.11.2)
+    multi_json (1.12.0)
     netrc (0.11.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    nokogiri (1.6.7.2-java)
     non-stupid-digest-assets (1.0.8)
       sprockets (>= 2.0)
-    optionable (0.2.0)
     origin (2.2.0)
     protected_attributes (1.0.9)
       activemodel (>= 4.0.1, < 5.0)
@@ -237,14 +221,13 @@ GEM
     therubyrhino (2.0.4)
       therubyrhino_jar (>= 1.7.3)
     therubyrhino_jar (1.7.6)
-    thin (1.6.3)
+    thin (1.6.4)
       daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0)
+      eventmachine (~> 1.0, >= 1.0.4)
       rack (~> 1.0)
     thor (0.19.1)
     thread_safe (0.3.5)
-    thread_safe (0.3.5-java)
-    tilt (2.0.2)
+    tilt (2.0.4)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -253,7 +236,6 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
-    unf (0.1.4-java)
     unf_ext (0.0.7.2)
     unicorn (5.1.0)
       kgio (~> 2.6)
@@ -267,12 +249,10 @@ GEM
       rubyzip (>= 1.0.0)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
   bootstrap-sass (~> 3.3.6)
-  bson
   byebug
   carrierwave
   carrierwave-mongoid
@@ -282,7 +262,6 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   lograge
-  moped!
   non-stupid-digest-assets
   quality-measure-engine!
   rails (~> 4.2.5.2)
@@ -297,4 +276,4 @@ DEPENDENCIES
   unicorn-rails
 
 BUNDLED WITH
-   1.12.0
+   1.12.4

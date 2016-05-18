@@ -31,12 +31,12 @@ gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
 
 
-gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'bump_mongoid'
+gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
 gem 'quality-measure-engine',
     git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
 
-gem "bson"
-gem "moped", github: "mongoid/moped"
+# gem "bson"
+# gem "moped", github: "mongoid/moped"
 
 gem 'font-awesome-sass'
 

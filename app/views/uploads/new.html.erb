@@ -4,95 +4,117 @@
   <p>The Cypress QRDA Validation Utility is intended as a development tool for EHR vendors who are testing synthetic QRDA Category I and Category III documents for conformance to CMS submission requirements. Files submitted for validation must not contain PHI or PII.</p>
 </div>
 
-<form action="/uploads" class="form-inline" method="post" id="upload_form" enctype="multipart/form-data">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h1 class="panel-title">Validate Files</h1>
+</div>
+
+<div class="panel-body">
+<form action="/uploads" class="form" method="post" id="upload_form" enctype="multipart/form-data">
 
   <fieldset>
     <legend class="control-label">Upload File</legend>
-    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+    <div class="fileinput fileinput-new input-group" style="width:50%" data-provides="fileinput">
       <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
       <label for="inputFile" class="sr-only">QRDA File</label>
-      <span class="input-group-addon btn btn-default btn-file">
+      <span class="input-group-addon btn btn-default btn-file btn-info">
       <span class="fileinput-new"><i class="fa fa-fw fa-mouse-pointer"></i> Select file</span>
       <span class="fileinput-exists"><i class="fa fa-fw fa-refresh"></i> Change</span>
         <input type="file" name="file" id="inputFile" required accept=".xml,.zip">
       </span>
-      <a href="#" class="input-group-addon btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+      <a href="#" class="input-group-addon btn btn-warning fileinput-exists" data-dismiss="fileinput">Remove</a>
     </div>
   </fieldset>
 
   <fieldset>
     <legend class="control-label">Reporting Year</legend>
-    <div class="btn-group" data-toggle="buttons">
-      <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="year" value="none" id="none">
+    <div class="form-group">
+    <div class="radio">
+      <label class="radio">
+        <input required type="radio" name="year" value="none" id="none">
         None (Base IG Only)
       </label>
-      <label class="btn btn-default">
-        <input required type="radio" class="form-control radio" name="year" value="2016" id="2016"> 2016
+      </div>
+      <div class="radio">
+      <label class="radio">
+        <input required type="radio" name="year" value="2016" id="2016"> 2016
       </label>
+      </div>
     </div>
     <div class="help-block with-errors"></div>
   </fieldset>
 
   <fieldset>
     <legend class="control-label">Reporting Program</legend>
-      <div class="btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-          <input required type="radio" class="form-control radio" name="program" data-program="ep" value="pqrs_mu_individual" id="pqrs_mu_individual"> PQRS - Individual
+      <div class="form-group">
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="ep" value="pqrs_mu_individual" id="pqrs_mu_individual"> PQRS - Individual
         </label>
-        <label class="btn btn-default">
-          <input required type="radio" class="form-control radio" name="program" data-program="ep" value="pqrs_mu_group" id="pqrs_mu_group"> PQRS - Group
+        </div>
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="ep" value="pqrs_mu_group" id="pqrs_mu_group"> PQRS - Group
         </label>
-        <label class="btn btn-default">
-          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_ehr" id="hqr_ehr"> HQR - EHR
+        </div>
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="eh" value="hqr_ehr" id="hqr_ehr"> HQR - EHR
         </label>
-        <label class="btn btn-default">
-          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_iqr" id="hqr_iqr"> HQR - IQR
+        </div>
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="eh" value="hqr_iqr" id="hqr_iqr"> HQR - IQR
         </label>
-        <label class="btn btn-default">
-          <input required type="radio" class="form-control radio" name="program" data-program="eh" value="hqr_ehr_iqr" id="hqr_ehr_iqr"> HQR - CDAC
+        </div>
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="eh" value="hqr_ehr_iqr" id="hqr_ehr_iqr"> HQR - CDAC
         </label>
+        </div>
       </div>
     <div class="help-block with-errors"></div>
   </fieldset>
 
   <fieldset>
     <legend class="control-label">Document Type</legend>
-    <div class="btn-group" data-toggle="buttons">
-      <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat1_r2" class="form-control" id="cat1_r2"> QRDA Cat I (R2)
+    <div class="form-group">
+      <div class="radio">
+      <label class="radio">
+        <input type="radio" required name="file_type" value="cat1_r3" id="cat1_r3"> QRDA Cat I (R3)
       </label>
-      <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat1_r3" class="form-control" id="cat1_r3"> QRDA Cat I (R3)
+      </div>
+      <div class="radio">
+      <label class="radio">
+        <input type="radio" required name="file_type" value="cat3" id="cat3"> QRDA Cat III
       </label>
-      <label type="button" class="btn btn-default">
-        <input type="radio" required name="file_type" value="cat3" class="form-control" id="cat3"> QRDA Cat III
-      </label>
+      </div>
     </div>
     <div class="help-block with-errors"></div>
   </fieldset>
 
 
     <fieldset>
-      <div class="alert alert-danger">
+      <div>
       <legend class="control-label">PHI Confirmation</legend>
-      <div class="form-group">
         <div class="radio">
-          <label for="warning" class="text-danger">Please check the box to acknowledge that you've read and understand the warning, and to the best of your knowledge, the submitted files will contain neither PII nor PHI:</label>
-          <input name="warning" class="form-control" type="checkbox" value="warning" required id="warning">
+          <label class="text-danger checkbox"><input name="warning" type="checkbox" value="warning" required id="warning"> By checking this box, I acknowledge that I've read and understand the warning, and to the best of my knowledge, the submitted files will contain neither PHI or PII.</label>
         </div>
-      </div>
       </div>
       <div class="help-block with-errors"></div>
     </fieldset>
 
 
-  <input class="btn btn-primary form-control" type="submit" value="Submit">
+  <div class="panel-footer">
+    <input name="commit" value="Submit" class="btn btn-primary" type="submit">
+  </div>
 
   <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
 
 
 </form>
+</div>
+</div>
 
 <script>
 var ready;
@@ -133,15 +155,15 @@ ready = function() {
 
   function disable_program() {
     console.log('disabled')
-    toggleAll(["cat1_r2", "cat1_r3", "cat3"], ["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"])
+    toggleAll(["cat1_r3", "cat3"], ["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"])
   }
 
   function eh_2016() { // helper that disables/enables
-    cmsToggleAll(["cat1_r3"], ["cat1_r2", "cat3"])
+    cmsToggleAll(["cat1_r3"], ["cat3"])
   };
 
   function ep_2016() { // helper that disables/enables
-    cmsToggleAll(["cat1_r3", "cat3"], ["cat1_r2"])
+    cmsToggleAll(["cat1_r3", "cat3"], [])
   };
 
   function toggleAll(enabled, disabled) {

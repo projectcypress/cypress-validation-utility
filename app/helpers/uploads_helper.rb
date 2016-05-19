@@ -8,7 +8,7 @@ module UploadsHelper
     end
 
     def validator_name(validator)
-      VALIDATOR_NAMES[validator]
+      VALIDATOR_CATEGORIES[validator.to_sym]
     end
 
     def validator_slug(validator)

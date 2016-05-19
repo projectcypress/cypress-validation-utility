@@ -1,0 +1,31 @@
+{
+    "bundle_id" : {"$oid" : "55b663b54d4d316449000000"},
+    "display_name" : "Intravenous or Intra-arterial Thrombolytic (t-PA) Therapy",
+    "oid" : "2.16.840.1.113762.1.4.1045.21",
+    "version" : "Draft",
+    "concepts" : [ 
+        {
+            "black_list" : false,
+            "code" : "69245005",
+            "code_system" : "2.16.840.1.113883.6.96",
+            "code_system_name" : "SNOMED-CT",
+            "code_system_version" : null,
+            "display_name" : "Intra-arterial infusion of thrombolytic agent (procedure)",
+            "white_list" : false
+        }, 
+        {
+            "black_list" : false,
+            "code" : "307521008",
+            "code_system" : "2.16.840.1.113883.6.96",
+            "code_system_name" : "SNOMED-CT",
+            "code_system_version" : null,
+            "display_name" : "Intravenous infusion of thrombolytic (procedure)",
+            "white_list" : false
+        }
+    ],
+    "categories" : {
+        "CMS114v3" : [ 
+            "Procedure"
+        ]
+    }
+}

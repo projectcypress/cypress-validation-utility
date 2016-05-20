@@ -4,7 +4,11 @@ THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLU
 Schematron generated from Trifolia on 7/16/2015
 -->
 <!-- 
-2016 CMS QRDA Category III Schematron for Eligible Professional (EP) Programs, Version 2
+2016 CMS QRDA Category III Schematron for Eligible Professional (EP) Programs, Version 2.2
+
+Updated 4/15/2016
+
+Fixed QRDA-251 by manually removing a-1109-711290 to conform to the IG where the component is now MAY
 -->
 <sch:schema xmlns:voc="http://www.lantanagroup.com/voc" xmlns:svs="urn:ihe:iti:svs:2008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdtc="urn:hl7-org:sdtc" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
   <sch:ns prefix="voc" uri="http://www.lantanagroup.com/voc" />
@@ -725,7 +729,9 @@ Schematron generated from Trifolia on 7/16/2015
     </sch:rule>
     <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.27.3.17-errors" context="cda:organizer[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.17']]">
       <sch:extends rule="r-urn-oid-2.16.840.1.113883.10.20.27.3.17-errors-abstract" />
-      <sch:assert id="a-1109-711290" test="count(cda:component[count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.25']])=1]) &gt; 0">SHALL contain at least one [1..*] component (CONF:711290) such that it SHALL contain exactly one [1..1] Performance Rate for Proportion Measure (CMS EP) (identifier: urn:oid:2.16.840.1.113883.10.20.27.3.25) (CONF:711213).</sch:assert>
+      <!--
+        <sch:assert id="a-1109-711290" test="count(cda:component[count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.25']])=1]) &gt; 0">SHALL contain at least one [1..*] component (CONF:711290) such that it SHALL contain exactly one [1..1] Performance Rate for Proportion Measure (CMS EP) (identifier: urn:oid:2.16.840.1.113883.10.20.27.3.25) (CONF:711213).</sch:assert>
+      -->
       <sch:assert id="a-1109-18425" test="count(cda:component[count(cda:observation[cda:templateId[@root='2.16.840.1.113883.10.20.27.3.16']])=1]) &gt; 0">SHALL contain at least one [1..*] component (CONF:18425) such that it SHALL contain exactly one [1..1] Measure Data (CMS EP) (identifier: urn:oid:2.16.840.1.113883.10.20.27.3.16) (CONF:711296).</sch:assert>
     </sch:rule>
     <sch:rule id="r-urn-oid-2.16.840.1.113883.10.20.27.3.17-17890-branch-17890-errors-abstract" abstract="true">

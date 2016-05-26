@@ -4,7 +4,7 @@ require_relative "../../lib/cms_validators"
 require_relative "../../lib/encounter_validator"
 
 BUNDLES = {
-  "2016" => HealthDataStandards::CQM::Bundle.find_by(version: "2.7.0")
+  "2016" => HealthDataStandards::CQM::Bundle.find_by(:version.in => ['2.7.0'])
 }
 
 
@@ -28,6 +28,8 @@ VALIDATOR_NAMES = {"HealthDataStandards::Validate::CDA" => "CDA",
                    "CypressValidationUtility::Validate::CCNValidator" => "Reporting",
                    "CypressValidationUtility::Validate::ProgramValidator" => "CMS Program",
                    "CypressValidationUtility::Validate::MeasurePeriodValidator" => "Measure Period"}
+
+VALIDATOR_CATEGORIES = { qrda: 'QRDA Errors', reporting: 'Reporting Errors', submission: 'Submission Errors' }
 
 NODE_TYPES ={ 1 => :element ,
               2 => :attribute ,

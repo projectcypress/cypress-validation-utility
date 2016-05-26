@@ -13,6 +13,7 @@ module CypressValidationUtility
       DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
 
       def initialize(program, program_year, doc_type)
+        @name = 'Measure Period Validator'
         @program = program
         @program_year = program_year
         @doc_type = doc_type

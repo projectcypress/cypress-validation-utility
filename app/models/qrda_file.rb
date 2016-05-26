@@ -32,12 +32,19 @@ class QrdaFile
   def process
     @measure_ids = get_measure_ids
 
-    self.validation_errors = {}
+    self.validation_errors = { qrda: [], reporting: [], submission: [], ungrouped: [] }
     validators.each do |v|
       errs = v.validate(content, file_name: @filename)
-      self.validation_errors[v.class.name] = errs.map { |e| e.instance_values }
-      # the validation errors are their own class, for simplicity this turns it into just a hash
+      errs.each do |e| 
+        e.validator ||= v.class.name
+        self.validation_errors[ validator_category(e.validator) ] << e.instance_values
+
+        # the validation errors are their own class, e.instance_values turns it into just a hash for simplicity 
+      end
     end
+
+    # if we forget to group something we will have a tab for it, otherwise dont show that tab
+    self.validation_errors.delete(:ungrouped) if self.validation_errors[:ungrouped].empty?
   end
 
   def grouped_errors
@@ -59,6 +66,24 @@ class QrdaFile
   end
 
   private
+
+  def validator_category(validator)
+    case validator
+    when 'CDA SDTC Validator', 'QRDA Cat 1 R3 Validator', 'QRDA Cat 1 Validator', 'QRDA Cat 3 Validator',
+         'CMS EP Cat I Schematron Validator', 'CMS EH Cat I Schematron Validator', 'CMS EP Cat III Schematron Validator'
+      :qrda
+    when 'Cat 1 Measure ID Validator', 'HealthDataStandards::Validate::Cat1Measure',
+         'Cat 3 Measure ID Validator', 'HealthDataStandards::Validate::Cat3Measure',
+         'HealthDataStandards::Validate::Cat3PerformanceRate', 'Cat III Population Validator',
+         'HealthDataStandards::Validate::DataValidator'
+      :reporting
+    when 'CCN Validator', 'Measure Period Validator', 'CMS Program Validator', 'Encounter validator',
+         'Valueset Category Validator'
+      :submission
+    else
+      :ungrouped
+    end
+  end
 
   def program_type
     #Figure out if the program is EP or EH
@@ -96,9 +121,6 @@ class QrdaFile
     @validators = []
     cms_validator = case doc_type
 
-    when "cat1_r2"
-      cat1_validator
-      HealthDataStandards::Validate::Cat1R2
     when "cat1_r3"
       cat1_validator
       HealthDataStandards::Validate::Cat1
@@ -118,10 +140,10 @@ class QrdaFile
       raise "Invalid doc_type param: Must be one of (cat1, cat3)"
     end
     @validators << cms_validator.instance if cms_validator
-    @validators << CypressValidationUtility::Validate::CCNValidator.instance if program.downcase == "eh"
+    @validators << CypressValidationUtility::Validate::CCNValidator.instance if program_type == "eh"
     @validators << HealthDataStandards::Validate::CDA.instance
-    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program_type, program_year, doc_type)
     @validators << CypressValidationUtility::Validate::ProgramValidator.new(program) unless program == 'none'
+    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program_type, program_year, doc_type)
 
     @validators
   end

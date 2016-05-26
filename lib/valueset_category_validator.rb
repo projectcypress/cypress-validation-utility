@@ -26,9 +26,8 @@ module CypressValidationUtility
         @name = "Valueset Category Validator"
         @hqmf_qrda_oid_map = HealthDataStandards::Export::QRDA::EntryTemplateResolver.hqmf_qrda_oid_map
         @measure_cms_ids = []
-        measure_ids = measure_ids
-        measure_ids.each do |measure_id|
-          @measure_cms_ids << HealthDataStandards::CQM::Measure.where(hqmf_id: measure_id).first.cms_id
+        if measure_ids && !measure_ids.empty?
+          @measure_cms_ids = HealthDataStandards::CQM::Measure.where(:hqmf_id.in => measure_ids).distinct(:cms_id)
         end
       end
       

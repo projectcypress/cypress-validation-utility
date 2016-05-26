@@ -14,6 +14,22 @@ class ActiveSupport::TestCase
     # which then has to be recreated (which is slow)
   end
 
+  def get_document(input)
+    content_str = case input
+                  when File
+                    input.read
+                  when Nokogiri::XML::Document
+                    return input
+                  else
+                    input
+                  end
+        
+    document = Nokogiri::XML(content_str) { |config| config.strict }
+    document.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
+    document.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
+    document
+  end
+
   def unzip_if_necessary(zipped_collection)
     zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + ".zip")
     folder = File.join(Rails.root, 'test', 'fixtures', zipped_collection)

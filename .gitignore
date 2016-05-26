@@ -2,3 +2,6 @@
 log/
 tmp/
 .env-prod
+.byebug_history
+public/assets/
+.DS_Store

@@ -4,6 +4,10 @@ module CypressValidationUtility
       include HealthDataStandards::Validate::BaseValidator
       include Singleton
 
+      def initialize
+        @name = 'CCN Validator'
+      end
+
       def validate(file, options = {})
         document = get_document(file)
         errors = []

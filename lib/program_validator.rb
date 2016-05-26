@@ -4,6 +4,7 @@ module CypressValidationUtility
       include HealthDataStandards::Validate::BaseValidator
 
       def initialize(program)
+        @name = 'CMS Program Validator'
         @program = program.upcase
       end
 
@@ -18,7 +19,7 @@ module CypressValidationUtility
         if !prog
           msg = "Expected to find program '#{@program}' but no program code was found."
           errors << build_error(msg, '/', options[:file_name])
-        elsif prog.value != @program_code
+        elsif prog.value != @program
           msg = "CMS Program code '#{prog.value}' does not match the expected code for program #{@program}."
           errors << build_error(msg, prog.parent.path, options[:file_name])
         end

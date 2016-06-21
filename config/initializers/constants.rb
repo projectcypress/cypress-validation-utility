@@ -4,7 +4,8 @@ require_relative "../../lib/cms_validators"
 require_relative "../../lib/encounter_validator"
 
 BUNDLES = {
-  "2016" => HealthDataStandards::CQM::Bundle.find_by(:version.in => ['2.7.0'])
+  "2016" => HealthDataStandards::CQM::Bundle.find_by(version: /^(2.7.0$)|(2016\..*)/) 
+  # 2016 bundle can either be the 2.7.0 bundle, or anything starting with "2016."
 }
 
 

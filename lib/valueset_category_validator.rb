@@ -46,8 +46,12 @@ module CypressValidationUtility
         valuesets.each do |value_set|
           value_set_hash = {}
           template_ids = []
-          # all of the template ids that are siblints to the valueset
-          template_id_nodes = value_set.parent.xpath("./cda:templateId")
+          # all of the template ids for the entry
+          template_node = value_set
+          while template_node.name != 'entry'
+            template_node = template_node.parent
+          end
+          template_id_nodes = template_node.xpath(".//cda:templateId")
           template_id_nodes.each do |template_id_node|
             template_ids << template_id_node.at_xpath("@root").value
           end
@@ -85,7 +89,7 @@ module CypressValidationUtility
       def category_appropriate_for_vs(valueset_categories, qrda_oids)
         categories = []
         valueset_categories.each do |cms_id, category_list|
-          # Add the categories if the cms_id matches 
+          # Add the categories if the cms_id matches
           categories = categories + category_list if @measure_cms_ids.include? cms_id
         end
         categories = categories.uniq

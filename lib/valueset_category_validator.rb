@@ -46,19 +46,23 @@ module CypressValidationUtility
         valuesets.each do |value_set|
           value_set_hash = {}
           template_ids = []
-          # all of the template ids for the entry
-          template_node = value_set
-          while template_node.name != 'entry'
-            template_node = template_node.parent
+          if value_set.name != 'code' && value_set.name != 'value'
+            value_set_hash['vset'] = value_set.at_xpath("@sdtc:valueSet").value
+          else
+            # all of the template ids for the entry
+            template_node = value_set
+            while template_node.name != 'entry'
+              template_node = template_node.parent
+              template_id_nodes = template_node.xpath(".//cda:templateId")
+              template_id_nodes.each do |template_id_node|
+                template_ids << template_id_node.at_xpath("@root").value
+              end
+            end
+            # Hash of the value set with the template ids associated with it
+            value_set_hash['vset'] = value_set.at_xpath("@sdtc:valueSet").value
+            value_set_hash['template_ids'] = template_ids
+            value_set_hash['path'] = value_set.path
           end
-          template_id_nodes = template_node.xpath(".//cda:templateId")
-          template_id_nodes.each do |template_id_node|
-            template_ids << template_id_node.at_xpath("@root").value
-          end
-          # Hash of the value set with the template ids associated with it
-          value_set_hash['vset'] = value_set.at_xpath("@sdtc:valueSet").value
-          value_set_hash['template_ids'] = template_ids
-          value_set_hash['path'] = value_set.path
           data_element_array << value_set_hash
         end
         data_element_array
@@ -93,6 +97,8 @@ module CypressValidationUtility
           categories = categories + category_list if @measure_cms_ids.include? cms_id
         end
         categories = categories.uniq
+        # return true if there aren't any qrda templates associated with the valueset, and valueset is of type attribute
+        return true if qrda_oids.nil? && categories.include?('Attribute')
         # loops though template ids to see if any match the category of the valueset
         qrda_oids.each do |qrda_oid|
           oid_tuple = @hqmf_qrda_oid_map.find {|map_tuple| map_tuple['qrda_oid'] == qrda_oid }

@@ -32,6 +32,8 @@ class QrdaFile
   def process
     @measure_ids = get_measure_ids
 
+    @bundle = BUNDLES[program_year]
+
     self.validation_errors = { qrda: [], reporting: [], submission: [], ungrouped: [] }
     validators.each do |v|
       errs = v.validate(content, file_name: @filename)
@@ -100,18 +102,19 @@ class QrdaFile
 
   def cat1_validator
     @validators.concat CAT1_VALIDATORS
-    if program_year == '2016'
-      @validators << HealthDataStandards::Validate::DataValidator.new(BUNDLES['2016'], @measure_ids)
-    end
+    @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids)
+    @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id)
+
     if program_type == "ep"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
-        @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, BUNDLES['2016'].id)
       end
     elsif program_type == "eh"
-      if program_year == "2016"
+      case program_year
+      when '2016'
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
-        @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, BUNDLES['2016'].id)
+      when '2017'
+        @validators << CypressValidationUtility::Validate::EHCat1_2017.instance
       end
     end
   end
@@ -124,6 +127,9 @@ class QrdaFile
     when "cat1_r3"
       cat1_validator
       HealthDataStandards::Validate::Cat1
+    when "cat1_r31"
+      cat1_validator
+      HealthDataStandards::Validate::Cat1R31
     when "cat3"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance

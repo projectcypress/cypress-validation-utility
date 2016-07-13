@@ -72,7 +72,7 @@ module CypressValidationUtility
         # for each hash of valuesets with their array of template ids
         data_elements.each do |data_element|
           result = false
-          qrda_oids = data_element['template_ids']
+          qrda_oids = data_element['template_ids'] || []
           value_set_oid = data_element['vset']
           vset = HealthDataStandards::SVS::ValueSet.where(oid: value_set_oid, bundle_id: @bundle_id)
           if vset.size > 0

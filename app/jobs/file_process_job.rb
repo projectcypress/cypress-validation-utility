@@ -24,7 +24,7 @@ class FileProcessJob < ActiveJob::Base
     if upload.can_calculate
       measure_ids = upload.qrda_files.collect(&:get_measure_ids).flatten.uniq
 
-      @bundle = BUNDLES['2016'] # TODO: figure out what bundle
+      @bundle = BUNDLES[upload.year]
       @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
 
       calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle)
@@ -40,8 +40,12 @@ class FileProcessJob < ActiveJob::Base
     end
 
     upload.complete
-  rescue => e
+  rescue Nokogiri::XML::SyntaxError => e
     upload.fail(e)
+  rescue => e
+    upload.fail(e.message)
+    ERROR_LOG.error e.message
+    ERROR_LOG.error e.backtrace.join("\n")
   end
 
   def process_single_file(uploaded_filename, content_string, parent_upload)

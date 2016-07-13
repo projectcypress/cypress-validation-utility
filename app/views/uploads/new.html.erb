@@ -27,26 +27,39 @@
   </fieldset>
 
   <fieldset>
-    <legend class="control-label">Reporting Year</legend>
+    <legend class="control-label">Annual Update Bundle</legend>
     <div class="form-group">
-    <div class="radio">
-      <label class="radio">
-        <input required type="radio" name="year" value="none" id="none">
-        None (Base IG Only)
-      </label>
-      </div>
+      <% if BUNDLES['2016'] %>
       <div class="radio">
       <label class="radio">
-        <input required type="radio" name="year" value="2016" id="2016"> 2016
+        <input required type="radio" name="year" value="2016" id="2016"> 2015 Bundle for the 2016 Reporting Period
       </label>
       </div>
+      <% end %>
+      <% if BUNDLES['2017'] %>
+      <div class="radio">
+      <label class="radio">
+        <input required type="radio" name="year" value="2017" id="2017"> 2016 Bundle for the 2017 Reporting Period        
+      </label>
+      </div>
+      <% end %>
     </div>
-    <div class="help-block with-errors"></div>
+    <% unless BUNDLES['2016'] %>
+      <span id="bundle-message" class="help-block">To enable the <em>2015 Bundle for the 2016 Reporting Period</em>, please install a 2015 Cypress bundle</span>
+    <% end %>
+    <% unless BUNDLES['2017'] %>
+      <span id="bundle-message" class="help-block">To enable the <em>2016 Bundle for the 2017 Reporting Period</em>, please install a 2016 Cypress bundle</span>
+    <% end %>
   </fieldset>
 
   <fieldset>
-    <legend class="control-label">Reporting Program</legend>
+    <legend class="control-label">CMS Reporting Program</legend>
       <div class="form-group">
+        <div class="radio">
+        <label class="radio">
+          <input required type="radio" name="program" data-program="none" value="none" id="none"> None (Base IG Only)
+        </label>
+        </div>
         <div class="radio">
         <label class="radio">
           <input required type="radio" name="program" data-program="ep" value="pqrs_mu_individual" id="pqrs_mu_individual"> PQRS - Individual
@@ -82,6 +95,11 @@
       <div class="radio">
       <label class="radio">
         <input type="radio" required name="file_type" value="cat1_r3" id="cat1_r3"> QRDA Cat I (R3)
+      </label>
+      </div>
+      <div class="radio">
+      <label class="radio">
+        <input type="radio" required name="file_type" value="cat1_r31" id="cat1_r31"> QRDA Cat I (R3.1)
       </label>
       </div>
       <div class="radio">
@@ -128,65 +146,71 @@ ready = function() {
   // when year changes
   $("[name=year]").change(function() {
     year = ($(this).val());
-    if (year == "2016") {
-      if (program == "eh") {
-        eh_2016();
-      } else {
-        ep_2016();
-      }
-    } else {
-      disable_program();
-    }
+    apply_selections(program, year);
   });
 
   // when program changes
   $("[name=program]").change(function() {
     program = ($(this).data('program'));
-    if (program == "eh") {
-      if (year == "2016") {
-        eh_2016();
-      }
-    } else if (program == "ep"){ // ep
-      if (year == "2016") {
-        ep_2016();
-      }
-    }
+    apply_selections(program, year);
   });
 
-  function disable_program() {
-    console.log('disabled')
-    toggleAll(["cat1_r3", "cat3"], ["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"])
+
+  function apply_selections(program, year) {
+    enabled = [];
+    disabled = [];
+
+    if (year == "2016") {
+      disabled.push("cat1_r31");
+      enabled.push("cat1_r3", "pqrs_mu_individual", "pqrs_mu_group")
+    } else if (year == "2017") {
+      enabled.push("cat1_r31");
+      disabled.push("cat1_r3", "pqrs_mu_individual", "pqrs_mu_group")
+    }
+
+    if (program == "eh") {
+      disabled.push("cat3");
+    } else {
+      enabled.push("cat3");
+    }
+
+    toggleAll(enabled, disabled);
+
+    if (program == "eh")
+    {
+      if (year == "2016")
+      {
+        clickCheckbox("cat1_r3");
+      } else if (year == "2017")
+      {
+        clickCheckbox("cat1_r31");
+      }
+    }
   }
-
-  function eh_2016() { // helper that disables/enables
-    cmsToggleAll(["cat1_r3"], ["cat3"])
-  };
-
-  function ep_2016() { // helper that disables/enables
-    cmsToggleAll(["cat1_r3", "cat3"], [])
-  };
 
   function toggleAll(enabled, disabled) {
     for (var i = 0; i < enabled.length; i++) {
-      enable(enabled[i])
+      enable(enabled[i]);
     }
     for (var i = 0; i < disabled.length; i++) {
-      disable(disabled[i])
+      disable(disabled[i]);
     }
   }
 
-  function cmsToggleAll(enabled, disabled) {
-    toggleAll(["pqrs_mu_individual","pqrs_mu_group","hqr_ehr","hqr_iqr","hqr_ehr_iqr"].concat(enabled),disabled);
-    if (enabled.length == 1) {
-      $("#" + enabled[0]).click()
-    }
+  function clickCheckbox(checkbox) {
+    $("#" + checkbox).click();
   }
+
   function enable(el) { toggle(el, true); }
   function disable(el) { toggle(el, false); }
 
   function toggle(el, bool) {
-    $("#" + el).parent().attr("disabled", !bool);
-    $("#" + el).attr("disabled", !bool);
+    var item = $("#" + el);
+    item.parent().attr("disabled", !bool);
+    item.attr("disabled", !bool);
+    if (!bool && item.is(":checked")) {
+      item.attr("checked", false);
+    }
   }
 
 }

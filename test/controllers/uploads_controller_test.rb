@@ -12,9 +12,9 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test "upload single valid xml" do
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/good_cat1.xml"), "text/xml")
+    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/good_cat3.xml"), "text/xml")
 
-    post 'create', file: file, year: 'none', file_type: 'cat1_r3', program: 'none' 
+    post 'create', file: file, year: '2016', file_type: 'cat3', program: 'none' 
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -28,7 +28,7 @@ class UploadsControllerTest < ActionController::TestCase
   test "upload single xml with errors" do
     file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/5_ASTHMA_A_with_errors.xml"), "text/xml")
 
-    post 'create', file: file, year: 'none', file_type: 'cat1_r3', program: 'none'
+    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -36,13 +36,13 @@ class UploadsControllerTest < ActionController::TestCase
     #replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')
 
-    assert( response_body.include?("108 errors found") , "Response for XML with errors does not include \"108 errors found\"" )
+    assert( response_body.include?("130 errors found") , "Response for XML with errors does not include \"130 errors found\"" )
   end
 
   test "upload single broken xml" do
     file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/invalid_xml.xml"), "text/xml")
 
-    post 'create', file: file, year: 'none', file_type: 'cat1_r3', program: 'none'
+    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -53,13 +53,13 @@ class UploadsControllerTest < ActionController::TestCase
   test "upload zip file" do
     file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/2_qrdas.zip"), "application/zip")
 
-    post 'create', file: file, year: 'none', file_type: 'cat1_r3', program: 'none'
+    post 'create', file: file, year: '2016', file_type: 'cat3', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
 
     #replace all whitespace with single spaces for validation
-    response_body = @response.body.gsub(/\s+/, ' ')
+    response_body = @response.body.gsub(/\s+/, ' ')  
 
     assert( response_body.include?("No errors found") , "Response for zip file does not include \"No errors found\"" )
   end

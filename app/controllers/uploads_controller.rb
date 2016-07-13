@@ -4,8 +4,12 @@ class UploadsController < ApplicationController
   before_action :require_bundles
 
   def require_bundles
-    unless BUNDLES["2016"]
-      raise "Please install a 2016 Cypress bundle in order to use the Cypress Validation Utility"
+    BUNDLES['2016'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2015\./)
+    # 2016 is the reporting year so we have to use the 2015.x.x bundle ("2015 bundle for the 2016 program year")
+    BUNDLES['2017'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2016\./)
+
+    unless BUNDLES['2016'] || BUNDLES['2017']
+      raise "Please install a 2016 Cypress bundle or a 2017 Cypress bundle in order to use the Cypress Validation Utility"
     end
   end
 
@@ -16,7 +20,7 @@ class UploadsController < ApplicationController
     begin
       artf = Artifact.new(file: params[:file])
       file_type = params[:file_type]
-      program = params[:program] || 'none'
+      program = params[:program]
       year = params[:year]
 
       @upload = Upload.new(artifact: artf, file_type: file_type, 
@@ -44,8 +48,8 @@ class UploadsController < ApplicationController
 
     measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
 
-    @bundle = BUNDLES["2016"] # TODO pick the bundle by measure ids
-    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+    @bundle = BUNDLES[@upload.year]
+    @measures = @bundle ? @bundle.measures.top_level.in(hqmf_id: measure_ids) : []
 
     @files = @upload.qrda_files
   end

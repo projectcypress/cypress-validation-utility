@@ -6,13 +6,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   rescue_from Exception, with: :global_handle_exception
 
-  def error_logger
-    @@error_logger ||= Logger.new(::File.new("log/error.log","a+"))
-  end
-
   def global_handle_exception(exception)
-    error_logger.error exception.message
-    error_logger.error exception.backtrace.join("\n")
+    ERROR_LOG.error exception.message
+    ERROR_LOG.error exception.backtrace.join("\n")
 
     flash[:notice] = exception.message
     render(template:"errors/500", status: 500) and return

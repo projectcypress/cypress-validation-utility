@@ -83,10 +83,16 @@ module CypressValidationUtility
               @errors << build_error("Value Set #{value_set_oid} was not checked for template/category alignment.", data_element['path'], options[:file_name])
               result = true
             else
-              result = category_appropriate_for_vs(valueset_categories, qrda_oids)              
+              result = category_appropriate_for_vs(valueset_categories, qrda_oids)
             end
           end
-          @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", data_element['path'], options[:file_name]) unless result
+          unless result
+            if qrda_oids
+              @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", data_element['path'], options[:file_name])
+            else
+              @errors << build_error("Value Set #{value_set_oid} has a different category than 'Attribute'", data_element['path'], options[:file_name])
+            end
+          end
         end
       end
 
@@ -98,7 +104,9 @@ module CypressValidationUtility
         end
         categories = categories.uniq
         # return true if there aren't any qrda templates associated with the valueset, and valueset is of type attribute
-        return true if qrda_oids.nil? && categories.include?('Attribute')
+        if qrda_oids.nil?
+          return categories.include?('Attribute') ? true : false
+        end
         # loops though template ids to see if any match the category of the valueset
         qrda_oids.each do |qrda_oid|
           oid_tuple = @hqmf_qrda_oid_map.find {|map_tuple| map_tuple['qrda_oid'] == qrda_oid }

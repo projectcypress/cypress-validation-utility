@@ -158,6 +158,7 @@ GEM
       mongoid (>= 4.0, < 6.0)
     multi_json (1.12.0)
     netrc (0.11.0)
+    newrelic_rpm (3.14.3.313)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
@@ -272,6 +273,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   lograge
+  newrelic_rpm
   non-stupid-digest-assets
   quality-measure-engine!
   rails (~> 4.2.5.2)

@@ -14,4 +14,6 @@ ADD . /rails/cypress-validation-utility
 
 RUN chmod 755 /rails/cypress-validation-utility/rails-entrypoint.sh
 
+RUN bundle exec rake assets:precompile
+
 EXPOSE 3000

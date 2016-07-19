@@ -1,1 +1,1 @@
-NonStupidDigestAssets.whitelist += [/.*.ttf/,/.*.woff/,/.*.woff2/]
+NonStupidDigestAssets.whitelist += [/.*.ttf/, /.*.woff/, /.*.woff2/]

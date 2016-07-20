@@ -1,5 +1,5 @@
 .sass-cache/
-log/
+log/*.log
 tmp/
 .env-prod
 .byebug_history

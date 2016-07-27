@@ -109,8 +109,8 @@ module CypressValidationUtility
         end
         # loops though template ids to see if any match the category of the valueset
         qrda_oids.each do |qrda_oid|
-          oid_tuple = @hqmf_qrda_oid_map.find {|map_tuple| map_tuple['qrda_oid'] == qrda_oid }
-          if oid_tuple
+          oid_tuples = @hqmf_qrda_oid_map.find_all {|map_tuple| map_tuple['qrda_oid'] == qrda_oid }
+          oid_tuples.each do |oid_tuple|
             categories.each do |category|
               if oid_tuple['hqmf_name'].include?(CATEGORY_MAP[category])
                 # if one of the template ids is the right category, true

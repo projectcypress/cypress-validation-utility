@@ -46,7 +46,7 @@ module CypressValidationUtility
         valuesets.each do |value_set|
           value_set_hash = {}
           template_ids = []
-          if value_set.name != 'code' && value_set.name != 'value'
+          if !['code', 'value', 'translation'].include? value_set.name
             value_set_hash['vset'] = value_set.at_xpath("@sdtc:valueSet").value
           else
             # all of the template ids for the entry

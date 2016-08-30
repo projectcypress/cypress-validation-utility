@@ -19,7 +19,7 @@ test:
 production:
   clients:
     default:
-      database: cypress_validation_utility_production
+      database: cypress_production
       hosts:
         - <%= ENV.fetch('MONGO_PORT_27017_TCP_ADDR', 'localhost') %>:<%= ENV.fetch('MONGO_PORT_27017_TCP_PORT', '27017') %>
   options:

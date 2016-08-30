@@ -89,6 +89,8 @@ module CypressValidationUtility
         # it looks like DateTime.parse is smart enough to figure out the date format, ex "20110706122735-0800" -> "Wed, 06 Jul 2011 12:27:35 -0800"
         rp_start_date = DateTime.parse(@rp_start)
         rp_end_date = DateTime.parse(@rp_end)
+        rp_start_date.change({ hour: 0, min: 0, sec: 0})
+        rp_end_date.change({ hour: 23, min: 59, sec: 59})
 
         any_date_within_period = false
 

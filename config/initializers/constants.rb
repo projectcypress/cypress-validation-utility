@@ -46,3 +46,14 @@ NODE_TYPES ={ 1 => :element ,
               10  => :doc_type,
               11  => :doc_frag,
               12  => :notaion}
+
+BUNDLE_PERIOD_OVERRIDES = {
+  "2015.0.0" => {
+    "measure_period_start" => 1451606400,
+    "effective_date" => 1483228799
+  },
+  "2016.0.0" => {
+    "measure_period_start" => 1483228800,
+    "effective_date" => 1514764799
+  }
+}.freeze

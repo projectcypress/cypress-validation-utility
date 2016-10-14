@@ -39,7 +39,7 @@
       <% if BUNDLES['2017'] %>
       <div class="radio">
       <label class="radio">
-        <input required type="radio" name="year" value="2017" id="2017"> 2016 Bundle for the 2017 Reporting Period        
+        <input required type="radio" name="year" value="2017" id="2017"> 2016 Bundle for the 2017 Reporting Period
       </label>
       </div>
       <% end %>
@@ -104,7 +104,12 @@
       </div>
       <div class="radio">
       <label class="radio">
-        <input type="radio" required name="file_type" value="cat3" id="cat3"> QRDA Cat III
+        <input type="radio" required name="file_type" value="cat3_r1" id="cat3_r1"> QRDA Cat III (R1)
+      </label>
+      </div>
+      <div class="radio">
+      <label class="radio">
+        <input type="radio" required name="file_type" value="cat3_r11" id="cat3_r11"> QRDA Cat III (R1.1)
       </label>
       </div>
     </div>
@@ -161,17 +166,17 @@ ready = function() {
     disabled = [];
 
     if (year == "2016") {
-      disabled.push("cat1_r31");
-      enabled.push("cat1_r3", "pqrs_mu_individual", "pqrs_mu_group")
+      enabled.push("cat1_r3", "cat3_r1", "pqrs_mu_individual", "pqrs_mu_group")
+      disabled.push("cat1_r31", "cat3_r11");
     } else if (year == "2017") {
-      enabled.push("cat1_r31");
-      disabled.push("cat1_r3", "pqrs_mu_individual", "pqrs_mu_group")
+      enabled.push("cat1_r31", "cat3_r11");
+      disabled.push("cat1_r3", "cat3_r1", "pqrs_mu_individual", "pqrs_mu_group")
     }
 
     if (program == "eh") {
-      disabled.push("cat3");
+      disabled.push("cat3_r1", "cat3_r11");
     } else {
-      enabled.push("cat3");
+      enabled.push("cat3_r1", "cat3_r11");
     }
 
     toggleAll(enabled, disabled);

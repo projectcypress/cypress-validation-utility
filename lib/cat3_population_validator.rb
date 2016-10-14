@@ -15,9 +15,9 @@ module CypressValidationUtility
 
         document.xpath(measure_entry_selector).each do |measure|
           begin
-            pop_counts = {}    
+            pop_counts = {}
             measure_id = measure.at_xpath(measure_id_selector).value
-            
+
             measure.xpath(population_selector_from_measure).each do |population|
               code = population.at_xpath(population_name_selector).value
               count = population.at_xpath(population_count_selector).value || 0
@@ -38,12 +38,12 @@ module CypressValidationUtility
         file = options[:file_name]
 
         # proportion measures, ipp >= denom, denom >= num + denexcp + denex
-        ipp = pop["IPP"] || 0
+        ipp = pop["IPP"] || pop["IPOP"] || 0
         denom = pop["DENOM"] || 0
         denex = pop["DENEX"] || 0
         denexcep = pop["DENEXCEP"] || 0
         num = pop["NUMER"] || 0
-        
+
         if denom > ipp
           errors << build_error("Denominator value #{denom} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
         end

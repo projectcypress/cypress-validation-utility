@@ -37,11 +37,11 @@ class QrdaFile
     self.validation_errors = { qrda: [], reporting: [], submission: [], ungrouped: [] }
     validators.each do |v|
       errs = v.validate(content, file_name: @filename)
-      errs.each do |e| 
+      errs.each do |e|
         e.validator ||= v.class.name
         self.validation_errors[ validator_category(e.validator) ] << e.instance_values
 
-        # the validation errors are their own class, e.instance_values turns it into just a hash for simplicity 
+        # the validation errors are their own class, e.instance_values turns it into just a hash for simplicity
       end
     end
 
@@ -130,15 +130,17 @@ class QrdaFile
     when "cat1_r31"
       cat1_validator
       HealthDataStandards::Validate::Cat1R31
-    when "cat3"
+    when "cat3_r1", "cat3_r11"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
-      if program_type == "ep"
-        if program_year == "2016"
-          CypressValidationUtility::Validate::EPCat3_2016
-        end
+      if program_type == "ep" && program_year == "2016"
+        CypressValidationUtility::Validate::EPCat3_2016
       elsif program_type == "none"
-        HealthDataStandards::Validate::Cat3
+        if doc_type == "cat3_r1"
+          HealthDataStandards::Validate::Cat3
+        elsif doc_type == "cat3_r11"
+          HealthDataStandards::Validate::Cat3R11
+        end
       else
         raise "Cannot validate an EH QRDA Category III file"
       end

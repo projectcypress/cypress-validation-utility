@@ -112,7 +112,8 @@ module CypressValidationUtility
           oid_tuples = @hqmf_qrda_oid_map.find_all {|map_tuple| map_tuple['qrda_oid'] == qrda_oid }
           oid_tuples.each do |oid_tuple|
             categories.each do |category|
-              if oid_tuple['hqmf_name'].include?(CATEGORY_MAP[category])
+              # value set category is ok if it matches the hqmf type, or if vs is an attribute
+              if oid_tuple['hqmf_name'].include?(CATEGORY_MAP[category]) || category == 'Attribute'
                 # if one of the template ids is the right category, true
                 return true
               end

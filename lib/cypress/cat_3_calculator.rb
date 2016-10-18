@@ -97,6 +97,7 @@ module Cypress
                             end_date.years_ago(1) + 1,
                             end_date,
                             nil,
+                            nil,
                             @correlation_id)
      # QME::PatientCache.where(test_id: @correlation_id).destroy_all
       HealthDataStandards::CQM::QueryCache.where(test_id: @correlation_id).destroy_all

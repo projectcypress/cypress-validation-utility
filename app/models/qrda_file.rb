@@ -34,13 +34,18 @@ class QrdaFile
 
     @bundle = BUNDLES[program_year]
 
-    self.validation_errors = { qrda: [], reporting: [], submission: [], ungrouped: [] }
+    self.validation_errors = { qrda: [], reporting: [], submission: [], warning: [], ungrouped: [] }
     validators.each do |v|
       errs = v.validate(content, file_name: @filename)
       errs.each do |e|
         e.validator ||= v.class.name
-        self.validation_errors[ validator_category(e.validator) ] << e.instance_values
-
+        #make cat1 validation error types a warning for data criteria outside the measure definition
+        byebug
+        if (e.validator == 'HealthDataStandards::Validate::DataValidator') && (e.message.include? ('data criteria outside'))
+          self.validation_errors[:warning] << e.instance_values
+        else
+          self.validation_errors[ validator_category(e.validator) ] << e.instance_values
+        end
         # the validation errors are their own class, e.instance_values turns it into just a hash for simplicity
       end
     end

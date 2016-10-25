@@ -33,7 +33,7 @@ VALIDATOR_NAMES = {"HealthDataStandards::Validate::CDA" => "CDA",
                    "CypressValidationUtility::Validate::ProgramValidator" => "CMS Program",
                    "CypressValidationUtility::Validate::MeasurePeriodValidator" => "Measure Period"}
 
-VALIDATOR_CATEGORIES = { qrda: 'QRDA Errors', reporting: 'Reporting Errors', submission: 'Submission Errors' }
+VALIDATOR_CATEGORIES = { qrda: 'QRDA Errors', reporting: 'Reporting Errors', submission: 'Submission Errors', warning: 'Warnings' }
 
 NODE_TYPES ={ 1 => :element ,
               2 => :attribute ,

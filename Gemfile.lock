@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: e92a2df9e00e27f4ff16709a5f4cc2ee1ca587bb
+  revision: 1bb2d48cf24f6acbc12574d55f8b4f0ac8a1fb73
   branch: mongoid5
   specs:
     health-data-standards (3.6.1)
@@ -69,7 +69,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
-    autoprefixer-rails (6.5.1)
+    autoprefixer-rails (6.5.1.1)
       execjs
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -107,7 +107,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.0.1)
     execjs (2.7.0)
-    font-awesome-sass (4.6.2)
+    font-awesome-sass (4.7.0)
       sass (>= 3.2)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -157,12 +157,12 @@ GEM
       mongoid (>= 4.0, < 6.0)
     multi_json (1.12.1)
     netrc (0.11.0)
-    newrelic_rpm (3.16.3.323)
+    newrelic_rpm (3.17.0.325)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     non-stupid-digest-assets (1.0.8)
       sprockets (>= 2.0)
-    origin (2.2.0)
+    origin (2.2.2)
     protected_attributes (1.0.9)
       activemodel (>= 4.0.1, < 5.0)
     rack (1.6.4)
@@ -236,7 +236,7 @@ GEM
     turbolinks-source (5.0.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.2)
+    uglifier (3.0.3)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext

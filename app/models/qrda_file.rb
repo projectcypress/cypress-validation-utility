@@ -40,7 +40,6 @@ class QrdaFile
       errs.each do |e|
         e.validator ||= v.class.name
         #make cat1 validation error types a warning for data criteria outside the measure definition
-        byebug
         if (e.validator == 'HealthDataStandards::Validate::DataValidator') && (e.message.include? ('data criteria outside'))
           self.validation_errors[:warning] << e.instance_values
         else

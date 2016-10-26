@@ -84,13 +84,13 @@
           <tbody>
             <% @measures.each do |measure| %>
               <tr>
-                <td><%= measure.name %></td>
+                <td><%= "#{measure.cms_id} ( #{measure.sub_id} ) #{measure.name}" %></td>
                 <!-- will show calculation results for product test records -->
                   <% msr_popl_ids.each do |population| %>
                     <td class="text-center">
                       <%= render partial: 'calculation_result_icon', locals: { result: get_result_value(record.calculation_results, measure, population) } %>
                     </td>
-                <% end %>
+                 <% end %>
               </tr>
             <% end %>
           </tbody>

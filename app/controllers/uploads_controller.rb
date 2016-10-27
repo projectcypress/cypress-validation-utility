@@ -49,7 +49,7 @@ class UploadsController < ApplicationController
     measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
 
     @bundle = BUNDLES[@upload.year]
-    @measures = @bundle ? @bundle.measures.top_level.in(hqmf_id: measure_ids) : []
+    @measures = @bundle ? @bundle.measures.in(hqmf_id: measure_ids) : []
 
     @files = @upload.qrda_files
   end

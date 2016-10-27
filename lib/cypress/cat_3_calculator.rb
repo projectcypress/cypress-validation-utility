@@ -4,8 +4,7 @@ module Cypress
 
     def initialize(measure_ids, bundle)
       @correlation_id = BSON::ObjectId.new
-      filter = { :hqmf_id.in => measure_ids }
-      @measures = bundle.measures.top_level.where(filter)
+      @measures = bundle.measures.in(hqmf_id: measure_ids)
       @bundle = bundle
     end
 

@@ -76,7 +76,8 @@ class QrdaFile
   def validator_category(validator)
     case validator
     when 'CDA SDTC Validator', 'QRDA Cat 1 R3 Validator', 'QRDA Cat 1 Validator', 'QRDA Cat 3 Validator',
-         'CMS EP Cat I Schematron Validator', 'CMS EH Cat I Schematron Validator', 'CMS EP Cat III Schematron Validator'
+         'CMS EP Cat I Schematron Validator', 'CMS EH Cat I Schematron Validator', 'CMS EP Cat III Schematron Validator',
+         'QRDA QDM Template Validator'
       :qrda
     when 'Cat 1 Measure ID Validator', 'HealthDataStandards::Validate::Cat1Measure',
          'Cat 3 Measure ID Validator', 'HealthDataStandards::Validate::Cat3Measure',
@@ -112,13 +113,16 @@ class QrdaFile
     if program_type == "ep"
       if program_year == "2016"
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
+        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3')
       end
     elsif program_type == "eh"
       case program_year
       when '2016'
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
+        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3')
       when '2017'
         @validators << CypressValidationUtility::Validate::EHCat1_2017.instance
+        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3_1')
       end
     end
   end

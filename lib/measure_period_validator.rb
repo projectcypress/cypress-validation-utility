@@ -34,7 +34,7 @@ module CypressValidationUtility
         when 'eh'
           validate_quarters_measurement_period
         end
-        validate_encounter_during_reporting_period unless @doc_type == 'cat3_r1' || @doc_type == 'cat3_r11'
+        validate_encounter_during_reporting_period unless @doc_type == 'cat3_r1' || @doc_type == 'cat3_r2'
         @errors
       rescue => e
         @errors << build_error('Unable to locate reporting period in document.', '/', @options[:file_name])

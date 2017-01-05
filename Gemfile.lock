@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 1bb2d48cf24f6acbc12574d55f8b4f0ac8a1fb73
+  revision: f633e7d079bff4bec857334b613ba50ddd87be52
   branch: mongoid5
   specs:
     health-data-standards (3.6.1)
@@ -74,7 +74,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bson (4.1.1)
+    bson (4.2.1)
     builder (3.2.2)
     byebug (9.0.6)
     carrierwave (0.11.2)
@@ -102,7 +102,7 @@ GEM
       delayed_job (>= 3.0, < 5)
       mongoid (>= 3.0, < 6)
       mongoid-compatibility
-    domain_name (0.5.20160826)
+    domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     eventmachine (1.2.0.1)
@@ -139,9 +139,9 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
-    minitest (5.9.1)
-    mongo (2.3.0)
-      bson (~> 4.1)
+    minitest (5.10.1)
+    mongo (2.4.1)
+      bson (>= 4.2.1, < 5.0.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
       mongo (~> 2.1)
@@ -162,7 +162,7 @@ GEM
       mini_portile2 (~> 2.1.0)
     non-stupid-digest-assets (1.0.8)
       sprockets (>= 2.0)
-    origin (2.2.2)
+    origin (2.3.0)
     protected_attributes (1.0.9)
       activemodel (>= 4.0.1, < 5.0)
     rack (1.6.4)

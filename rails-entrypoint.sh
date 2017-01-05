@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-exec rails s -b 0.0.0.0
+exec unicorn -c config/unicorn.rb -p 3000
 
 exec "$@"

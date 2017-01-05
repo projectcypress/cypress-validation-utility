@@ -87,10 +87,10 @@ module CypressValidationUtility
             end
           end
           unless result
-            if qrda_oids
-              @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", data_element['path'], options[:file_name])
-            else
+            if qrda_oids.blank?
               @errors << build_error("Value Set #{value_set_oid} has a different category than 'Attribute'", data_element['path'], options[:file_name])
+            else
+              @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", data_element['path'], options[:file_name])
             end
           end
         end
@@ -104,7 +104,7 @@ module CypressValidationUtility
         end
         categories = categories.uniq
         # return true if there aren't any qrda templates associated with the valueset, and valueset is of type attribute
-        if qrda_oids.nil?
+        if qrda_oids.blank?
           return categories.include?('Attribute') ? true : false
         end
         # loops though template ids to see if any match the category of the valueset

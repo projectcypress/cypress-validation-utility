@@ -53,7 +53,7 @@ class MeasurePeriodValidatorTest < ActiveSupport::TestCase
     errors = validator.validate(@document)
 
     assert_equal 1, errors.count, "Expected 1 error, got #{errors}"
-    msg = 'Documents must contain at least one encounter with a discharge date during the reporting period'
+    msg = 'Documents must contain at least one encounter or procedure with a discharge date during the reporting period'
     assert_equal msg, errors[0].message
   end
 

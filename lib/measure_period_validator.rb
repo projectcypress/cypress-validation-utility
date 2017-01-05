@@ -10,7 +10,9 @@ module CypressValidationUtility
       REPORTING_PERIOD_START = REPORTING_PERIOD_SELECTOR + "/cda:low/@value"
       REPORTING_PERIOD_END = REPORTING_PERIOD_SELECTOR + "/cda:high/@value"
 
-      DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
+      R3_DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
+      R3_1_DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.133']]/cda:entryRelationship/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
+      PROCEDURE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value"
 
       def initialize(program, program_year, doc_type)
         @name = 'Measure Period Validator'
@@ -84,7 +86,9 @@ module CypressValidationUtility
 
       def validate_encounter_during_reporting_period
         # pick all the discharge dates and make sure at least one falls within the reporting period
-        discharge_dates = @document.xpath(DISCHARGE_SELECTOR).collect(&:value)
+        discharge_dates = @document.xpath(R3_DISCHARGE_SELECTOR).collect(&:value)
+        discharge_dates += @document.xpath(R3_1_DISCHARGE_SELECTOR).collect(&:value)
+        discharge_dates += @document.xpath(PROCEDURE_SELECTOR).collect(&:value)
 
         # it looks like DateTime.parse is smart enough to figure out the date format, ex "20110706122735-0800" -> "Wed, 06 Jul 2011 12:27:35 -0800"
         rp_start_date = DateTime.parse(@rp_start)
@@ -104,7 +108,7 @@ module CypressValidationUtility
         end
 
         unless any_date_within_period
-          msg = 'Documents must contain at least one encounter with a discharge date during the reporting period'
+          msg = 'Documents must contain at least one encounter or procedure with a discharge date during the reporting period'
           @errors << build_error(msg, '/', @options[:file_name])
         end
       end

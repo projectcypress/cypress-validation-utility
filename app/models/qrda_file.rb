@@ -138,16 +138,18 @@ class QrdaFile
     when "cat1_r31"
       cat1_validator
       HealthDataStandards::Validate::Cat1R31
-    when "cat3_r1", "cat3_r11"
+    when "cat3_r1", "cat3_r2"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
       if program_type == "ep" && program_year == "2016"
         CypressValidationUtility::Validate::EPCat3_2016
+      elsif program_type == "ep" && program_year == "2017"
+        CypressValidationUtility::Validate::ECCat3_2017
       elsif program_type == "none"
         if doc_type == "cat3_r1"
           HealthDataStandards::Validate::Cat3
-        elsif doc_type == "cat3_r11"
-          HealthDataStandards::Validate::Cat3R11
+        elsif doc_type == "cat3_r2"
+          HealthDataStandards::Validate::Cat3R2
         end
       else
         raise "Cannot validate an EH QRDA Category III file"

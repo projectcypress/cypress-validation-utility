@@ -109,7 +109,7 @@
       </div>
       <div class="radio">
       <label class="radio">
-        <input type="radio" required name="file_type" value="cat3_r11" id="cat3_r11"> QRDA Cat III (R1.1)
+        <input type="radio" required name="file_type" value="cat3_r2" id="cat3_r2"> QRDA Cat III (R2)
       </label>
       </div>
     </div>
@@ -167,16 +167,16 @@ ready = function() {
 
     if (year == "2016") {
       enabled.push("cat1_r3", "cat3_r1", "pqrs_mu_individual", "pqrs_mu_group")
-      disabled.push("cat1_r31", "cat3_r11");
+      disabled.push("cat1_r31", "cat3_r2");
     } else if (year == "2017") {
-      enabled.push("cat1_r31", "cat3_r11");
+      enabled.push("cat1_r31", "cat3_r2");
       disabled.push("cat1_r3", "cat3_r1", "pqrs_mu_individual", "pqrs_mu_group")
     }
 
     if (program == "eh") {
-      disabled.push("cat3_r1", "cat3_r11");
+      disabled.push("cat3_r1", "cat3_r2");
     } else {
-      enabled.push("cat3_r1", "cat3_r11");
+      enabled.push("cat3_r1", "cat3_r2");
     }
 
     toggleAll(enabled, disabled);

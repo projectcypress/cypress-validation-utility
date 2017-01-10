@@ -77,7 +77,7 @@ class QrdaFile
     case validator
     when 'CDA SDTC Validator', 'QRDA Cat 1 R3 Validator', 'QRDA Cat 1 Validator', 'QRDA Cat 3 Validator',
          'CMS EP Cat I Schematron Validator', 'CMS EH Cat I Schematron Validator', 'CMS EP Cat III Schematron Validator',
-         'QRDA QDM Template Validator'
+         'QRDA QDM Template Validator', 'CMS EC Cat III Schematron Validator'
       :qrda
     when 'Cat 1 Measure ID Validator', 'HealthDataStandards::Validate::Cat1Measure',
          'Cat 3 Measure ID Validator', 'HealthDataStandards::Validate::Cat3Measure',

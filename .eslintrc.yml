@@ -72,6 +72,7 @@ rules:
   no-div-regex: error
   no-duplicate-imports: error
   no-else-return: 'off'
+  no-empty: warn
   no-empty-function: 'off'
   no-eq-null: error
   no-eval: error

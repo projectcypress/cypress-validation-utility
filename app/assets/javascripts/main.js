@@ -1,15 +1,5 @@
-function scrollToElement(element){
-  var offsetFromTop = 200;
-  if ($(element).length) {
-    try {
-       $(element).animate({ scrollTop: $(element).scrollTop() - $(element).offset().top }, { duration: 'slow', easing: 'swing'});
-       $('html,body').animate({ scrollTop: $(element).offset().top - offsetFromTop }, { duration: 1000, easing: 'swing'});
-       window.location.hash = element;
-     } catch(e) {}
-  }
-}
-
-// Faster version of scrollToElement,
+/* eslint no-unused-vars: ["off"],
+ max-statements: ["error", 14] */
 function jumpToElement(element){
   var jumpThreshold = 5000;
   var offsetFromTop = 200;

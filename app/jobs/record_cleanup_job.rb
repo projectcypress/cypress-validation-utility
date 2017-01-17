@@ -19,11 +19,10 @@ class RecordCleanupJob < ActiveJob::Base
     uploads.each do |upload|
       correlation_id = upload.correlation_id
       upload.destroy
-      if correlation_id
-        Record.where(test_id: correlation_id).destroy_all
-        QME::PatientCache.where(test_id: correlation_id).destroy_all
-        HealthDataStandards::CQM::QueryCache.where(test_id: correlation_id).destroy_all
-      end
+      next unless correlation_id
+      Record.where(test_id: correlation_id).destroy_all
+      QME::PatientCache.where(test_id: correlation_id).destroy_all
+      HealthDataStandards::CQM::QueryCache.where(test_id: correlation_id).destroy_all
     end
   end
 end

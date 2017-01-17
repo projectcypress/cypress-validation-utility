@@ -88,7 +88,7 @@ module Cypress
         qr = QME::QualityReport.find_or_create(measure.hqmf_id, measure.sub_id, ex_opts)
         qr.calculate({ 'prefilter' => { test_id: @correlation_id }, oid_dictionary: oid_dictionary, bundle_id: @bundle.id }, false)
       end
-      # QRDA III export hardcoded to r2. Version doesn't matter, this is for displaying the calculation results only. 
+      # QRDA III export hardcoded to r2. Version doesn't matter, this is for displaying the calculation results only.
       exporter = HealthDataStandards::Export::Cat3.new('r2')
       end_date = Time.at(@bundle.effective_date.to_i).utc
       xml = exporter.export(@measures,
@@ -99,7 +99,7 @@ module Cypress
                             nil,
                             nil,
                             @correlation_id)
-     # QME::PatientCache.where(test_id: @correlation_id).destroy_all
+      # QME::PatientCache.where(test_id: @correlation_id).destroy_all
       HealthDataStandards::CQM::QueryCache.where(test_id: @correlation_id).destroy_all
       xml
     end

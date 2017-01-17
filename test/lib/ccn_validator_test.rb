@@ -5,11 +5,11 @@ class CCNValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = CypressValidationUtility::Validate::CCNValidator.instance
 
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/good_cat1.xml"), "text/xml")
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/good_cat1.xml'), 'text/xml')
     @document = get_document(file)
   end
 
-  CCN_SELECTOR = "/cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id[@root='2.16.840.1.113883.4.336']/@extension"
+  CCN_SELECTOR = "/cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id[@root='2.16.840.1.113883.4.336']/@extension".freeze
 
   test 'Should return error for document missing CCN' do
     @document.at_xpath(CCN_SELECTOR).parent.remove

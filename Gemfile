@@ -58,6 +58,7 @@ end
 group :test do
   gem 'brakeman', require: false
   gem 'bundler-audit'
+  gem 'simplecov', require: false
 end
 
 group :production do

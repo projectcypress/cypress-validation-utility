@@ -1,3 +1,9 @@
+require 'simplecov'
+
+SimpleCov.start 'rails'
+
+# This is the coverage percentage before any testing improvements. Please increase this as you add testing to the application.
+SimpleCov.minimum_coverage 79
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -23,7 +29,7 @@ class ActiveSupport::TestCase
                   else
                     input
                   end
-        
+
     document = Nokogiri::XML(content_str) { |config| config.strict }
     document.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
     document.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')

@@ -22,7 +22,7 @@ PreCommit:
     enabled: true
     exclude: ['vendor/assets/javascripts/**/*', 'test/fixtures/**/*', 'app/assets/javascripts/vendor/*']
   ScssLint:
-    enabled: true
+    enabled: false
     exclude: ['vendor/assets/stylesheets/**/*']
   HardTabs:
     enabled: true

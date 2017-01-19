@@ -1,7 +1,7 @@
 span.angry {
-    font-size: 1.3em;
-    text-decoration: underline;
-    font-weight: bold;
+  font-size: 1.3em;
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 #overlay {
@@ -11,8 +11,8 @@ span.angry {
   bottom: 0;
   right: 0;
   background: #000;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  opacity: .8;
+  filter: alpha(opacity = 80);
   z-index: 1000;
 }
 
@@ -26,10 +26,11 @@ span.angry {
   z-index: 1001;
 }
 
-#wrapper, #all-files {
+#wrapper,
+#all-files {
   display: inline-block;
 }
 
 #wrapper {
-  width: 100%
+  width: 100%;
 }

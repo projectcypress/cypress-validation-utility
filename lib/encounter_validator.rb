@@ -8,6 +8,7 @@ class EncounterValidator
     @name = 'Encounter validator'
   end
 
+  # rubocop:disable MethodLength
   def validate(file, options = {})
     doc = get_document(file)
     encounter_times = doc.xpath("//cda:entry/cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime")
@@ -35,17 +36,20 @@ class EncounterValidator
         end
         next
       end
-
-      current_time = Time.now.to_i
-      if low > high
-        # encounter ends before start time
-        errors << build_error("Encounter ends (#{format_time(high)}) before start time (#{format_time(low)})", encounter.parent.path, options[:file_name])
-      elsif low > current_time || high > current_time
-        # encounter occurs in the future
-        errors << build_error("Encounter occurs in the future (#{format_time(low)})", encounter.parent.path, options[:file_name])
-      end
+      validate_time(low, high, errors, encounter.parent.path, options[:file_name])
     end
     errors
+  end
+
+  def validate_time(low, high, errors, path, file_name)
+    current_time = Time.now.to_i
+    if low > high
+      # encounter ends before start time
+      errors << build_error("Encounter ends (#{format_time(high)}) before start time (#{format_time(low)})", path, file_name)
+    elsif low > current_time || high > current_time
+      # encounter occurs in the future
+      errors << build_error("Encounter occurs in the future (#{format_time(low)})", path, file_name)
+    end
   end
 
   def format_time(time_i)

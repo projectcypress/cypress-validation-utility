@@ -28,6 +28,7 @@ module CypressValidationUtility
             validate_populations(measure_id, pop_counts, errors, options)
           rescue
             # do nothing, if we get an exception the file is probably broken in some way
+            next
           end
         end
 
@@ -44,22 +45,36 @@ module CypressValidationUtility
         denexcep = pop['DENEXCEP'] || 0
         num = pop['NUMER'] || 0
 
-        if denom > ipp
-          errors << build_error("Denominator value #{denom} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
-        end
+        validate_denom(ipp, denom, measure, errors, file)
         if (num + denex + denexcep) > denom
-          errors << build_error("Numerator value #{num} + Denominator Exclusions value #{denex} + Denominator Exceptions value #{denexcep} is greater than Denominator value #{denom} for measure #{measure}", '/', file)
+          errors << build_error("Numerator value #{num} + Denominator Exclusions value #{denex} + Denominator Exceptions value #{denexcep}"\
+                                " is greater than Denominator value #{denom} for measure #{measure}", '/', file)
         end
 
         # CVT measures, IPP >= MSRPOPL >= OBSERV
         msrpopl = pop['MSRPOPL'] || 0
         observ = pop['OBSERV'] || 0
+        validate_measure_population(msrpopl, ipp, measure, errors, file)
+        validate_measure_observations(observ, msrpopl, measure, errors, file)
+      end
 
-        if msrpopl > ipp
-          errors << build_error("Measure Population value #{msrpopl} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
+      def validate_denom(ipp, denom, measure, errors, file)
+        if denom > ipp
+          errors << build_error("Denominator value #{denom} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
         end
+      end
+
+      def validate_measure_population(msrpopl, ipp, measure, errors, file)
+        if msrpopl > ipp
+          errors << build_error("Measure Population value #{msrpopl} is greater than Initial Population value #{ipp} for measure #{measure}",
+                                '/', file)
+        end
+      end
+
+      def validate_measure_observations(observ, msrpopl, measure, errors, file)
         if observ > msrpopl
-          errors << build_error("Measure observvations value #{observ} cannot be greater than Measure Population value #{msrpopl} for measure #{measure}", '/', file)
+          errors << build_error("Measure observations value #{observ} cannot be greater than Measure Population value #{msrpopl}"\
+                                " for measure #{measure}", '/', file)
         end
       end
 
@@ -81,7 +96,8 @@ module CypressValidationUtility
       end
 
       def population_count_selector
-        "cda:entryRelationship/cda:observation[./cda:templateId[@root='2.16.840.1.113883.10.20.27.3.3'] and ./cda:code[@code='MSRAGG'] and ./cda:methodCode[@code='COUNT']]/cda:value/@value"
+        "cda:entryRelationship/cda:observation[./cda:templateId[@root='2.16.840.1.113883.10.20.27.3.3'] and ./cda:code[@code='MSRAGG']"\
+        " and ./cda:methodCode[@code='COUNT']]/cda:value/@value"
       end
     end
   end

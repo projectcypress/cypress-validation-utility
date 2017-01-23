@@ -39,7 +39,7 @@ module CypressValidationUtility
         @errors
       end
 
-      def extract_valuesets(doc, _options = {})
+      def extract_valuesets(doc)
         data_element_array = []
         # Get array of all valuesets in the document
         valuesets = doc.xpath('//*[@sdtc:valueSet]')
@@ -52,11 +52,8 @@ module CypressValidationUtility
             # all of the template ids for the entry
             template_node = value_set
             while template_node.name != 'entry'
-              template_node = template_node.parent
-              template_id_nodes = template_node.xpath('.//cda:templateId')
-              template_id_nodes.each do |template_id_node|
-                template_ids << template_id_node.at_xpath('@root').value
-              end
+              template_id_nodes = template_node.parent.xpath('.//cda:templateId')
+              template_id_nodes.each { |template_id_node| template_ids << template_id_node.at_xpath('@root').value }
             end
             # Hash of the value set with the template ids associated with it
             value_set_hash['vset'] = value_set.at_xpath('@sdtc:valueSet').value
@@ -70,27 +67,27 @@ module CypressValidationUtility
 
       def verify_vs_categories(data_elements, options = {})
         # for each hash of valuesets with their array of template ids
-        data_elements.each do |data_element|
+        data_elements.each do |de|
           result = false
-          qrda_oids = data_element['template_ids'] || []
-          value_set_oid = data_element['vset']
+          qrda_oids = de['template_ids'] || []
+          value_set_oid = de['vset']
           vset = HealthDataStandards::SVS::ValueSet.where(oid: value_set_oid, bundle_id: @bundle_id)
-          unless vset.empty?
-            # all of the categories associated with the valueset, each measure may have different category
-            valueset_categories = vset.first.categories
-            # only run check if valueset has categories. compatibility with older bundles
-            if valueset_categories.nil?
-              @errors << build_error("Value Set #{value_set_oid} was not checked for template/category alignment.", data_element['path'], options[:file_name])
-              result = true
-            else
-              result = category_appropriate_for_vs(valueset_categories, qrda_oids)
-            end
+          next if vset.empty?
+          # all of the categories associated with the valueset, each measure may have different category
+          valueset_categories = vset.first.categories
+          # only run check if valueset has categories. compatibility with older bundles
+          if valueset_categories.nil?
+            @errors << build_error("Value Set #{value_set_oid} was not checked for template/category alignment.", de['path'], options[:file_name])
+            result = true
+          else
+            result = category_appropriate_for_vs(valueset_categories, qrda_oids)
           end
+
           next if result
           if qrda_oids.blank?
-            @errors << build_error("Value Set #{value_set_oid} has a different category than 'Attribute'", data_element['path'], options[:file_name])
+            @errors << build_error("Value Set #{value_set_oid} has a different category than 'Attribute'", de['path'], options[:file_name])
           else
-            @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", data_element['path'], options[:file_name])
+            @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}", de['path'], options[:file_name])
           end
         end
       end

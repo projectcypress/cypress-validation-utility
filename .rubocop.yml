@@ -1,13 +1,10 @@
-inherit_from: .rubocop_todo.yml
 AllCops:
   Exclude:
     - 'bin/**/*'
-    - 'lib/tasks/cucumber.rake'
 Rails:
   Enabled: true
-Rails/HasAndBelongsToMany:
-  Exclude:
-    - 'app/models/role.rb'
+Rails/FindEach:
+  Enabled: false
 Metrics/LineLength:
   Max: 150
   Exclude:
@@ -19,7 +16,7 @@ Metrics/ClassLength:
   Max: 110
   Exclude:
     - 'test/**/*'
-    - 'lib/cypress/api_measure_evaluator.rb'
+    - 'app/models/qrda_file.rb'
 Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be a Fixnum or
   # a Float.
@@ -29,7 +26,6 @@ Metrics/AbcSize:
 Metrics/ModuleLength:
   Max: 110
   Exclude:
-    - 'app/helpers/products_helper.rb'
 # Avoid complex methods.
 Metrics/CyclomaticComplexity:
   Max: 10
@@ -40,3 +36,11 @@ Style/GuardClause:
   MinBodyLength: 100
 Style/HashSyntax:
   UseHashRocketsWithSymbolValues: true
+Style/ClassAndModuleCamelCase:
+  Exclude:
+    - 'lib/cms_validators.rb'
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'test/test_helper.rb'
+Style/Documentation:
+  Enabled: false

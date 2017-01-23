@@ -44,7 +44,7 @@ class UploadsController < ApplicationController
     redirect_to(root_path) && return unless @upload
     return unless @upload.completed?
 
-    measure_ids = @upload.qrda_files.collect(&:get_measure_ids).flatten.uniq
+    measure_ids = @upload.qrda_files.collect(&:measure_ids_from_file).flatten.uniq
 
     @bundle = BUNDLES[@upload.year]
     @measures = @bundle ? @bundle.measures.in(hqmf_id: measure_ids) : []

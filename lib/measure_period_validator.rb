@@ -3,16 +3,23 @@ module CypressValidationUtility
     class MeasurePeriodValidator
       include HealthDataStandards::Validate::BaseValidator
 
-      REPORTING_PERIOD_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/
-                                   cda:entry/cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.17.3.8']]/
-                                   cda:effectiveTime".freeze
+      REPORTING_PERIOD_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/'\
+                                  "cda:entry/cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.17.3.8']]/"\
+                                  'cda:effectiveTime'.freeze
 
       REPORTING_PERIOD_START = REPORTING_PERIOD_SELECTOR + '/cda:low/@value'
       REPORTING_PERIOD_END = REPORTING_PERIOD_SELECTOR + '/cda:high/@value'
 
-      R3_DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
-      R3_1_DISCHARGE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.133']]/cda:entryRelationship/cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
-      PROCEDURE_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value".freeze
+      R3_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
+                              "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
+                              "cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
+      R3_1_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
+                                "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
+                                "cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.133']]/cda:entryRelationship/"\
+                                "cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
+      PROCEDURE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
+                           "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
+                           "cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value".freeze
 
       def initialize(program, program_year, doc_type)
         @name = 'Measure Period Validator'
@@ -91,15 +98,15 @@ module CypressValidationUtility
         discharge_dates += @document.xpath(PROCEDURE_SELECTOR).collect(&:value)
 
         # it looks like DateTime.parse is smart enough to figure out the date format, ex "20110706122735-0800" -> "Wed, 06 Jul 2011 12:27:35 -0800"
-        rp_start_date = DateTime.parse(@rp_start)
-        rp_end_date = DateTime.parse(@rp_end)
+        rp_start_date = DateTime.parse(@rp_start).utc
+        rp_end_date = DateTime.parse(@rp_end).utc
         rp_start_date.change(hour: 0, min: 0, sec: 0)
         rp_end_date.change(hour: 23, min: 59, sec: 59)
 
         any_date_within_period = false
 
         discharge_dates.each do |discharge|
-          discharge_date = DateTime.parse(discharge)
+          discharge_date = DateTime.parse(discharge).utc
 
           if rp_start_date <= discharge_date && discharge_date <= rp_end_date
             any_date_within_period = true

@@ -12,7 +12,7 @@ class RecordCleanupJob < ActiveJob::Base
       time_cutoff = options[:cutoff]
     end
 
-    uploads = Upload.where(:created_at.lte => Time.now - time_cutoff.seconds)
+    uploads = Upload.where(:created_at.lte => Time.now.in_time_zone - time_cutoff.seconds)
     # by default, only look for things more than 10 minutes old,
     # we dont want the job deleting things before the user actually sees them
 

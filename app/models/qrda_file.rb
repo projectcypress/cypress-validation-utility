@@ -30,7 +30,7 @@ class QrdaFile
   end
 
   def process
-    @measure_ids = get_measure_ids
+    @measure_ids = measure_ids_from_file
 
     @bundle = BUNDLES[program_year]
 
@@ -61,7 +61,7 @@ class QrdaFile
     validation_errors.values.flatten
   end
 
-  def get_measure_ids
+  def measure_ids_from_file
     measure_ids = content.xpath("//cda:entry/cda:organizer[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.97']]" \
       "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" \
       "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
@@ -108,53 +108,29 @@ class QrdaFile
     @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids)
     @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id)
 
+    # QrdaQdmTemplateValidator only gets a different template version in 2017 measure year for EH
+    qrda_qdm_template_type = 'r3'
+
     if program_type == 'ep'
       if program_year == '2016'
         @validators << CypressValidationUtility::Validate::EPCat1_2016.instance
-        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3')
       end
     elsif program_type == 'eh'
       case program_year
       when '2016'
         @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
-        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3')
       when '2017'
         @validators << CypressValidationUtility::Validate::EHCat1_2017.instance
-        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3_1')
+        qrda_qdm_template_type = 'r3_1'
       end
+      @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new(qrda_qdm_template_type)
     end
   end
 
   def validators
     return @validators if @validators
     @validators = []
-    cms_validator = case doc_type
-
-                    when 'cat1_r3'
-                      cat1_validator
-                      HealthDataStandards::Validate::Cat1
-                    when 'cat1_r31'
-                      cat1_validator
-                      HealthDataStandards::Validate::Cat1R31
-                    when 'cat3_r1', 'cat3_r2'
-                      @validators.concat CAT3_VALIDATORS
-                      @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
-                      if program_type == 'ep' && program_year == '2016'
-                        CypressValidationUtility::Validate::EPCat3_2016
-                      elsif program_type == 'ep' && program_year == '2017'
-                        CypressValidationUtility::Validate::ECCat3_2017
-                      elsif program_type == 'none'
-                        if doc_type == 'cat3_r1'
-                          HealthDataStandards::Validate::Cat3
-                        elsif doc_type == 'cat3_r2'
-                          HealthDataStandards::Validate::Cat3R2
-                        end
-                      else
-                        raise 'Cannot validate an EH QRDA Category III file'
-                      end
-                    else
-                      raise 'Invalid doc_type param: Must be one of (cat1, cat3)'
-    end
+    cms_validator = cms_validator_for_doc_type
     @validators << cms_validator.instance if cms_validator
     @validators << CypressValidationUtility::Validate::CCNValidator.instance if program_type == 'eh'
     @validators << HealthDataStandards::Validate::CDA.instance
@@ -162,5 +138,38 @@ class QrdaFile
     @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program_type, program_year, doc_type)
 
     @validators
+  end
+
+  def cms_validator_for_doc_type
+    case doc_type
+    when 'cat1_r3'
+      cat1_validator
+      HealthDataStandards::Validate::Cat1
+    when 'cat1_r31'
+      cat1_validator
+      HealthDataStandards::Validate::Cat1R31
+    when 'cat3_r1', 'cat3_r2'
+      cms_cat3_validator
+    else
+      raise 'Invalid doc_type param: Must be one of (cat1, cat3)'
+    end
+  end
+
+  def cms_cat3_validator
+    @validators.concat CAT3_VALIDATORS
+    @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
+    if program_type == 'ep' && program_year == '2016'
+      CypressValidationUtility::Validate::EPCat3_2016
+    elsif program_type == 'ep' && program_year == '2017'
+      CypressValidationUtility::Validate::ECCat3_2017
+    elsif program_type == 'none'
+      if doc_type == 'cat3_r1'
+        HealthDataStandards::Validate::Cat3
+      elsif doc_type == 'cat3_r2'
+        HealthDataStandards::Validate::Cat3R2
+      end
+    else
+      raise 'Cannot validate an EH QRDA Category III file'
+    end
   end
 end

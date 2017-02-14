@@ -6,7 +6,6 @@ require 'zip/zip'
 require 'sucker_punch/testing/inline'
 
 class ActiveSupport::TestCase
-
   def drop_database
     Mongoid::Config.purge!
     # purge the database instead of dropping it
@@ -23,15 +22,15 @@ class ActiveSupport::TestCase
                   else
                     input
                   end
-        
-    document = Nokogiri::XML(content_str) { |config| config.strict }
+
+    document = Nokogiri::XML(content_str, &:strict)
     document.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
     document.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
     document
   end
 
   def unzip_if_necessary(zipped_collection)
-    zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + ".zip")
+    zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + '.zip')
     folder = File.join(Rails.root, 'test', 'fixtures', zipped_collection)
 
     return if Dir.exist? folder
@@ -40,7 +39,7 @@ class ActiveSupport::TestCase
 
     Zip::ZipFile.open(zipfile) do |content|
       content.each do |file_entry|
-        dest_file = File.join(folder , file_entry.name)
+        dest_file = File.join(folder, file_entry.name)
         file_entry.extract(dest_file)
       end
     end

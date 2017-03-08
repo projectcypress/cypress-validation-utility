@@ -28,7 +28,7 @@ class UploadsControllerTest < ActionController::TestCase
   test 'upload single xml with errors' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/5_ASTHMA_A_with_errors.xml'), 'text/xml')
 
-    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
+    post 'create', file: file, year: '2015', file_type: 'cat1_r3', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -42,7 +42,7 @@ class UploadsControllerTest < ActionController::TestCase
   test 'upload single broken xml' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/invalid_xml.xml'), 'text/xml')
 
-    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
+    post 'create', file: file, year: '2015', file_type: 'cat1_r3', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -53,7 +53,7 @@ class UploadsControllerTest < ActionController::TestCase
   test 'upload zip file' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/2_qrdas.zip'), 'application/zip')
 
-    post 'create', file: file, year: '2016', file_type: 'cat3_r1', program: 'none'
+    post 'create', file: file, year: '2016', file_type: 'cat3_r2', program: 'none'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -67,7 +67,7 @@ class UploadsControllerTest < ActionController::TestCase
   test 'upload single xml with category error' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/wrong_categories.xml'), 'text/xml')
 
-    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
+    post 'create', file: file, year: '2015', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]
@@ -79,7 +79,7 @@ class UploadsControllerTest < ActionController::TestCase
   test 'upload single xml without category error' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/correct_categories.xml'), 'text/xml')
 
-    post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
+    post 'create', file: file, year: '2015', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
 
     assert_response :redirect
     get 'show', id: redirect_to_url.split('/')[-1]

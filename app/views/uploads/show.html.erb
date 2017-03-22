@@ -11,7 +11,7 @@
 
   <ul class="list-group">
   <% for i in 0...@files.count %>
-      
+
     <% err_count = @files[i].errors.count %>
 
     <li class="list-group-item filename-list-entry" data-index="<%= i %>">
@@ -25,7 +25,7 @@
     <%= @files[i].filename %>
 
     <% if err_count > 0 %>
-      <span class="badge"><%= err_count %></span> 
+      <span class="badge"><%= err_count %></span>
     <% end %>
     </li>
 
@@ -38,9 +38,14 @@
 <div id="all-files" <%= (@files.count > 1 ? 'class="col-xs-9"' : 'style="width:100%"').html_safe %> >
 <% for i in 0...@files.count %>
 
+<% @measures = @bundle ? @bundle.measures.in(hqmf_id: @files[i].get_measure_ids) : [] %>
+
 <div id="file_<%= i %>" class="file-summary">
   <ul id="error_report_toc" class="nav nav-tabs">
     <li class="active"><a href="#test_summary_<%= i %>" data-toggle="tab">Summary </a></li>
+    <% if @files[i].doc_type.include? "cat1" %>
+      <li class=""><a href="#test_highlighting_<%= i %>" data-toggle="tab">Measure Breakdown </a></li>
+    <% end %>
     <% @files[i].grouped_errors.each_pair do |val, errors| %>
       <li class=""><a href="#test_measure_<%= i %>_<%= validator_slug(val) %>" data-toggle="tab"><%= validator_name(val) %> (<%= errors.count %>)</a></li>
     <% end %>
@@ -84,7 +89,11 @@
           <tbody>
             <% @measures.each do |measure| %>
               <tr>
-                <td><%= "#{measure.cms_id} ( #{measure.sub_id} ) #{measure.name}" %></td>
+                <% if measure.sub_id %>
+                  <td><%= "#{measure.cms_id} ( #{measure.sub_id} ) #{measure.name} - #{measure.subtitle}" %> </td>
+                <% else %>
+                  <td><%= "#{measure.cms_id} #{measure.name}" %></td>
+                <% end %>
                 <!-- will show calculation results for product test records -->
                   <% msr_popl_ids.each do |population| %>
                     <td class="text-center">
@@ -106,6 +115,18 @@
 
     </div>
 
+    <% if @files[i].doc_type.include? "cat1" %>
+      <div class="tab-pane" id="test_highlighting_<%= i %>">
+        <% @patient_cache_all = QME::PatientCache.where({'value.patient_id'=> @files[i].record._id}) %>
+        <% if @patient_cache_all.first %>
+          <%= render partial: 'measure_detail', locals: {measures: @measures} %>
+        <% else %>
+          <h3>Measure Breakdown Unavailable</h3>
+          File must validate and patient must fall into the IPP for <i>Measure Breakdown</i> view.
+          <br><br>
+        <% end %>
+      </div>
+    <% end %>
 
 
     <% error_map, error_attributes = match_errors(@files[i]) %>
@@ -117,7 +138,7 @@
     <% end %>
   </div><!-- end #test_result_tabs -->
 
-  
+
   <div id="xml_frame_<%= i %>" class="xml_frame">
     <%= render partial:'subnav', layout: false %>
     <% unless @files[i].errors.empty? %>
@@ -208,7 +229,7 @@ function showErrorPopup(anchor) {
   // auto-select the first entry
   $("li.filename-list-entry").first().addClass("active");
 
-  // hide all of the file details except the first one 
+  // hide all of the file details except the first one
   $("div.file-summary").slice(1).hide();
 
   // the first one is active
@@ -224,4 +245,3 @@ $(document).on('page:load', showReady);
   </script>
 
 <% end %>
-

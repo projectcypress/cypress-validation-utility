@@ -34,6 +34,7 @@ class FileProcessJob < ActiveJob::Base
 
       upload.qrda_files.each do |qrda|
         qrda.record = calculator.import_cat1_file(qrda.content)
+        qrda.save
       end
 
       @calculated_results = calculator.generate_cat3

@@ -1,0 +1,43 @@
+<span class="criteria-title">
+  <!-- TODO: fix has_parent as seen in initialization? -->
+  <% dc_access = measure[:hqmf_document][:data_criteria] %>
+  <% dataCriteria = dc_access[reference] %>
+  <% if dataCriteria && dataCriteria[:children_criteria]%>
+
+    <% rootCriteria = dc_access[dataCriteria[:children_criteria][0]] %>
+
+    <% while rootCriteria[:children_criteria] && (!rootCriteria[:definition].include? "satisfies") do %>
+      <% rootCriteria = dc_access[rootCriteria[:children_criteria][0]] %>
+    <% end %>
+
+    <% unless dataCriteria[:has_parent] %>
+      <% if rootCriteria[:specific_occurrence] && !(rootCriteria[:description].include? "Occurrence")%>
+        Occurrence <%= rootCriteria[:specific_occurrence] %>:
+      <% end %>
+      <% if rootCriteria[:variable] && !(rootCriteria[:description].include? "$")%>$<% end %><%= rootCriteria[:description] %>
+    <% end %>
+    <span class="sr-only sr-highlight-status"></span>
+    <% if dataCriteria[:definition] == 'satisfies_all' %>
+      SATISFIES ALL
+    <% end %>
+    <% if dataCriteria[:definition] == 'satisfies_any' %>
+      SATISFIES ANY
+    <% end %>
+    <ul class="multi-statement">
+      <% dataCriteria[:children_criteria].each do |child| %>
+        <li>
+          <span class="sr-only sr-highlight-status"></span>
+          <%= render partial: 'data_criteria', locals: {reference: child, expandVariable: false, measure:measure, tag: "span"} %>
+        </li>
+      <% end %>
+      <% if dataCriteria[:temporal_references] %>
+        <% dataCriteria[:temporal_references].each do |temp_ref| %>
+          <li>
+            <span class="{{../dataCriteria.key}} rationale-target">
+            <%= render partial: 'temporal_reference', locals: {temporalReference: temp_ref, measure:measure, tag: "span"} %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+</span>

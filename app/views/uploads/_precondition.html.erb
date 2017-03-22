@@ -1,0 +1,31 @@
+<% suppress = (precondition[:negation] && precondition[:preconditions].length == 1) %>
+<% unless suppress %>
+  <ul id="precondition_<%=precondition[:id]%>">
+    <li>
+      <!-- {{#if comments}}{{#each comments}}<div class="logic-comment"># {{this}}</div>{{/each}}{{/if}} -->
+      <span class="conjunction <%=parentPrecondition[:id]%> rationale eval-<%=@rationale[("precondition_"+parentPrecondition[:id].to_s)]%>">
+        <b>
+          <% if parentNegation %>
+            <% if parentPrecondition[:conjunction_code]=='allTrue' %>OR NOT<% end %>
+            <% if parentPrecondition[:conjunction_code]=='atLeastOneTrue' %>AND NOT<% end %>
+          <% else %>
+            <% if parentPrecondition[:conjunction_code]=='allTrue' %>AND<% end %>
+            <% if parentPrecondition[:conjunction_code]=='atLeastOneTrue' %>OR<% end %>
+          <% end %>
+        </b>
+        <span class="sr-only sr-highlight-status"></span>
+      </span>
+<% end %>
+
+<% if precondition[:preconditions]%>
+  <% precondition[:preconditions].each do |prec| %>
+    <%= render partial: 'precondition', locals: {precondition: prec, parentPrecondition:precondition, parentNegation: precondition[:negation], measure: measure} %>
+  <% end %>
+<% else %>
+  <%= render partial: 'data_criteria', locals: {reference: precondition[:reference], expandVariable: false, measure: measure, negatedParent: parentNegation,tag: "span"} %>
+<% end %>
+
+<% unless suppress %>
+    </li>
+  </ul>
+<% end %>

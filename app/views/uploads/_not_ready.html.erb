@@ -6,6 +6,6 @@
 window.timerReload = setTimeout(function(){
   // reload the page every 2 seconds until the job is done
   clearTimeout(window.timerReload);
-  Turbolinks.visit(window.location.href)
+  window.location.reload(true);
 }, 2000);
 </script>

@@ -69,3 +69,14 @@ $xml-gray:              lighten($gray-base, 60%) !default;
     width: 300px;
   }
 }
+
+.rationale{
+  .eval-true {
+    background-color: $state-success-bg;
+    color: $state-success-text;
+  }
+  .eval-false {
+    background-color: $state-danger-bg;
+    color: $state-danger-text;
+  }
+}

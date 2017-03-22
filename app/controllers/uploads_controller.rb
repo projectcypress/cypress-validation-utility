@@ -1,7 +1,9 @@
 require 'ext/artifact'
+require 'hqmf-parser'
 
 class UploadsController < ApplicationController
   before_action :require_bundles
+  helper_method :shouldSwitchHighlight
 
   def require_bundles
     BUNDLES['2016'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2015\./)
@@ -47,11 +49,32 @@ class UploadsController < ApplicationController
     redirect_to(root_path) and return unless @upload
     return unless @upload.completed?
 
-    measure_ids = @upload.qrda_files.collect{ |file| file.get_measure_ids }.flatten.uniq
-
     @bundle = BUNDLES[@upload.year]
-    @measures = @bundle ? @bundle.measures.in(hqmf_id: measure_ids) : []
 
     @files = @upload.qrda_files
+  end
+
+  def shouldSwitchHighlight (dataCriteriaKey, populationCriteriaKey, specifics, rationale)
+    #check final specifics approach
+    shouldSwitch = false
+
+    if (specifics && specifics[populationCriteriaKey])
+      pop_final_specifics = []
+      if (specifics[populationCriteriaKey].length > 0)
+        pop_final_specifics = specifics[populationCriteriaKey][0]
+      end
+
+      if rationale[dataCriteriaKey][:specifics] && (rationale[dataCriteriaKey][:specifics].length >0)
+        dc_specifics = rationale[dataCriteriaKey][:specifics][0]
+
+        dc_specifics.each do |dc_spec|
+          if (dc_spec != "*") && !pop_final_specifics.include?(dc_spec)
+            return true
+          end
+        end
+      end
+    end
+
+    return false
   end
 end

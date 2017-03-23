@@ -11,6 +11,8 @@
     <code value="PQRS_MU_INDIVIDUAL" displayName="PQRS Meaningful Use Individual" codeSystemName="CMS Program" codeSystem="2.16.840.1.113883.3.249.7" />
     <code value="PQRS_MU_GROUP" displayName="PQRS Meaningful Use Group" codeSystemName="CMS Program" codeSystem="2.16.840.1.113883.3.249.7" />
     <code value="MU_ONLY" displayName="Meaningful Use Only" codeSystemName="CMS Program" codeSystem="2.16.840.1.113883.3.249.7" />
+    <code value="CPCPLUS" displayName="CPC+" codeSystemName="CMS Program" codeSystem="2.16.840.1.113883.3.249.7" />
+    <code value="MIPS" displayName="MIPS Individual" codeSystemName="CMS Program" codeSystem="2.16.840.1.113883.3.249.7" />
   </system>
   <system valueSetOid="2.16.840.1.113883.1.11.16926" valueSetName="HL7 BasicConfidentialityKind">
     <code value="N" displayName="normal" codeSystemName="ConfidentialityCode" codeSystem="2.16.840.1.113883.5.25" />

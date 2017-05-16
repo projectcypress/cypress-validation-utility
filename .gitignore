@@ -5,3 +5,4 @@ tmp/
 .byebug_history
 public/assets/
 .DS_Store
+/bundles

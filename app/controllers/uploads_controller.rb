@@ -31,7 +31,7 @@ class UploadsController < ApplicationController
 
     redirect_to upload_path(@upload)
   ensure
-    File.delete(params[:file].tempfile)
+    params[:file].tempfile.delete()
     # rails 4 activejob adapter is not fully implemented
     #  wrt the run at a specific time later with sucker_punch
     # RecordCleanupJob.set(wait: 10.minutes).perform_later

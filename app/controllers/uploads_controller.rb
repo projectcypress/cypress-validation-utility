@@ -7,13 +7,16 @@ class UploadsController < ApplicationController
     BUNDLES['2016'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2015\./)
     # 2016 is the reporting year so we have to use the 2015.x.x bundle ("2015 bundle for the 2016 program year")
     BUNDLES['2017'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2016\./)
+    BUNDLES['2018'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2017\./)
 
-    unless BUNDLES['2016'] || BUNDLES['2017']
-      raise "Please install a 2016 Cypress bundle or a 2017 Cypress bundle in order to use the Cypress Validation Utility"
+    unless BUNDLES['2016'] || BUNDLES['2017'] || BUNDLES['2018']
+      raise "Please install a 2016, 2017 or 2018 Cypress bundle in order to use the Cypress Validation Utility"
     end
   end
 
   def new
+    @program_years = YEAR_PROGRAMS
+    @document_years = YEAR_PROGRAMTYPE_DOCUMENTS
   end
 
   def create

@@ -6,9 +6,56 @@ require_relative "../../lib/encounter_validator"
 
 ERROR_LOG = Logger.new(::File.new("log/error.log","a+"))
 
-BUNDLES = { '2016' => nil, '2017' => nil }
+BUNDLES = { '2016' => nil, '2017' => nil, '2018' => nil}
 # just define which bundles we want for now, in the uploads controller we'll populate these
 # (allows for re-checking without restarting in case the user installs a new one)
+
+YEAR_PROGRAMS = {
+  '2016' => {
+    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
+             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
+             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR']],
+    'ep' => [['Comprehensive End-Stage Renal Disease Care Initiative', 'III', 'CEC'],
+             ['PQRS Meaningful Use Individual', 'both', 'PQRS_MU_INDIVIDUAL'],
+             ['PQRS Meaningful Use Group', 'both', 'PQRS_MU_GROUP'],
+             ['CPC', 'III', 'CPC'],
+             ['Meaningful Use Only', 'III', 'MU_ONLY']]
+  },
+  '2017' => {
+    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program','I', 'HQR_EHR'],
+             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program','I', 'HQR_EHR_IQR'],
+             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program','I', 'HQR_IQR']],
+    'ep' => [['CPC+', 'III', 'CPCPLUS'],
+             ['MIPS Individual', 'III', 'MIPS_INDIV'],
+             ['MIPS Group', 'III', 'MIPS_GROUP']]
+  },
+  '2018' => {
+    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
+             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
+             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
+             ['Hospital Quality Reporting for Inpatient Quality Reporting Program voluntary submissions', 'I', 'HQR_IQR_VOL'],
+             ['Hospital Quality Reporting for Episode Payment Model voluntary submissions', 'I', 'HQR_EPM_VOL']],
+    'ep' => []
+  }
+}
+
+YEAR_PROGRAMTYPE_DOCUMENTS = {
+  '2016' => {
+    'I' => [['QRDA Cat I (R3)','cat1_r3']],
+    'III' => [['QRDA Cat III (R1)','cat3_r1']],
+    'both' => [['QRDA Cat I (R3)','cat1_r3'], ['QRDA Cat III (R1)','cat3_r1']]
+  },
+  '2017' => {
+    'I' => [['QRDA Cat I (R3.1)','cat1_r31']],
+    'III' => [['QRDA Cat III (R2)','cat3_r2']],
+    'both' => [['QRDA Cat I (R3.1)','cat1_r31'], ['QRDA Cat III (R2)','cat3_r2']]
+  },
+  '2018' => {
+    'I' => [['QRDA Cat I (R4)','cat1_r4']],
+    'III' => [['QRDA Cat III (R2)','cat3_r2']],
+    'both' => [['QRDA Cat I (R4)','cat1_r4'], ['QRDA Cat III (R2)','cat3_r2']]
+  }
+}
 
 
 CAT1_VALIDATORS = [HealthDataStandards::Validate::Cat1Measure.instance]
@@ -49,12 +96,16 @@ NODE_TYPES ={ 1 => :element ,
               12  => :notaion}
 
 BUNDLE_PERIOD_OVERRIDES = {
-  "2015.0.0" => {
+  "2015" => {
     "measure_period_start" => 1451606400,
     "effective_date" => 1483228799
   },
-  "2016.0.0" => {
+  "2016" => {
     "measure_period_start" => 1483228800,
     "effective_date" => 1514764799
+  },
+  "2017" => {
+    "measure_period_start" => 1514851200,
+    "effective_date" => 1546300799
   }
 }.freeze

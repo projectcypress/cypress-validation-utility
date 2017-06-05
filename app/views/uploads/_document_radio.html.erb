@@ -1,0 +1,7 @@
+<% document_types[1].each do |document_type| %>
+  <div class="radio">
+    <label class="radio">
+      <input required class="docradio" type="radio" name="file_type" value="<%= "#{document_type[1]}" %>"><%= " #{document_type[0]}" %>
+    </label>
+  </div>
+<% end %>

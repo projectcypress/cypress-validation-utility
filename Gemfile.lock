@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 0c855e5658d166eacc351fc786da12d5068926dc
+  revision: 8d45dc61ad839a9aba50a811fb4ea2df28fe9ac9
   branch: mongoid5
   specs:
     health-data-standards (3.6.1)
@@ -74,7 +74,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bson (4.2.1)
+    bson (4.2.2)
     builder (3.2.3)
     bundler-audit (0.5.0)
       bundler (~> 1.2)
@@ -117,7 +117,7 @@ GEM
     highline (1.7.8)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (0.8.1)
+    i18n (0.8.4)
     jbuilder (2.6.4)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2)
@@ -143,7 +143,7 @@ GEM
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
     minitest (5.10.2)
-    mongo (2.4.1)
+    mongo (2.4.2)
       bson (>= 4.2.1, < 5.0.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
@@ -165,7 +165,7 @@ GEM
       mini_portile2 (~> 2.1.0)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
-    origin (2.3.0)
+    origin (2.3.1)
     protected_attributes (1.0.9)
       activemodel (>= 4.0.1, < 5.0)
     rack (1.6.7)
@@ -284,4 +284,4 @@ DEPENDENCIES
   unicorn-rails
 
 BUNDLED WITH
-   1.14.6
+   1.15.1

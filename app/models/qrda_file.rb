@@ -95,9 +95,9 @@ class QrdaFile
   def program_type
     #Figure out if the program is EP or EH
     case program.upcase
-    when "CPC","PQRS_MU_INDIVIDUAL","PQRS_MU_GROUP","MU_ONLY"
+    when "CPC","PQRS_MU_INDIVIDUAL","PQRS_MU_GROUP","MU_ONLY","CEC","CPCPLUS","MIPS_INDIV","MIPS_GROUP"
       "ep"
-    when "HQR_EHR","HQR_IQR","HQR_EHR_IQR"
+    when "HQR_EHR","HQR_IQR","HQR_EHR_IQR","HQR_IQR_VOL","HQR_EPM_VOL"
       "eh"
     else
       #If the program name doesn't exist, return nil
@@ -123,6 +123,9 @@ class QrdaFile
       when '2017'
         @validators << CypressValidationUtility::Validate::EHCat1_2017.instance
         @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r3_1')
+      when '2018'
+        @validators << CypressValidationUtility::Validate::EHCat1_2018.instance
+        @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new('r4')
       end
     end
   end
@@ -138,6 +141,9 @@ class QrdaFile
     when "cat1_r31"
       cat1_validator
       HealthDataStandards::Validate::Cat1R31
+    when "cat1_r4"
+      cat1_validator
+      HealthDataStandards::Validate::Cat1R4
     when "cat3_r1", "cat3_r2"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance

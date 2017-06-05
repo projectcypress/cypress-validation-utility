@@ -1,0 +1,23 @@
+<div class="form-group">
+  <div class="radio">
+    <label class="radio" for="none" title="both">
+      <input required class="proradio" type="radio" name="program" value="none" id="none"> None
+    </label>
+  </div>
+  <div class="program-type">EH Programs</div>
+  <% programs[1]['eh'].each_with_index do |program, index| %>
+    <div class="radio">
+      <label for="<%="eh#{index}"%>" class="radio" title="<%= "#{program[1]}" %>">
+        <input required class="proradio" type="radio" name="program" value="<%= "#{program[2]}" %>" id="<%="eh#{index}"%>"><%= "#{program[0]}" %>
+      </label>
+    </div>
+  <% end %>
+  <div class="program-type">EP Programs</div>
+  <% programs[1]['ep'].each_with_index do |program, index| %>
+    <div class="radio">
+      <label for="<%="ep#{index}"%>" class="radio" title="<%= "#{program[1]}" %>">
+        <input required class="proradio" type="radio" name="program" value="<%= "#{program[2]}" %>" id="<%="ep#{index}"%>"><%= "#{program[0]}" %>
+      </label>
+    </div>
+  <% end %>
+</div>

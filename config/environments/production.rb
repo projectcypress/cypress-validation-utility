@@ -75,8 +75,6 @@ Rails.application.configure do
   config.lograge.enabled = true
   config.logger = Logger.new(STDOUT)
 
-
-  #allow requests to run concurrently
+  # allow requests to run concurrently
   config.allow_concurrency = true
-
 end

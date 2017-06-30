@@ -8,36 +8,13 @@ class FileProcessJob < ActiveJob::Base
     upload.save!(validate: false)
 
     if upload.artifact.archive?
-      upload.artifact.each_file do |filename, data|
-        process_single_file(filename, data, upload)
-      end
-
-      if upload.qrda_files.count == 0
-        upload.fail('Uploaded Zip file contained no XML files')
-        return
-      end
+      return unless process_archive_upload(upload)
     else
       content_string = upload.artifact.file.read
       process_single_file('', content_string, upload)
     end
 
-    if upload.can_calculate
-      measure_ids = upload.qrda_files.collect(&:get_measure_ids).flatten.uniq
-
-      @bundle = BUNDLES[upload.year]
-      @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
-
-      calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle)
-
-      upload.correlation_id = calculator.correlation_id
-      upload.save!(validate: false)
-
-      upload.qrda_files.each do |qrda|
-        qrda.record = calculator.import_cat1_file(qrda.content)
-      end
-
-      @calculated_results = calculator.generate_cat3
-    end
+    calculate_upload(upload) if upload.can_calculate
 
     upload.complete
   rescue Nokogiri::XML::SyntaxError => e
@@ -57,5 +34,36 @@ class FileProcessJob < ActiveJob::Base
 
     curr_file.process
     curr_file.save(validate: false)
+  end
+
+  private
+
+  def process_archive_upload(upload)
+    upload.artifact.each_file do |filename, data|
+      process_single_file(filename, data, upload)
+    end
+
+    if upload.qrda_files.count == 0
+      upload.fail('Uploaded Zip file contained no XML files')
+      return false
+    end
+  end
+
+  def calculate_upload(upload)
+    measure_ids = upload.qrda_files.collect(&:measure_ids_from_file).flatten.uniq
+
+    @bundle = BUNDLES[upload.year]
+    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+
+    calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle)
+
+    upload.correlation_id = calculator.correlation_id
+    upload.save!(validate: false)
+
+    upload.qrda_files.each do |qrda|
+      qrda.record = calculator.import_cat1_file(qrda.content)
+    end
+
+    @calculated_results = calculator.generate_cat3
   end
 end

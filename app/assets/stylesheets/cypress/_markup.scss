@@ -3,8 +3,9 @@ $xml-light-orange:      lighten($xml-orange, 25%) !default;
 $xml-dark-orange:       darken($xml-orange, 25%) !default;
 $xml-red:               #FF6347 !default;
 $xml-light-red:         lighten($xml-red, 25%) !default;
-$xml-green:             green !default;
+$xml-green:             #008000 !default;
 $xml-gray:              lighten($gray-base, 60%) !default;
+$xml-dark-blue:         #00008B !default;
 
 .xml_frame {
 
@@ -13,7 +14,7 @@ $xml-gray:              lighten($gray-base, 60%) !default;
   }
 
   .markup {
-    color: #00008b;
+    color: $xml-dark-blue;
   }
 
   .comment {
@@ -24,12 +25,12 @@ $xml-gray:              lighten($gray-base, 60%) !default;
     color: $brand-primary;
   }
 
-  .start-tag, .end-tag {
+  .start-tag,
+  .end-tag {
     color: $brand-info;
   }
 
   .pi {
-    // color: #9932CC;
     color: $xml-green;
   }
 
@@ -43,7 +44,6 @@ $xml-gray:              lighten($gray-base, 60%) !default;
 
   .attribute_error {
     border: 2px dotted $xml-red;
-    /*background-color: #FF5F3;*/
     background-color: $xml-light-red;
     padding: 10px;
   }
@@ -61,7 +61,7 @@ $xml-gray:              lighten($gray-base, 60%) !default;
     i.fa-comment {
       background-color: $xml-orange;
       border: 5px solid $xml-orange;
-      margin-top:-4px;
+      margin-top: -4px;
     }
   }
 

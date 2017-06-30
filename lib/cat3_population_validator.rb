@@ -6,10 +6,10 @@ module CypressValidationUtility
       include Singleton
 
       def initialize
-        @name = "Cat III Population Validator"
+        @name = 'Cat III Population Validator'
       end
 
-      def validate(file, options={})
+      def validate(file, options = {})
         errors = []
         document = get_document(file)
 
@@ -28,6 +28,7 @@ module CypressValidationUtility
             validate_populations(measure_id, pop_counts, errors, options)
           rescue
             # do nothing, if we get an exception the file is probably broken in some way
+            next
           end
         end
 
@@ -38,38 +39,52 @@ module CypressValidationUtility
         file = options[:file_name]
 
         # proportion measures, ipp >= denom, denom >= num + denexcp + denex
-        ipp = pop["IPP"] || pop["IPOP"] || 0
-        denom = pop["DENOM"] || 0
-        denex = pop["DENEX"] || 0
-        denexcep = pop["DENEXCEP"] || 0
-        num = pop["NUMER"] || 0
+        ipp = pop['IPP'] || pop['IPOP'] || 0
+        denom = pop['DENOM'] || 0
+        denex = pop['DENEX'] || 0
+        denexcep = pop['DENEXCEP'] || 0
+        num = pop['NUMER'] || 0
 
-        if denom > ipp
-          errors << build_error("Denominator value #{denom} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
-        end
-        if (num+denex+denexcep) > denom
-          errors << build_error("Numerator value #{num} + Denominator Exclusions value #{denex} + Denominator Exceptions value #{denexcep} is greater than Denominator value #{denom} for measure #{measure}", '/', file)
+        validate_denom(ipp, denom, measure, errors, file)
+        if (num + denex + denexcep) > denom
+          errors << build_error("Numerator value #{num} + Denominator Exclusions value #{denex} + Denominator Exceptions value #{denexcep}"\
+                                " is greater than Denominator value #{denom} for measure #{measure}", '/', file)
         end
 
         # CVT measures, IPP >= MSRPOPL >= OBSERV
-        msrpopl = pop["MSRPOPL"] || 0
-        observ = pop["OBSERV"] || 0
+        msrpopl = pop['MSRPOPL'] || 0
+        observ = pop['OBSERV'] || 0
+        validate_measure_population(msrpopl, ipp, measure, errors, file)
+        validate_measure_observations(observ, msrpopl, measure, errors, file)
+      end
 
-        if msrpopl > ipp
-          errors << build_error("Measure Population value #{msrpopl} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
+      def validate_denom(ipp, denom, measure, errors, file)
+        if denom > ipp
+          errors << build_error("Denominator value #{denom} is greater than Initial Population value #{ipp} for measure #{measure}", '/', file)
         end
+      end
+
+      def validate_measure_population(msrpopl, ipp, measure, errors, file)
+        if msrpopl > ipp
+          errors << build_error("Measure Population value #{msrpopl} is greater than Initial Population value #{ipp} for measure #{measure}",
+                                '/', file)
+        end
+      end
+
+      def validate_measure_observations(observ, msrpopl, measure, errors, file)
         if observ > msrpopl
-          errors << build_error("Measure observvations value #{observ} cannot be greater than Measure Population value #{msrpopl} for measure #{measure}", '/', file)
+          errors << build_error("Measure observations value #{observ} cannot be greater than Measure Population value #{msrpopl}"\
+                                " for measure #{measure}", '/', file)
         end
       end
 
       def measure_entry_selector
-        "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component" +
-        "/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.27.2.1']]/cda:entry"
+        '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component' \
+          "/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.27.2.1']]/cda:entry"
       end
 
       def measure_id_selector
-        "cda:organizer/cda:id/@extension"
+        'cda:organizer/cda:id/@extension'
       end
 
       def population_selector_from_measure
@@ -77,11 +92,12 @@ module CypressValidationUtility
       end
 
       def population_name_selector
-        "cda:value/@code"
+        'cda:value/@code'
       end
 
       def population_count_selector
-        "cda:entryRelationship/cda:observation[./cda:templateId[@root='2.16.840.1.113883.10.20.27.3.3'] and ./cda:code[@code='MSRAGG'] and ./cda:methodCode[@code='COUNT']]/cda:value/@value"
+        "cda:entryRelationship/cda:observation[./cda:templateId[@root='2.16.840.1.113883.10.20.27.3.3'] and ./cda:code[@code='MSRAGG']"\
+        " and ./cda:methodCode[@code='COUNT']]/cda:value/@value"
       end
     end
   end

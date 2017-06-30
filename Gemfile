@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.7.1'
 # Use Bootstrap via this gem
@@ -19,7 +18,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'sdoc', '~> 0.4.0', :group => :doc
 
 gem 'carrierwave'
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
@@ -29,7 +28,6 @@ gem 'thin'
 
 gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
-
 
 gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
 gem 'quality-measure-engine',
@@ -42,17 +40,24 @@ gem 'font-awesome-sass'
 
 gem 'rubyzip'
 
-#clean up the stdout logs, doesn't affect the log/access.log and log/error.log
-gem "lograge"
+# clean up the stdout logs, doesn't affect the log/access.log and log/error.log
+gem 'lograge'
 
 # necessary to prevent cache-busting of the bootstrap fonts
-gem "non-stupid-digest-assets"
+gem 'non-stupid-digest-assets'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'overcommit'
+  gem 'scss_lint', require: false
+  gem 'rubocop', '0.39', require: false
+end
 
+group :test do
+  gem 'brakeman', require: false
   gem 'bundler-audit'
+  gem 'simplecov', require: false
 end
 
 group :production do

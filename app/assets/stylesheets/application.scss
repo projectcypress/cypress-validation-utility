@@ -16,8 +16,8 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap-variables';
 @import 'bootstrap';
-@import "font-awesome-sprockets";
-@import "font-awesome";
+@import 'font-awesome-sprockets';
+@import 'font-awesome';
 
 // Cypress specific component styles and overrides
-@import "cypress/*";
+@import 'cypress/*';

@@ -7,60 +7,75 @@ a:not(.btn) {
 }
 
 .list-group-item {
-  border: none;
+  border: 0;
   border-right: 2px solid #000;
   border-radius: none;
   overflow: hidden;
 }
 
-.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus {
   background-color: #AAA;
   background-image: none;
   text-shadow: none;
   border-right: 2px solid #000;
-
 }
 
-/* add a little triangle to the right of the active item */
-.list-group-item.active:after {
-content: "";
-position:absolute;
-right:0;
-top:12px;
-border-top: 8px solid transparent;
-border-bottom: 8px solid transparent;
-border-right: 8px solid #000;
-
+// add a little triangle to the right of the active item
+.list-group-item.active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 12px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #000;
 }
 
 .list-group-item:hover, .list-group-item:focus {
     background-color: #EEE;
 }
 
-/* Test execution details */
+// Test execution details
 .xml_frame {
   font-family: $font-family-monospace;
+
   .subnav {
-    .container {width:805px;}
-    .brand i {
-    position:relative;
-    top:4px;
+    .container {
+      width: 805px;
     }
-  ul.nav {
-    margin-top:3px;
-    &>li>a {
-      cursor:pointer;
-      &:active {
-        position:relative;
-        top:1px;
-        left:1px;
-      }
+
+    .brand i {
+      position: relative;
+      top: 4px;
+    }
+
+    ul.nav {
+      margin-top: 3px;
+
+      &>li>a {
+        cursor: pointer;
+
+        &:active {
+          position: relative;
+          top: 1px;
+          left: 1px;
+        }
       }
     }
   }
-  .no-select { user-select: none; -o-user-select:none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+
+  .no-select {
+    user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+  }
+
   span.error_popup {
-    position:relative;
-    left:240px;
+    position: relative;
+    left: 240px;
   }
 }

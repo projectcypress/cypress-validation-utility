@@ -18,16 +18,12 @@
     <div class="panel-body">
       <ul>
         <% variables.each do |key,dc| %>
-        <!-- {{#collection variables tag="div"}} -->
 
           <li>
             <span class="<%= dc %> rationale-target">
-              <!-- <b>${{description}} = </b> -->
-              <!-- TODO: is this the same description? -->
               <b><%= dc[:description] %> = </b>
               <span class="sr-only sr-highlight-status"></span>
             </span>
-            <!-- {{view "DataCriteriaLogic" reference=source_data_criteria expandVariable=true measure=../measure tag="span"}} -->
             <%= render partial: 'data_criteria', locals: {reference: dc[:source_data_criteria], expandVariable: true, measure: measure, tag: "span"} %>
           </li>
         <% end %>

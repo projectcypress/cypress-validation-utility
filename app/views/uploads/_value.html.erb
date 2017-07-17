@@ -1,11 +1,8 @@
-<% if value[:type] == 'ANYNonNull' %>
-<!-- any value -->
-<% else %>
+<% unless value[:type] == 'ANYNonNull' %>
   <% if value[:type] == 'PQ' ||value[:type] == 'TS'%>
     <%= rangeComparison %>
     <% if value[:inclusive?] %>=<% end %>
     <% if value[:type] == 'TS' %>
-      <!-- TODO: best long format? -->
       <%=Date.strptime(value[:value], '%Y%m%d').strftime('%F')%>
     <% else %>
       <%= value[:value] %>
@@ -20,7 +17,6 @@
         'min'=>'minute',
         's'=>'second'} %>
         <% if unit_map[value[:unit]] %>
-          <!-- TODO: localize -->
           <%= unit_map[value[:unit]].pluralize(value[:value]) %>
         <% else %>
           <%= value[:unit] %>
@@ -31,7 +27,6 @@
     <% if value[:type] == 'IVL_PQ' ||value[:type] == 'IVL_TS'%>
       <% if value[:high] && value[:low] %>
         <% if value[:high][:value] == value[:low][:value] && value[:high][:inclusive?] && value[:low][:inclusive?]%>
-        <!-- @value.high?.value == @value.low?.value && @value.high?['inclusive?'] && @value.low?['inclusive?'] -->
           <%= render partial: 'value', locals: {value:value[:low], rangeComparison: "", tag: "span"} %>
         <% else %>
           <%= render partial: 'value', locals: {value:value[:low], rangeComparison: ">", tag: "span"} %> and
@@ -48,8 +43,6 @@
       <% end %>
     <% else %>
       <% if value[:type] == 'CD' %>
-      <!-- : {{translate_oid value.code_list_id}} -->
-        <!-- TODO: @measure.valueSets().findWhere({oid: oid})?.get('display_name') -->
         :
         <% valueSets = HealthDataStandards::SVS::ValueSet.where(oid: value[:code_list_id]) %>
         <% valueSets.each do |set| %>

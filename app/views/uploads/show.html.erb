@@ -94,7 +94,7 @@
                 <% else %>
                   <td><%= "#{measure.cms_id} #{measure.name}" %></td>
                 <% end %>
-                <!-- will show calculation results for product test records -->
+                <% # will show calculation results for product test records %>
                   <% msr_popl_ids.each do |population| %>
                     <td class="text-center">
                       <%= render partial: 'calculation_result_icon', locals: { result: get_result_value(record.calculation_results, measure, population) } %>

@@ -2,16 +2,15 @@
   <%rat_ref = @rationale[reference]%>
   <% if rat_ref.is_a?(Hash) && (@specifics[@population_key] || @population_key == 'VAR')%>
     <%rat_ref = (rat_ref[:results].count > 0) %>
-    <% if shouldSwitchHighlight(reference, @population_key, @specifics, @rationale) %>
+    <% if should_switch_highlight(reference, @population_key, @specifics, @rationale) %>
       *<%rat_ref = !rat_ref %>
     <% end %>
   <% end %>
   <span class="rationale eval-<%=rat_ref%>">
-  <!-- <span class="{{#if ../isSetOp}}{{#unless ../../dataCriteria.variable}}set-op-group{{/unless}}{{/if}} {{dataCriteria.key}} rationale-target {{#unless suppressDataCriteriaHighlight}}highlight-target{{/unless}}"> -->
 <% end %>
 
 <% dataCriteria = measure[:hqmf_document][:data_criteria][reference] %>
-<!-- check attributes -->
+<% #check attributes %>
 <% unless dataCriteria %>
   <% dataCriteria = measure[:hqmf_document][:source_data_criteria][reference]%>
 <% end %>
@@ -23,7 +22,7 @@
     <% end %>
   <% end %>
 
-  <!-- {{#if hasChildren}} -->
+
   <% if dataCriteria[:type] == 'derived' && (!dataCriteria[:variable] || expandVariable) %>
     <% if dataCriteria[:definition] == 'satisfies_all' ||  dataCriteria[:definition] == 'satisfies_any' %>
       <%= render partial: 'satisfies', locals: {reference: reference, measure:measure, tag: "span"} %>
@@ -71,12 +70,10 @@
     <% end %>
   <% else %>
     <span class="criteria-title">
-      <!-- {{#unless hideTitle}} -->
       <% if dataCriteria[:specific_occurrence] && !(dataCriteria[:description].include? "Occurrence")%>
         Occurrence <%= dataCriteria[:specific_occurrence] %>:
       <% end %>
       <% if dataCriteria[:variable] && !(dataCriteria[:description].include? "$")%>$<% end %><%= dataCriteria[:description] %>
-      <!-- {{/unless}} -->
 
       <% if dataCriteria[:value] && dataCriteria[:type]!= 'characteristic'%>
         <%= render partial: 'value', locals: {value:dataCriteria[:value], rangeComparison: "", measure:measure, tag: "span"} %>
@@ -84,7 +81,7 @@
 
       <% if dataCriteria[:field_values] %>
         <% dataCriteria[:field_values].each do |key,value| %>
-          <!--ANYNonNull type means field value type -->
+          <% #ANYNonNull type means field value type %>
           <% if value[:type] == 'ANYNonNull' %>
             (<%=HQMF::DataCriteria::FIELDS[key][:title]%>)
           <% else %>

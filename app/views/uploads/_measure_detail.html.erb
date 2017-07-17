@@ -1,5 +1,3 @@
-
-<!-- TODO: Pass single appropriate measure through of there's a batch?? -->
 <% measures.each do |measure| %>
   <%patient_cache_subs = @patient_cache_all.where({'value.measure_id'=> measure[:id]})%>
   <%@patient_cache = patient_cache_subs.select{|k| k.value[:sub_id]==measure[:sub_id]}.first%>
@@ -33,10 +31,8 @@
           <% measure[:population_ids].values.uniq.each do |id| %>
             <% population = (measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }).values[0]%>
             <% @population_key = population[:type] %>
-            <!-- {{view "PopulationCriteriaLogic" population=this measure=../measure suppressDataCriteriaHighlight=../suppressDataCriteriaHighlight}} -->
             <%= render partial: 'population_criteria', locals: {population: population, measure: measure} %>
           <% end %>
-          <!-- {{view "VariablesLogic" measure=measure suppressDataCriteriaHighlight=../suppressDataCriteriaHighlight}} -->
           <% @population_key = 'VAR' %>
           <%= render partial: 'variables', locals: {measure: measure} %>
         </div>

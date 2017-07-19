@@ -94,7 +94,7 @@
                 <% else %>
                   <td><%= "#{measure.cms_id} #{measure.name}" %></td>
                 <% end %>
-                <% # will show calculation results for product test records %>
+                <%# will show calculation results for product test records %>
                   <% msr_popl_ids.each do |population| %>
                     <td class="text-center">
                       <%= render partial: 'calculation_result_icon', locals: { result: get_result_value(record.calculation_results, measure, population) } %>
@@ -105,7 +105,8 @@
           </tbody>
         </table>
 
-        <% else  # record is nil %>
+        <% else %>
+        <%# record is nil %>
 
         <p> Record failed to calculate </p>
 
@@ -136,7 +137,7 @@
       <%= render partial: 'error_list', locals: {errors: errs, error_map: error_map, file_num: i } %>
     </div>
     <% end %>
-  </div><!-- end #test_result_tabs -->
+  </div><%#end #test_result_tabs %>
 
 
   <div id="xml_frame_<%= i %>" class="xml_frame">

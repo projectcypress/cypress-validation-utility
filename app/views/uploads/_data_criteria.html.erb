@@ -10,7 +10,7 @@
 <% end %>
 
 <% dataCriteria = measure[:hqmf_document][:data_criteria][reference] %>
-<% #check attributes %>
+<%#check attributes %>
 <% unless dataCriteria %>
   <% dataCriteria = measure[:hqmf_document][:source_data_criteria][reference]%>
 <% end %>
@@ -81,7 +81,7 @@
 
       <% if dataCriteria[:field_values] %>
         <% dataCriteria[:field_values].each do |key,value| %>
-          <% #ANYNonNull type means field value type %>
+          <%#ANYNonNull type means field value type %>
           <% if value[:type] == 'ANYNonNull' %>
             (<%=HQMF::DataCriteria::FIELDS[key][:title]%>)
           <% else %>

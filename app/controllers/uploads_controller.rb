@@ -15,8 +15,6 @@ class UploadsController < ApplicationController
   end
 
   def new
-    @program_years = YEAR_PROGRAMS
-    @document_years = YEAR_PROGRAMTYPE_DOCUMENTS
   end
 
   def create

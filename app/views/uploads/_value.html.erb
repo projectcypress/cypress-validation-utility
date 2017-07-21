@@ -1,9 +1,9 @@
 <% unless value[:type] == 'ANYNonNull' %>
-  <% if value[:type] == 'PQ' ||value[:type] == 'TS'%>
-    <%= rangeComparison %>
+  <% if value[:type] == 'PQ' ||value[:type] == 'TS' %>
+    <%= range_comparison %>
     <% if value[:inclusive?] %>=<% end %>
     <% if value[:type] == 'TS' %>
-      <%=Date.strptime(value[:value], '%Y%m%d').strftime('%F')%>
+      <%= Date.strptime(value[:value], '%Y%m%d').strftime('%F') %>
     <% else %>
       <%= value[:value] %>
     <% end %>
@@ -24,28 +24,26 @@
     <% end %>
 
   <% else %>
-    <% if value[:type] == 'IVL_PQ' ||value[:type] == 'IVL_TS'%>
+    <% if value[:type] == 'IVL_PQ' ||value[:type] == 'IVL_TS' %>
       <% if value[:high] && value[:low] %>
-        <% if value[:high][:value] == value[:low][:value] && value[:high][:inclusive?] && value[:low][:inclusive?]%>
-          <%= render partial: 'value', locals: {value:value[:low], rangeComparison: "", tag: "span"} %>
+        <% if value[:high][:value] == value[:low][:value] && value[:high][:inclusive?] && value[:low][:inclusive?] %>
+          <%= render partial: 'value', locals: {value: value[:low], range_comparison: "", tag: "span"} %>
         <% else %>
-          <%= render partial: 'value', locals: {value:value[:low], rangeComparison: ">", tag: "span"} %> and
-          <%= render partial: 'value', locals: {value:value[:high], rangeComparison: "<", tag: "span"} %>
+          <%= render partial: 'value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %> and
+          <%= render partial: 'value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
         <% end %>
       <% else %>
         <% if value[:high] %>
-          <%= render partial: 'value', locals: {value:value[:high], rangeComparison: "<", tag: "span"} %>
-        <% else %>
-          <% if value[:low] %>
-            <%= render partial: 'value', locals: {value:value[:low], rangeComparison: ">", tag: "span"} %>
-          <% end %>
+          <%= render partial: 'value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
+        <% elsif value[:low] %>
+          <%= render partial: 'value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %>
         <% end %>
       <% end %>
     <% else %>
       <% if value[:type] == 'CD' %>
         :
-        <% valueSets = HealthDataStandards::SVS::ValueSet.where(oid: value[:code_list_id]) %>
-        <% valueSets.each do |set| %>
+        <% value_sets = HealthDataStandards::SVS::ValueSet.where(oid: value[:code_list_id]) %>
+        <% value_sets.each do |set| %>
           <%= set[:display_name] %>
         <% end %>
       <% end %>

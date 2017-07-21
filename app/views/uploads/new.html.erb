@@ -64,20 +64,19 @@
   <hr>
   <fieldset>
     <legend class="control-label">CMS Reporting Program</legend>
-    <% @program_years.each do |program_year| %>
-      <div class="form-group program-radio" id="<%= "radioContainer_#{program_year[0]}" %>" style="display: none;">
-          <%= render partial: 'program_radio', locals: {programs: program_year} %>
+    <% YEAR_PROGRAMS.each do |year, programs| %>
+      <div class="form-group program-radio" id="<%= "radioContainer_#{year}" %>" style="display: none;">
+          <%= render partial: 'program_radio', locals: {programs: programs, year: year} %>
       </div>
     <% end %>
   </fieldset>
   <hr>
   <fieldset>
     <legend class="control-label">Document Type</legend>
-    <div class="form-group" id="radioDocumentContainer">
-    <% @document_years.each do |document_year| %>
-      <% document_year[1].each do |document_type| %>
-        <div class="form-group document-radio" id="<%= "radioDocumentContainer_#{document_year[0]}_#{document_type[0]}" %>" style="display: none;">
-            <%= render partial: 'document_radio', locals: {document_types: document_type} %>
+    <% YEAR_PROGRAMTYPE_DOCUMENTS.each do |year, category| %>
+      <% category.each do |category, specifications| %>
+        <div class="form-group document-radio" id="<%= "radioDocumentContainer_#{year}_#{category}" %>" style="display: none;">
+            <%= render partial: 'document_radio', locals: {document_types: specifications} %>
         </div>
       <% end %>
     <% end %>
@@ -115,7 +114,7 @@ $("#radioYearContainer").click(function(){
 })
 
 
-$(".program-radio").click(function(){
+$(".proradio").click(function(){
   var year = $('.proyear:checked').val();
   var checkedId = $('.proradio:checked').attr('id')
   var programType = $("label[for='" + checkedId + "']").attr('title')

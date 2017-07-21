@@ -1,5 +1,4 @@
-
-<% case subsetOperator[:type]
+<% case subset_operator[:type]
 when "RECENT" %>
   MOST RECENT
 <% when "TIMEDIFF" %>
@@ -9,10 +8,10 @@ when "RECENT" %>
 <% when "DATETIMEDIFF" %>
   Difference between date/times
 <% else %>
-  <%= subsetOperator[:type] %>
+  <%= subset_operator[:type] %>
 <% end %>
 
-<% if subsetOperator[:value] && subsetOperator[:value][:type]!= 'ANYNonNull'%>
-  <%= render partial: 'value', locals: {value:subsetOperator[:value], rangeComparison: "", tag: "span"} %>
+<% if subset_operator[:value] && subset_operator[:value][:type]!= 'ANYNonNull' %>
+  <%= render partial: 'value', locals: {value: subset_operator[:value], range_comparison: "", tag: "span"} %>
 <% end %>
 :

@@ -3,7 +3,6 @@ require 'hqmf-parser'
 
 class UploadsController < ApplicationController
   before_action :require_bundles
-  helper_method :should_switch_highlight
 
   def require_bundles
     BUNDLES['2016'] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^2015\./)
@@ -50,32 +49,5 @@ class UploadsController < ApplicationController
     @bundle = BUNDLES[@upload.year]
 
     @files = @upload.qrda_files
-  end
-
-  def should_switch_highlight(data_key, pop_key, specifics, rationale)
-    # check final specifics approach
-    if specifics && specifics[pop_key]
-      pop_final_specifics = []
-      unless specifics[pop_key].empty?
-        # first specfics entry for this population is final specifics array
-        pop_final_specifics = specifics[pop_key][0]
-      end
-      return check_specifics(data_key, rationale, pop_final_specifics)
-    end
-    false
-  end
-
-  def check_specifics(data_key, rationale, pop_final_specifics)
-    if rationale[data_key][:specifics] &&
-       !rationale[data_key][:specifics].empty?
-      # get this data criteria's specific info
-      dc_specifics = rationale[data_key][:specifics][0]
-      dc_specifics.each do |dc_spec|
-        # find any data criteria specific entry that is not included
-        # in the population final specifics
-        true if (dc_spec != '*') && !pop_final_specifics.include?(dc_spec)
-      end
-    end
-    false
   end
 end

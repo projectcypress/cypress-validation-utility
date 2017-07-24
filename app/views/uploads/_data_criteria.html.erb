@@ -32,7 +32,7 @@
       <% if data_criteria[:derivation_operator] == 'INTERSECT' ||
             data_criteria[:derivation_operator] == 'UNION' &&
             !expand_variable %>
-        <ul><li><span class="set-op rationale-target">
+        <ul><li><span class="set-op rationale-target rationale eval-<%= rat_ref %>">
           <%= data_criteria[:derivation_operator] %> of:
         </span></li>
       <% end %>

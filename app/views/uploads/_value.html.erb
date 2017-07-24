@@ -1,7 +1,6 @@
 <% unless value[:type] == 'ANYNonNull' %>
   <% if value[:type] == 'PQ' ||value[:type] == 'TS' %>
-    <%= range_comparison %>
-    <% if value[:inclusive?] %>=<% end %>
+    <%= range_comparison %><% if value[:inclusive?] %>=<% end %>
     <% if value[:type] == 'TS' %>
       <%= Date.strptime(value[:value], '%Y%m%d').strftime('%F') %>
     <% else %>

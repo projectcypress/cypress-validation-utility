@@ -20,7 +20,9 @@
         <% variables.each do |key,dc| %>
 
           <li>
-            <span class="<%= dc %> rationale-target">
+            <% rat_ref = @rationale[key] %>
+            <% rat_ref = true if rat_ref.is_a?(Hash) %>
+            <span class="<%= dc %> rationale-target rationale eval-<%= rat_ref %>">
               <b><%= dc[:description] %> = </b>
               <span class="sr-only sr-highlight-status"></span>
             </span>

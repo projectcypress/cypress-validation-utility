@@ -1,8 +1,10 @@
 <% unless expand_variable %>
   <% rat_ref = @rationale[reference] %>
-  <% if rat_ref.is_a?(Hash) && (@specifics[@population_key] || @population_key == 'VAR') %>
+  <% if rat_ref.is_a?(Hash) &&
+        (@specifics[@population_key] || @population_key == 'VAR')%>
     <% rat_ref = rat_ref[:results].count > 0 %>
-    <% if should_switch_highlight?(reference, @population_key, @specifics, @rationale) %>
+    <% if @population_key != 'VAR' &&
+          should_switch_highlight?(reference, @population_key, @specifics, @rationale) %>
       *<% rat_ref = !rat_ref %>
     <% end %>
   <% end %>
@@ -18,7 +20,7 @@
 <% if data_criteria %>
   <% if data_criteria[:subset_operators] && data_criteria[:subset_operators].length>0 %>
     <% data_criteria[:subset_operators].each do |so| %>
-      <%= render partial: 'subset_operator', locals: {subsetOperator:so, tag: "span"} %>
+      <%= render partial: 'subset_operator', locals: {subset_operator:so, tag: "span"} %>
     <% end %>
   <% end %>
 

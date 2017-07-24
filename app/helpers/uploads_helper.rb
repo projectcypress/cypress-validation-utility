@@ -55,30 +55,49 @@ module UploadsHelper
     end
 
     def should_switch_highlight?(data_key, pop_key, specifics, rationale)
-      # check final specifics approach
-      if specifics && specifics[pop_key]
-        pop_final_specifics = []
-        unless specifics[pop_key].empty?
-          # first specfics entry for this population is final specifics array
-          pop_final_specifics = specifics[pop_key][0]
+      # determine if final specifics indicates a "specifically false" switch
+
+      # data criteria specifics arrays
+      dc_specifics = rationale[data_key][:specifics]
+
+      if specifics && specifics[pop_key] && !specifics[pop_key].empty?
+        # iterate over all final specifics arrays in this population
+        specifics[pop_key].each do |final_spec_arr|
+          # compare to all specifics arrays for this data criteria
+          dc_specifics.each do |data_crit_spec_arr|
+            # if any spec comparison matches, don't switch highlight
+            return false if spec_arrays_match?(final_spec_arr, data_crit_spec_arr)
+          end
         end
-        return has_specifics?(data_key, rationale, pop_final_specifics)
+        # if none match, switch highlight
+        return true
       end
-      false
+
+      # if there are no population specifics, check for all wildcard in any dc_arr (implicit match)
+      dc_specifics.each do |data_crit_spec_arr|
+        # if any spec comparison matches, don't switch highlight
+        return false if found_implicit_match?(data_crit_spec_arr)
+      end
+      # switch highlight if none match
+      return true
     end
 
-    def has_specifics?(data_key, rationale, pop_final_specifics)
-      if rationale[data_key][:specifics] &&
-         !rationale[data_key][:specifics].empty?
-        # get this data criteria's specific info
-        dc_specifics = rationale[data_key][:specifics][0]
-        dc_specifics.each do |dc_spec|
-          # find any data criteria specific entry that is not included
-          # in the population final specifics
-          return true if (dc_spec != '*') && !pop_final_specifics.include?(dc_spec)
+    def spec_arrays_match?(fs_arr, dc_arr)
+      # if each element is the same as the corresponding element (or either is
+      # a wildcard) then true (spec matches)
+      fs_arr.each_with_index do |fs, i|
+        if(i < dc_arr.length && fs != '*' && dc_arr[i] != '*' && fs!=dc_arr[i])
+          return false
         end
       end
-      false
+      return true
+    end
+
+    def found_implicit_match?(dc_arr)
+      dc_arr.each do |dc_spec_item|
+        return false unless dc_spec_item == '*'
+      end
+      return true
     end
 
     def first_nested_criteria(criteria)

@@ -47,13 +47,13 @@ YEAR_PROGRAMTYPE_DOCUMENTS = {
   },
   '2017' => {
     'I' => [['QRDA Cat I (R3.1)','cat1_r31']],
-    'III' => [['QRDA Cat III (R2)','cat3_r2']],
-    'both' => [['QRDA Cat I (R3.1)','cat1_r31'], ['QRDA Cat III (R2)','cat3_r2']]
+    'III' => [['QRDA Cat III (R2.1)','cat3_r21']],
+    'both' => [['QRDA Cat I (R3.1)','cat1_r31'], ['QRDA Cat III (R2.1)','cat3_r21']]
   },
   '2018' => {
     'I' => [['QRDA Cat I (R4)','cat1_r4']],
-    'III' => [['QRDA Cat III (R2)','cat3_r2']],
-    'both' => [['QRDA Cat I (R4)','cat1_r4'], ['QRDA Cat III (R2)','cat3_r2']]
+    'III' => [['QRDA Cat III (R2.1)','cat3_r21']],
+    'both' => [['QRDA Cat I (R4)','cat1_r4'], ['QRDA Cat III (R2.1)','cat3_r21']]
   }
 }
 

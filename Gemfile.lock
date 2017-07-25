@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 8d45dc61ad839a9aba50a811fb4ea2df28fe9ac9
+  revision: e4804f6c4593291ddc4cb4b800e7360e270875c5
   branch: mongoid5
   specs:
     health-data-standards (3.6.1)
@@ -21,7 +21,7 @@ GIT
 
 GIT
   remote: https://github.com/projectcypress/quality-measure-engine.git
-  revision: 284bd90f8fc00e650630c0d6567f05f8a63347ad
+  revision: 2fd3fc4d2a9e7ce58b7a856ae8ef74e0d08c172d
   branch: bump_mongoid
   specs:
     quality-measure-engine (3.1.2)
@@ -99,8 +99,8 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     daemons (1.2.4)
-    delayed_job (4.1.2)
-      activesupport (>= 3.0, < 5.1)
+    delayed_job (4.1.3)
+      activesupport (>= 3.0, < 5.2)
     delayed_job_mongoid (2.2.0)
       delayed_job (>= 3.0, < 5)
       mongoid (>= 3.0, < 6)
@@ -117,7 +117,7 @@ GEM
     highline (1.7.8)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (0.8.4)
+    i18n (0.8.6)
     jbuilder (2.6.4)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2)
@@ -142,8 +142,8 @@ GEM
     mime-types (2.99.3)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
-    minitest (5.10.2)
-    mongo (2.4.2)
+    minitest (5.10.3)
+    mongo (2.4.3)
       bson (>= 4.2.1, < 5.0.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
@@ -284,4 +284,4 @@ DEPENDENCIES
   unicorn-rails
 
 BUNDLED WITH
-   1.15.1
+   1.15.2

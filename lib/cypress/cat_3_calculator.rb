@@ -1,3 +1,5 @@
+require 'cypress/go_importer'
+
 module Cypress
   class Cat3Calculator
     attr_accessor :correlation_id, :measure, :bundle, :mre, :qr
@@ -67,12 +69,15 @@ module Cypress
     end
 
     def import_cat1_file(doc)
-      doc = Nokogiri::XML(doc) unless doc.is_a? Nokogiri::XML::Document
-      doc.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
-      doc.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
-      record = HealthDataStandards::Import::Cat1::PatientImporter.instance.parse_cat1(doc)
+      record = GoCDATools::Import::GoImporter.instance.parse_with_ffi(doc)
       record.test_id = @correlation_id
       record.medical_record_number = rand(1_000_000_000_000_000)
+      # When imported from go, conditions that are unresolved need to have a stop_time added
+      # When imported from go, diagnoses need to have a status_code of null
+      Cypress::GoImport.update_conditions(record)
+      # When imported from go, entry ids need to be updated to reflected references
+      # When imported from go, negated enries need to lookup a related code
+      Cypress::GoImport.update_entries(record, @bundle, Cypress::GoImport.resolve_references(record))
       record.save
       record
     rescue

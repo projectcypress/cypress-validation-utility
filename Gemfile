@@ -34,6 +34,8 @@ gem 'sucker_punch', '~> 2.0'
 gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
 gem 'quality-measure-engine',
     git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
+gem 'go-cda-tools', git: 'https://github.com/projectcypress/go-cda-tools.git', branch: 'master'
+# gem 'go-cda-tools', path: '../go-cda-tools'
 
 # gem "bson"
 # gem "moped", github: "mongoid/moped"

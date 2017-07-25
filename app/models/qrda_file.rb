@@ -154,8 +154,8 @@ class QrdaFile
       elsif program_type == "none"
         if doc_type == "cat3_r1"
           HealthDataStandards::Validate::Cat3
-        elsif doc_type == "cat3_r2"
-          HealthDataStandards::Validate::Cat3R2
+        elsif doc_type == "cat3_r21"
+          HealthDataStandards::Validate::Cat3R21
         end
       else
         raise "Cannot validate an EH QRDA Category III file"

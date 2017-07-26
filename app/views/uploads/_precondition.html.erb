@@ -2,7 +2,19 @@
 <% unless suppress %>
   <ul id="precondition_<%= precondition[:id] %>">
     <li>
-      <span class="conjunction <%= parent_precondition[:id] %> rationale eval-<%= @rationale[("precondition_"+parent_precondition[:id].to_s)] %>">
+      <% reference = ("precondition_"+parent_precondition[:id].to_s) %>
+      <% rat_ref = @rationale[reference] %>
+      <% if rat_ref.is_a?(Hash) &&
+            (@specifics[@population_key] || @population_key == 'VAR') %>
+        <% rat_ref = rat_ref[:results].count > 0 %>
+        <% if @population_key != 'VAR' &&
+              @updated_rationale[@population_key] &&
+              @updated_rationale[@population_key].key?(reference) %>
+          *<% rat_ref = @updated_rationale[@population_key][reference]  %>
+        <% end %>
+      <% end %>
+
+      <span class="conjunction <%= parent_precondition[:id] %> rationale eval-<%= rat_ref %>">
         <b>
           <% if parent_negation %>
             <% if parent_precondition[:conjunction_code]=='allTrue' %>OR NOT<% end %>

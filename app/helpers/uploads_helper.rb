@@ -112,6 +112,7 @@ module UploadsHelper
     end
 
     def specifics_rationale(measure, rationale, final_specifics)
+      # byebug
       updated_rationale = {}
       or_counts = calculate_or_counts(measure, rationale)
       measure[:population_ids].values.uniq.each do |id|
@@ -132,7 +133,7 @@ module UploadsHelper
 
           # check each bad occurrence and remove highlights marking true
           criteria_results[:bad].each do |bad_criteria|
-            if[rationale[:bad_criteria]]
+            if(rationale[bad_criteria])
               updated_rationale[code][bad_criteria] = false
               # move up the logic tree to set AND/ORs to false based on the removal of the bad specific's true eval
               updated_rationale = update_logic_tree(updated_rationale, rationale, code, bad_criteria, or_counts, parent_map, final_specifics)
@@ -142,16 +143,18 @@ module UploadsHelper
           # and one is good while the other is bad, the child of the negation will evaluate to true, we want it to
           # evaluate to false since if there's a good negation then there's an occurrence for which it evaluated to false
           criteria_results[:good].each do |good_criteria|
-            updated_rationale = updated_negated_good(updated_rationale[code], rationale, good_criteria, parent_map)
+            updated_rationale[code] = updated_negated_good(updated_rationale[code], rationale, good_criteria, parent_map)
           end
 
         end
       end
+      # byebug
       return updated_rationale
     end
 
 
     def get_data_criteria_keys(child, data_crit_hash, key=nil)
+      # byebug
       occurrences = []
       return occurrences unless child
       if child[:preconditions] && child[:preconditions].length > 0
@@ -191,6 +194,7 @@ module UploadsHelper
 
 
     def check_criteria_for_rationale(final_specifics, criteria, rationale, data_crit_hash, pop_key)
+      # byebug
       results = {bad: [], good: []}
       criteria.each do |criterion|
         criterion_rationale = rationale[criterion]
@@ -201,14 +205,15 @@ module UploadsHelper
           next
         end
 
-        if criterion_rationale == false || !criterion_rationale[:specifics] || criterion_rationale[:specifics].length == 0
-          results.good.push(criterion)
+        if (criterion_rationale &&
+          criterion_rationale.is_a?(Hash) &&
+          criterion_rationale[:specifics] &&
+          criterion_rationale[:specifics].length > 0 &&
+          should_switch_highlight?(criterion, pop_key, final_specifics, rationale))
+
+          results[:bad].push(criterion)
         else
-          if should_switch_highlight(criterion, pop_key, final_specifics, rationale)
-            results.bad.push(criterion)
-          else
-            results.good.push(criterion)
-          end
+          results[:good].push(criterion)
         end
       end
       return results
@@ -216,20 +221,22 @@ module UploadsHelper
 
     # Or counts are used to know when to turn an OR from green to red.  Once we negate all the true ors, we can switch to red
     def calculate_or_counts (measure, rationale)
-      orCounts = {}
+      # byebug
+      or_counts = {}
       measure[:population_ids].values.uniq.each do |id|
+        # byebug
         pop_map = measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }
         population = pop_map.values[0]
 
-        orCounts = orCounts.merge(calculate_or_counts_recursive(rationale, population[:preconditions]))
+        or_counts = or_counts.merge(calculate_or_counts_recursive(rationale, population[:preconditions]))
       end
-      orCounts.merge(calculate_data_criteria_or_counts(measure, rationale))
+      or_counts.merge(calculate_data_criteria_or_counts(measure, rationale))
     end
 
     # recursively walk preconditions to count true values for child ORs moving down the tree
     def calculate_or_counts_recursive (rationale, preconditions)
-      orCounts = {}
-      return orCounts unless preconditions && preconditions.length > 0
+      or_counts = {}
+      return or_counts unless preconditions && preconditions.length > 0
       preconditions.each do |precondition|
         if (precondition[:conjunction_code] == 'atLeastOneTrue' && !precondition[:negation])
           trueCount = 0
@@ -243,11 +250,11 @@ module UploadsHelper
               trueCount += 1 if rationale[key]
             end
           end
-          orCounts["precondition_#{precondition[:id]}"] = trueCount
+          or_counts["precondition_#{precondition[:id]}"] = trueCount
         end
-        orCounts = orCounts.merge calculate_or_counts_recursive(rationale, precondition[:preconditions])
+        or_counts = or_counts.merge calculate_or_counts_recursive(rationale, precondition[:preconditions])
       end
-      return orCounts
+      return or_counts
     end
 
     # walk through data criteria to account for specific occurrences within a UNION
@@ -256,7 +263,7 @@ module UploadsHelper
       measure[:hqmf_document][:data_criteria].each do |key,dc|
         if dc[:derivation_operator] == 'UNION' && (key.downcase.include?('union') || key.downcase.include?('satisfiesany'))
           dc[:children_criteria].each do |child|
-            orCounts[key] = (orCounts[key] || 0) + 1 if rationale[child] # Only add to orCount for logically true branches
+            or_counts[key] = (or_counts[key] || 0) + 1 if rationale[child] # Only add to orCount for logically true branches
           end
         end
       end
@@ -266,13 +273,15 @@ module UploadsHelper
     def updated_negated_good(updated_rationale, rationale, good_occurrence, parent_map)
       parent = parent_map[good_occurrence]
       while parent do
-        if (parent[:negation] && rationale[good_occurrence])
+        # byebug
+        # TODO: get rid of array in hash?
+        if (parent[0][:negation] && rationale[good_occurrence])
           updated_rationale[good_occurrence] = false
           return
         end
-        parent = parent_map["precondition_#{parent[:id]}"]
+        parent = parent_map["precondition_#{parent[0][:id]}"]
       end
-      updated_rationale
+      return updated_rationale
     end
 
     def build_parent_map(root, data_crit_hash)
@@ -280,31 +289,31 @@ module UploadsHelper
       return parent_map unless root
       if root[:preconditions] && root[:preconditions].length > 0
         root[:preconditions].each do |precondition|
-          parent_map["precondition_#{precondition[:id]}"] = (parent_map["precondition_#{precondition[:id]}"] || []).concat root
-          parent_map = parent_map.merge(build_parent_map(precondition)){|key, oldval, newval| oldval.concat newval}
+          parent_map["precondition_#{precondition[:id]}"] = (parent_map["precondition_#{precondition[:id]}"] || []).push root
+          parent_map = parent_map.merge(build_parent_map(precondition, data_crit_hash)){|key, oldval, newval| oldval.concat newval}
         end
       elsif root[:reference]
-        parent_map[root[:reference]] = (parent_map[root[:reference]] || []).concat root
-        parent_map = parent_map.merge(build_parent_map(data_crit_hash[root[:reference]])){|key, oldval, newval| oldval.concat newval}
+        parent_map[root[:reference]] = (parent_map[root[:reference]] || []).push root
+        parent_map = parent_map.merge(build_parent_map(data_crit_hash[root[:reference]], data_crit_hash)){|key, oldval, newval| oldval.concat newval}
       else
         if root[:temporal_references]
           root[:temporal_references].each do |temporal_reference|
             if temporal_reference[:reference] != 'MeasurePeriod'
-              parent_map[temporal_reference[:reference]] = (parent_map[temporal_reference[:reference]] || []).concat root
-              parent_map = parent_map.merge(build_parent_map(data_crit_hash[temporal_reference[:reference]])){|key, oldval, newval| oldval.concat newval}
+              parent_map[temporal_reference[:reference]] = (parent_map[temporal_reference[:reference]] || []).push root
+              parent_map = parent_map.merge(build_parent_map(data_crit_hash[temporal_reference[:reference]], data_crit_hash)){|key, oldval, newval| oldval.concat newval}
             end
           end
         end
         if root[:references] # ??? check for :references in db
           root[:references].each do |reference|
-            parent_map[reference[:reference]] = (parent_map[reference[:reference]] || []).concat root
-            parent_map = parent_map.merge(build_parent_map(data_crit_hash[reference[:reference]])){|key, oldval, newval| oldval.concat newval}
+            parent_map[reference[:reference]] = (parent_map[reference[:reference]] || []).push root
+            parent_map = parent_map.merge(build_parent_map(data_crit_hash[reference[:reference]], data_crit_hash)){|key, oldval, newval| oldval.concat newval}
           end
         end
         if root[:children_criteria]
           root[:children_criteria].each do |child|
-            parent_map[child] = (parent_map[child] || []).concat root
-            parent_map = parent_map.merge(build_parent_map(data_crit_hash[child])){|key, oldval, newval| oldval.concat newval}
+            parent_map[child] = (parent_map[child] || []).push root
+            parent_map = parent_map.merge(build_parent_map(data_crit_hash[child], data_crit_hash)){|key, oldval, newval| oldval.concat newval}
           end
         end
       end
@@ -319,8 +328,9 @@ module UploadsHelper
 
     def update_logic_tree_children(updated_rationale, rationale, code, parents, or_counts, parent_map, final_specifics)
       return updated_rationale unless parents
-      parents.each do |key, parent|
-        parent_key = parent[:id]? "precondition_#{parent[:id]}" : key || parent[:type]
+      parents.each do |parent|
+        # TODO: fix 'key'
+        parent_key = parent[:id]? "precondition_#{parent[:id]}" : 'key' || parent[:type]
         # we are negated if the parent is negated and the parent is a precondition.  If it's a data criteria, then negation is fine
         negated = parent[:negation] && parent[:id]
         # do not bubble up negated unless we have no final specifics.  If we have no final specifics then we may not have positive statements to bubble up.

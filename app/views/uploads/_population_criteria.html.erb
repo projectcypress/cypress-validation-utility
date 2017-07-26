@@ -5,6 +5,7 @@
         <div>
           <% title = population[:title] %>
           <% if (population[:type] == 'OBSERV') then title = 'Observations' end %>
+          <%# TODO: check specifics rationale for population? %>
           <span class="population-label <%= title %> rationale eval-<%= @rationale[population[:type]] %>"><b><%= title %></b><span class="sr-only sr-highlight-status"></span></span>
           <div class="pull-right">
             <i class="fa fa-lg fa-angle-down toggle-icon" aria-hidden="true"></i>

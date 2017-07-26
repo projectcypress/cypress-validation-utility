@@ -1,11 +1,12 @@
 <% unless expand_variable %>
-  <% @rat_ref = @rationale[reference] %>
-  <% if @rat_ref.is_a?(Hash) &&
-        (@specifics[@population_key] || @population_key == 'VAR')%>
-    <% @rat_ref = @rat_ref[:results].count > 0 %>
+  <% rat_ref = @rationale[reference] %>
+  <% if rat_ref.is_a?(Hash) &&
+        (@specifics[@population_key] || @population_key == 'VAR') %>
+    <% rat_ref = rat_ref[:results].count > 0 %>
     <% if @population_key != 'VAR' &&
-          should_switch_highlight?(reference, @population_key, @specifics, @rationale) %>
-      *<% @rat_ref = !@rat_ref %>
+          @updated_rationale[@population_key] &&
+          @updated_rationale[@population_key].key?(reference) %>
+      *<% rat_ref = @updated_rationale[@population_key][reference]  %>
     <% end %>
   <% end %>
   <span class="rationale eval-<%= @rat_ref %>">

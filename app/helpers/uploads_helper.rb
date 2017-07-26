@@ -111,4 +111,230 @@ module UploadsHelper
       root_criteria
     end
 
+    def specifics_rationale(measure, rationale, final_specifics)
+      updated_rationale = {}
+      or_counts = calculate_or_counts(measure, rationale)
+      measure[:population_ids].values.uniq.each do |id|
+        pop_map = measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }
+        population = pop_map.values[0]
+        code = population[:type]
+        specifics = final_specifics[code]
+        if specifics
+          updated_rationale[code] = {}
+          # get the referenced occurrences in the logic tree using original population code
+          data_crit_hash = measure[:hqmf_document][:data_criteria]
+          criteria = get_data_criteria_keys(population, data_crit_hash, code).uniq
+          criteria_results = check_criteria_for_rationale(final_specifics, criteria, rationale, data_crit_hash, code)
+          submeasure_code = pop_map.keys[0]# @population.get(code)?.code || code ???
+
+          # parent_map = build_parent_map(@measure.get('population_criteria')[submeasure_code])
+          parent_map = build_parent_map(population, data_crit_hash)
+
+          # check each bad occurrence and remove highlights marking true
+          criteria_results[:bad].each do |bad_criteria|
+            if[rationale[:bad_criteria]]
+              updated_rationale[code][bad_criteria] = false
+              # move up the logic tree to set AND/ORs to false based on the removal of the bad specific's true eval
+              updated_rationale = update_logic_tree(updated_rationale, rationale, code, bad_criteria, or_counts, parent_map, final_specifics)
+            end
+          end
+          # check the good specifics with a negated parent.  If there are multiple candidate specifics
+          # and one is good while the other is bad, the child of the negation will evaluate to true, we want it to
+          # evaluate to false since if there's a good negation then there's an occurrence for which it evaluated to false
+          criteria_results[:good].each do |good_criteria|
+            updated_rationale = updated_negated_good(updated_rationale[code], rationale, good_criteria, parent_map)
+          end
+
+        end
+      end
+      return updated_rationale
+    end
+
+
+    def get_data_criteria_keys(child, data_crit_hash, key=nil)
+      occurrences = []
+      return occurrences unless child
+      if child[:preconditions] && child[:preconditions].length > 0
+        child[:preconditions].each do |precondition|
+          occurrences = occurrences.concat get_data_criteria_keys(precondition, data_crit_hash)
+        end
+      elsif child[:reference]
+        occurrences = occurrences.concat get_data_criteria_keys(data_crit_hash[child[:reference]], data_crit_hash, child[:reference])
+      else
+        if child[:type]=='derived' && child[:children_criteria]
+          # add derived to DC list if it's a satisfies all/any or a variable
+          occurrences.push key if key && (child[:definition]=='satisfies_all' || child[:definition]=='satisfies_any' || child[:variable])
+          child[:children_criteria].each do |data_criteria_key|
+            data_criteria = data_crit_hash[data_criteria_key]
+            occurrences = occurrences.concat get_data_criteria_keys(data_criteria, data_crit_hash, data_criteria_key)
+          end
+        else
+          occurrences.push key if key
+        end
+        if (child[:temporal_references] && child[:temporal_references].length > 0)
+          child[:temporal_references].each do |temporal_reference|
+            data_criteria = data_crit_hash[temporal_reference[:reference]]
+            occurrences = occurrences.concat get_data_criteria_keys(data_criteria, data_crit_hash, temporal_reference[:reference])
+          end
+        end
+
+        if (child[:references] && child[:references].length>0)
+          # for type, reference of child.references ???
+          child[:references].each do |reference|
+            data_criteria = data_crit_hash[reference[:reference]]
+            occurrences = occurrences.concat get_data_criteria_keys(data_criteria, data_crit_hash, reference[:reference])
+          end
+        end
+      end
+      return occurrences
+    end
+
+
+    def check_criteria_for_rationale(final_specifics, criteria, rationale, data_crit_hash, pop_key)
+      results = {bad: [], good: []}
+      criteria.each do |criterion|
+        criterion_rationale = rationale[criterion]
+
+        # handle the case where the rationale does not contain a criteria
+        if !criterion_rationale
+          puts 'WARNING: data criteria #{criterion} is not contained in the rationale'
+          next
+        end
+
+        if criterion_rationale == false || !criterion_rationale[:specifics] || criterion_rationale[:specifics].length == 0
+          results.good.push(criterion)
+        else
+          if should_switch_highlight(criterion, pop_key, final_specifics, rationale)
+            results.bad.push(criterion)
+          else
+            results.good.push(criterion)
+          end
+        end
+      end
+      return results
+    end
+
+    # Or counts are used to know when to turn an OR from green to red.  Once we negate all the true ors, we can switch to red
+    def calculate_or_counts (measure, rationale)
+      orCounts = {}
+      measure[:population_ids].values.uniq.each do |id|
+        pop_map = measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }
+        population = pop_map.values[0]
+
+        orCounts = orCounts.merge(calculate_or_counts_recursive(rationale, population[:preconditions]))
+      end
+      orCounts.merge(calculate_data_criteria_or_counts(measure, rationale))
+    end
+
+    # recursively walk preconditions to count true values for child ORs moving down the tree
+    def calculate_or_counts_recursive (rationale, preconditions)
+      orCounts = {}
+      return orCounts unless preconditions && preconditions.length > 0
+      preconditions.each do |precondition|
+        if (precondition[:conjunction_code] == 'atLeastOneTrue' && !precondition[:negation])
+          trueCount = 0
+          if precondition[:preconditions] && precondition[:preconditions].length > 0
+            precondition[:preconditions].each do |child|
+              if (child[:preconditions])
+                key = "precondition_#{child[:id]}"
+              else
+                key = child[:reference]
+              end
+              trueCount += 1 if rationale[key]
+            end
+          end
+          orCounts["precondition_#{precondition[:id]}"] = trueCount
+        end
+        orCounts = orCounts.merge calculate_or_counts_recursive(rationale, precondition[:preconditions])
+      end
+      return orCounts
+    end
+
+    # walk through data criteria to account for specific occurrences within a UNION
+    def calculate_data_criteria_or_counts(measure, rationale)
+      or_counts = {}
+      measure[:hqmf_document][:data_criteria].each do |key,dc|
+        if dc[:derivation_operator] == 'UNION' && (key.downcase.include?('union') || key.downcase.include?('satisfiesany'))
+          dc[:children_criteria].each do |child|
+            orCounts[key] = (orCounts[key] || 0) + 1 if rationale[child] # Only add to orCount for logically true branches
+          end
+        end
+      end
+      or_counts
+    end
+
+    def updated_negated_good(updated_rationale, rationale, good_occurrence, parent_map)
+      parent = parent_map[good_occurrence]
+      while parent do
+        if (parent[:negation] && rationale[good_occurrence])
+          updated_rationale[good_occurrence] = false
+          return
+        end
+        parent = parent_map["precondition_#{parent[:id]}"]
+      end
+      updated_rationale
+    end
+
+    def build_parent_map(root, data_crit_hash)
+      parent_map = {}
+      return parent_map unless root
+      if root[:preconditions] && root[:preconditions].length > 0
+        root[:preconditions].each do |precondition|
+          parent_map["precondition_#{precondition[:id]}"] = (parent_map["precondition_#{precondition[:id]}"] || []).concat root
+          parent_map = parent_map.merge(build_parent_map(precondition)){|key, oldval, newval| oldval.concat newval}
+        end
+      elsif root[:reference]
+        parent_map[root[:reference]] = (parent_map[root[:reference]] || []).concat root
+        parent_map = parent_map.merge(build_parent_map(data_crit_hash[root[:reference]])){|key, oldval, newval| oldval.concat newval}
+      else
+        if root[:temporal_references]
+          root[:temporal_references].each do |temporal_reference|
+            if temporal_reference[:reference] != 'MeasurePeriod'
+              parent_map[temporal_reference[:reference]] = (parent_map[temporal_reference[:reference]] || []).concat root
+              parent_map = parent_map.merge(build_parent_map(data_crit_hash[temporal_reference[:reference]])){|key, oldval, newval| oldval.concat newval}
+            end
+          end
+        end
+        if root[:references] # ??? check for :references in db
+          root[:references].each do |reference|
+            parent_map[reference[:reference]] = (parent_map[reference[:reference]] || []).concat root
+            parent_map = parent_map.merge(build_parent_map(data_crit_hash[reference[:reference]])){|key, oldval, newval| oldval.concat newval}
+          end
+        end
+        if root[:children_criteria]
+          root[:children_criteria].each do |child|
+            parent_map[child] = (parent_map[child] || []).concat root
+            parent_map = parent_map.merge(build_parent_map(data_crit_hash[child])){|key, oldval, newval| oldval.concat newval}
+          end
+        end
+      end
+      parent_map
+    end
+
+    # from each leaf walk up the tree updating the logical statements appropriately to false
+    def update_logic_tree(updated_rationale, rationale, code, bad_occurrence, or_counts, parent_map, final_specifics)
+      parents = parent_map[bad_occurrence]
+      return update_logic_tree_children(updated_rationale, rationale, code, parents, or_counts, parent_map, final_specifics)
+    end
+
+    def update_logic_tree_children(updated_rationale, rationale, code, parents, or_counts, parent_map, final_specifics)
+      return updated_rationale unless parents
+      parents.each do |key, parent|
+        parent_key = parent[:id]? "precondition_#{parent[:id]}" : key || parent[:type]
+        # we are negated if the parent is negated and the parent is a precondition.  If it's a data criteria, then negation is fine
+        negated = parent[:negation] && parent[:id]
+        # do not bubble up negated unless we have no final specifics.  If we have no final specifics then we may not have positive statements to bubble up.
+        if updated_rationale[code][parent_key] != false && (!negated || final_specifics[code].empty?)
+          # if this is an OR then remove a true increment since it's a bad true
+          or_counts[parent_key]= or_counts[parent_key]-1 if or_counts[parent_key]
+          # if we're either an AND or we're an OR and the count is zero then switch to false and move up the tree
+          if ((!or_counts[parent_key] || or_counts[parent_key] == 0) && (!!rationale[parent_key] == true || !defined?(rationale[parent_key]))) # ??? undefinied???
+            updated_rationale[code][parent_key] = false if rationale[parent_key]
+            updated_rationale = update_logic_tree_children(updated_rationale, rationale, code, parent_map[parent_key], or_counts, parent_map, final_specifics)
+          end
+        end
+      end
+      return updated_rationale
+    end
+
 end

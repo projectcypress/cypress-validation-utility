@@ -144,7 +144,7 @@ class QrdaFile
     when "cat1_r4"
       cat1_validator
       HealthDataStandards::Validate::Cat1R4
-    when "cat3_r1", "cat3_r2"
+    when "cat3_r1", "cat3_r21"
       @validators.concat CAT3_VALIDATORS
       @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
       if program_type == "ep" && program_year == "2016"

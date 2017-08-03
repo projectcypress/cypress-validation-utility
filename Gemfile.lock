@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/go-cda-tools.git
-  revision: 609ede81dec70c6e5106af766548bfb3e5bec3ec
+  revision: ed52f19b29473c9f8e95dc41e91c33ba2623bc20
   branch: master
   specs:
     go-cda-tools (0.0.0)

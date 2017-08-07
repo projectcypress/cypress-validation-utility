@@ -19,6 +19,7 @@ module CypressValidationUtility
                       'Physical Exam' => 'Physical Exam',
                       'Procedure' => 'Procedure',
                       'Risk Category/Assessment' => 'Risk Category Assessment',
+                      'Assessment' => 'Assessment',
                       'Substance' => 'Substance',
                       'Transfer of Care' => 'Transfer'}
       def initialize(measure_ids, bundle_id)

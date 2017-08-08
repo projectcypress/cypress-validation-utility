@@ -7,3 +7,5 @@ public/assets/
 .DS_Store
 /bundles
 test/fixtures/measures
+coverage
+coverage/

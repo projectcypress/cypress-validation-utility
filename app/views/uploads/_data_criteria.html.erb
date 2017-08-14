@@ -1,14 +1,6 @@
 <% unless expand_variable %>
-  <% rat_ref = @rationale[reference] %>
-  <% if rat_ref.is_a?(Hash) &&
-        (@specifics[@population_key] || @population_key == 'VAR') %>
-    <% rat_ref = rat_ref[:results].count > 0 %>
-    <% if @population_key != 'VAR' &&
-          @updated_rationale[@population_key] &&
-          @updated_rationale[@population_key].key?(reference) %>
-      *<% rat_ref = @updated_rationale[@population_key][reference]  %>
-    <% end %>
-  <% end %>
+  <% @rat_ref = final_rationale_ref(reference)%>
+  <% if should_star?(reference) %>*<% end %>
   <span class="rationale eval-<%= @rat_ref %>">
 <% end %>
 
@@ -47,7 +39,7 @@
             <% end %>
           <% else %>
             <li>
-              <span class="conjunction rationale-target"><%= (data_criteria[:derivation_operator] == 'XPRODUCT')? 'AND':'' %>: <span class="sr-only sr-highlight-status"></span></span>
+              <span class="conjunction rationale-target rationale eval-<%= @rat_ref %>"><%= (data_criteria[:derivation_operator] == 'XPRODUCT')? 'AND':'' %>: <span class="sr-only sr-highlight-status"></span></span>
           <% end %>
             <%= render partial: 'data_criteria', locals: {reference: child, expand_variable: false, measure:measure, tag: "span"} %>
           </li>
@@ -55,7 +47,9 @@
         <% if data_criteria[:temporal_references] %>
           <% data_criteria[:temporal_references].each do |temp_ref| %>
             <li>
-              <span class="rationale-target">
+              <% temp_rat_ref = final_rationale_ref(reference)%>
+              <% if should_star?(reference) %>*<% end %>
+              <span class="rationale-target rationale eval-<%= temp_rat_ref %>">
                 <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure:measure, tag: "span"} %>
               </span>
             </li>

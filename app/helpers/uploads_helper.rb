@@ -192,8 +192,8 @@ module UploadsHelper
         criterion_rationale = rationale[criterion]
 
         # handle the case where the rationale does not contain a criteria
-        if !criterion_rationale
-          puts 'WARNING: data criteria #{criterion} is not contained in the rationale'
+        if (criterion_rationale==nil)
+          puts 'WARNING: data criteria '+criterion+' is not contained in the rationale'
           next
         end
 
@@ -253,7 +253,7 @@ module UploadsHelper
     def calculate_data_criteria_or_counts(measure, rationale)
       or_counts = {}
       measure[:hqmf_document][:data_criteria].each do |key,dc|
-        if dc[:derivation_operator] == 'UNION' && (key.downcase.include?('union') || key.downcase.include?('satisfiesany'))
+        if dc[:derivation_operator] == 'UNION' && (key.include?('UNION') || key.include?('satisfiesAny'))
           dc[:children_criteria].each do |child|
             or_counts[key] = (or_counts[key] || 0) + 1 if rationale[child] # Only add to orCount for logically true branches
           end
@@ -337,6 +337,28 @@ module UploadsHelper
         end
       end
       return updated_rationale
+    end
+
+    def final_rationale_ref(reference)
+      rat_ref = @rationale[reference]
+      if rat_ref.is_a?(Hash) &&
+            (@specifics[@population_key] || @population_key == 'VAR')
+        rat_ref = rat_ref[:results].count > 0
+        if @population_key != 'VAR' &&
+              @updated_rationale[@population_key] &&
+              @updated_rationale[@population_key].key?(reference)
+          rat_ref = @updated_rationale[@population_key][reference]
+        end
+      end
+      return rat_ref
+    end
+
+    def should_star?(reference)
+      return(@rationale[reference].is_a?(Hash) &&
+            @specifics[@population_key] &&
+            @population_key != 'VAR' &&
+            @updated_rationale[@population_key] &&
+            @updated_rationale[@population_key].key?(reference))
     end
 
 end

@@ -118,8 +118,8 @@
 
     <% if @files[i].doc_type.include? "cat1" %>
       <div class="tab-pane" id="test_highlighting_<%= i %>">
-        <% @patient_cache_all = QME::PatientCache.where({'value.patient_id'=> @files[i].record._id}) %>
-        <% if @patient_cache_all.first %>
+        <% @patient_cache_all = QME::PatientCache.where({'value.patient_id'=> @files[i].record._id}) unless @files[i].record == nil %>
+        <% if @patient_cache_all && @patient_cache_all.first %>
           <%= render partial: 'measure_detail', locals: {measures: @measures} %>
         <% else %>
           <h3>Measure Breakdown Unavailable</h3>

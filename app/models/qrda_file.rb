@@ -20,6 +20,7 @@ class QrdaFile
   field :content_string, type: String
   field :filename, type: String
   field :validation_errors, type: Hash
+  field :state, type: Symbol, default: :pending
 
   def content
     return @content if @content

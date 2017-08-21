@@ -1,7 +1,7 @@
-<% if !@upload.completed? %>
-  <%= render(partial: 'not_ready') %>
-<% elsif @upload.state == :failed %>
+<% if @upload.state == :failed %>
   <%= render(partial: 'failed') %>
+<% elsif !@upload_complete %>
+  <%= render(partial: 'not_ready') %>
 <% else %>
 
 <div id="wrapper">
@@ -41,7 +41,7 @@
 <% @measures = @bundle ? @bundle.measures.in(hqmf_id: @files[i].get_measure_ids) : [] %>
 
 <div id="file_<%= i %>" class="file-summary">
-  <ul id="error_report_toc" class="nav nav-tabs">
+  <ul id="error_report_toc" class="nav nav-tabs nav-justified fix-nav-height">
     <li class="active"><a href="#test_summary_<%= i %>" data-toggle="tab">Summary </a></li>
     <% if @files[i].doc_type.include? "cat1" %>
       <li class=""><a href="#test_highlighting_<%= i %>" data-toggle="tab">Measure Breakdown </a></li>
@@ -128,7 +128,6 @@
         <% end %>
       </div>
     <% end %>
-
 
     <% error_map, error_attributes = match_errors(@files[i]) %>
 

@@ -1,62 +1,43 @@
 require 'cypress/cat_3_calculator'
 
 class FileProcessJob < ActiveJob::Base
-  def perform(upload_id, _options = {})
+  def perform(upload_id, filename, _options = {})
     upload = Upload.find(upload_id)
 
-    upload.state = :processing
-    upload.save!(validate: false)
+    data = upload.artifact.get_file_contents(filename)
 
-    if upload.artifact.archive?
-      upload.artifact.each_file do |filename, data|
-        process_single_file(filename, data, upload)
-      end
+    curr_file = upload.qrda_files.build(filename: filename,
+                                        content_string: data,
+                                        doc_type: upload.file_type,
+                                        program: upload.program,
+                                        program_year: upload.year)
 
-      if upload.qrda_files.count == 0
-        upload.fail('Uploaded Zip file contained no XML files')
-        return
-      end
-    else
-      content_string = upload.artifact.file.read
-      process_single_file('', content_string, upload)
-    end
+    curr_file.state = :processing
+    curr_file.process
+    curr_file.save(validate: false)
 
     if upload.can_calculate
-      measure_ids = upload.qrda_files.collect(&:get_measure_ids).flatten.uniq
+      measure_ids = curr_file.get_measure_ids
 
       @bundle = BUNDLES[upload.year]
       @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+      calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, upload.correlation_id)
 
-      calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle)
-
-      upload.correlation_id = calculator.correlation_id
-      upload.save!(validate: false)
-
-      upload.qrda_files.each do |qrda|
-        qrda.record = calculator.import_cat1_file(qrda.content)
-        qrda.save
-      end
+      curr_file.record = calculator.import_cat1_file(curr_file.content)
+      curr_file.save
 
       @calculated_results = calculator.generate_cat3
     end
 
-    upload.complete
+    curr_file.state = :complete
+    curr_file.save(validate: false)
+
   rescue Nokogiri::XML::SyntaxError => e
-    upload.fail(e)
+    upload.fail(e, curr_file)
   rescue => e
-    upload.fail(e.message)
+    upload.fail(e.message, curr_file)
     ERROR_LOG.error e.message
     ERROR_LOG.error e.backtrace.join("\n")
   end
 
-  def process_single_file(uploaded_filename, content_string, parent_upload)
-    curr_file = parent_upload.qrda_files.build(filename: uploaded_filename,
-                                               content_string: content_string,
-                                               doc_type: parent_upload.file_type,
-                                               program: parent_upload.program,
-                                               program_year: parent_upload.year)
-
-    curr_file.process
-    curr_file.save(validate: false)
-  end
 end

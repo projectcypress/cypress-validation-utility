@@ -6,3 +6,4 @@ tmp/
 public/assets/
 .DS_Store
 /bundles
+test/fixtures/measures

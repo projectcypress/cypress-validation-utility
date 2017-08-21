@@ -4,8 +4,8 @@ module Cypress
   class Cat3Calculator
     attr_accessor :correlation_id, :measure, :bundle, :mre, :qr
 
-    def initialize(measure_ids, bundle)
-      @correlation_id = BSON::ObjectId.new
+    def initialize(measure_ids, bundle, correlation_id)
+      @correlation_id = correlation_id
       @measures = bundle.measures.in(hqmf_id: measure_ids)
       @bundle = bundle
     end

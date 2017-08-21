@@ -5,8 +5,9 @@ class Upload
   field :file_type, type: String
   field :program, type: String
   field :year, type: String
-  field :correlation_id, type: String
-  field :state, type: Symbol, default: :pending
+  field :file_count, type: Integer
+  field :state, type: Symbol, default: :uploaded
+  field :correlation_id, type: String, default: BSON::ObjectId.new
   field :status_message, type: String
 
   has_one :artifact, :autosave => true, :dependent => :destroy
@@ -16,18 +17,9 @@ class Upload
     %w(cat1_r2 cat1_r3 cat1_r31 cat1_r4).include?(file_type)
   end
 
-  def completed?
-    state == :complete || state == :failed
-  end
-
-  def complete(message = '')
-    self.state = :complete
-    self.status_message = message
-    save!(validate: false)
-  end
-
-  def fail(message = '')
+  def fail(message = '', qrda_file = nil)
     self.state = :failed
+    message = message.to_s + " for file '#{qrda_file.filename}'" if qrda_file
     self.status_message = message
     save!(validate: false)
   end

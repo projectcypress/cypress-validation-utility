@@ -1,3 +1,17 @@
+@media(min-width: 768px) {
+  .fix-nav-height {
+      display: flex;
+  }
+  .fix-nav-height li {
+      display: flex !important;
+      flex: 1;
+  }
+
+  .fix-nav-height li  a {
+      flex: 1;
+  }
+}
+
 .navbar-toggle {
   color: $navbar-inverse-link-color;
   margin: 0;

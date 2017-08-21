@@ -43,7 +43,6 @@ module UploadsHelper
           if elem
 
             unless elem['error_id']
-
               elem['error_id']= uuid.generate.to_s
             end
             error_map[location] = elem['error_id']

@@ -18,30 +18,6 @@ class Artifact
     MIME_FILE_TYPES[content_type] == :zip || File.extname(file.uploaded_filename) == '.zip'
   end
 
-  def file_names
-    file_names = []
-    if archive?
-      Zip::ZipFile.open(file.path) do |zipfile|
-        file_names = zipfile.entries.collect(&:name)
-      end
-    else
-      file_names = [file.uploaded_filename]
-    end
-    file_names
-  end
-
-  def file_count
-    count = 0
-    if archive?
-      Zip::ZipFile.open(file.path) do |zipfile|
-        count = zipfile.entries.count
-      end
-    else
-      count = 1
-    end
-    count
-  end
-
   def get_file(name)
     if archive?
       return get_archived_file(name)
@@ -62,12 +38,23 @@ class Artifact
     if archive?
       Zip::ZipFile.open(file.path) do |zipfile|
         zipfile.glob('*.xml', File::FNM_CASEFOLD | ::File::FNM_PATHNAME | ::File::FNM_DOTMATCH).each do |entry|
-          data = zipfile.read(entry.name)
-          yield entry.name, data
+          yield entry.name
         end
       end
     else
-      yield file.uploaded_filename, file.read
+      yield file.uploaded_filename
+    end
+  end
+
+  def get_file_contents(filename)
+    if archive?
+      Zip::ZipFile.open(file.path) do |zipfile|
+        zipfile.read(filename)
+      end
+    elsif file.uploaded_filename.eql? filename
+      file.read
+    else
+      nil
     end
   end
 

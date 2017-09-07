@@ -107,6 +107,9 @@ module UploadsHelper
       # byebug
       updated_rationale = {}
       or_counts = calculate_or_counts(measure, rationale)
+      data_crit_hash = measure[:hqmf_document][:data_criteria]
+      keyed_data_crit_hash = create_keyed_hash(data_crit_hash)
+
       measure[:population_ids].values.uniq.each do |id|
         pop_map = measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }
         population = pop_map.values[0]
@@ -115,13 +118,12 @@ module UploadsHelper
         if specifics
           updated_rationale[code] = {}
           # get the referenced occurrences in the logic tree using original population code
-          data_crit_hash = measure[:hqmf_document][:data_criteria]
           criteria = get_data_criteria_keys(population, data_crit_hash, code).uniq
           criteria_results = check_criteria_for_rationale(final_specifics, criteria, rationale, data_crit_hash, code)
           submeasure_code = pop_map.keys[0]# @population.get(code)?.code || code ???
 
           # parent_map = build_parent_map(@measure.get('population_criteria')[submeasure_code])
-          parent_map = build_parent_map(population, data_crit_hash)
+          parent_map = build_parent_map(population, keyed_data_crit_hash)
 
           # check each bad occurrence and remove highlights marking true
           criteria_results[:bad].each do |bad_criteria|
@@ -142,6 +144,15 @@ module UploadsHelper
       end
       # byebug
       return updated_rationale
+    end
+
+    def create_keyed_hash(input_hash)
+      output = {}
+      input_hash.each do |key,val|
+        output[key]=val
+        output[key][:key]=key
+      end
+      return output
     end
 
 
@@ -322,7 +333,7 @@ module UploadsHelper
       return updated_rationale unless parents
       parents.each do |parent|
         # TODO: fix 'key'
-        parent_key = parent[:id]? "precondition_#{parent[:id]}" : 'key' || parent[:type]
+        parent_key = parent[:id]? "precondition_#{parent[:id]}" : parent[:key] || parent[:type]
         # we are negated if the parent is negated and the parent is a precondition.  If it's a data criteria, then negation is fine
         negated = parent[:negation] && parent[:id]
         # do not bubble up negated unless we have no final specifics.  If we have no final specifics then we may not have positive statements to bubble up.
@@ -330,7 +341,7 @@ module UploadsHelper
           # if this is an OR then remove a true increment since it's a bad true
           or_counts[parent_key]= or_counts[parent_key]-1 if or_counts[parent_key]
           # if we're either an AND or we're an OR and the count is zero then switch to false and move up the tree
-          if ((!or_counts[parent_key] || or_counts[parent_key] == 0) && (!!rationale[parent_key] == true || !defined?(rationale[parent_key]))) # ??? undefinied???
+          if ((!or_counts[parent_key] || or_counts[parent_key] == 0) && (!!rationale[parent_key] == true || !rationale.key?(parent_key))) # ??? undefinied???
             updated_rationale[code][parent_key] = false if rationale[parent_key]
             updated_rationale = update_logic_tree_children(updated_rationale, rationale, code, parent_map[parent_key], or_counts, parent_map, final_specifics)
           end
@@ -340,10 +351,11 @@ module UploadsHelper
     end
 
     def final_rationale_ref(reference)
-      rat_ref = @rationale[reference]
-      if rat_ref.is_a?(Hash) &&
-            (@specifics[@population_key] || @population_key == 'VAR')
-        rat_ref = rat_ref[:results].count > 0
+      return nil if(@population_key == "OBSERV")
+      rat_ref = nil
+      if (@specifics[@population_key] || @population_key == 'VAR')
+        rat_ref = @rationale[reference]
+        rat_ref = rat_ref[:results].count > 0 if rat_ref.is_a?(Hash)
         if @population_key != 'VAR' &&
               @updated_rationale[@population_key] &&
               @updated_rationale[@population_key].key?(reference)
@@ -354,8 +366,7 @@ module UploadsHelper
     end
 
     def should_star?(reference)
-      return(@rationale[reference].is_a?(Hash) &&
-            @specifics[@population_key] &&
+      return(@specifics[@population_key] &&
             @population_key != 'VAR' &&
             @updated_rationale[@population_key] &&
             @updated_rationale[@population_key].key?(reference))

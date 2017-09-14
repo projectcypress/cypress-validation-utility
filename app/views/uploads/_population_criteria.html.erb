@@ -8,7 +8,6 @@
           <%# TODO: check specifics rationale for population? %>
           <% rat_ref = final_rationale_ref(population[:type])%>
           <span class="population-label <%= title %> rationale eval-<%= rat_ref %>">
-            <% if should_star?(population[:type]) %>*<% end %>
             <b><%= title %></b><span class="sr-only sr-highlight-status"></span>
           </span>
           <div class="pull-right">

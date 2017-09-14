@@ -22,7 +22,6 @@
           <li>
             <% rat_ref = final_rationale_ref(key)%>
             <span class="<%= dc %> rationale-target rationale eval-<%= rat_ref %>">
-              <% if should_star?(key) %>*<% end %>
               <b><%= dc[:description] %> = </b>
               <span class="sr-only sr-highlight-status"></span>
             </span>

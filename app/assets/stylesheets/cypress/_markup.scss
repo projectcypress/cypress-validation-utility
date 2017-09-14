@@ -77,10 +77,27 @@ $xml-dark-blue:         #00008B !default;
   .eval-true {
     background-color: $state-success-bg;
     color: $state-success-text;
+    &:before {
+      content: "\f00c";//check
+      font-family: FontAwesome;
+    }
   }
 
   .eval-false {
     background-color: $state-danger-bg;
     color: $state-danger-text;
+    &:before {
+      content: "\f00d";//times
+      font-family: FontAwesome;
+    }
   }
+  .eval-bad-specifics {
+    background-color: $state-danger-bg;
+    color: $state-danger-text;
+    &:before {
+      content: "\f069";//asterisk
+      font-family: FontAwesome;
+    }
+  }
+
 }

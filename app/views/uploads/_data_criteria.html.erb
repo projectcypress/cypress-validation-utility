@@ -10,7 +10,6 @@
   <% if data_criteria[:subset_operators] && data_criteria[:subset_operators].length>0 %>
     <% data_criteria[:subset_operators].each do |so| %>
       <span class="rationale eval-<%= @rat_ref %>">
-        <% if should_star?(reference) %>*<% end %>
         <%= render partial: 'subset_operator', locals: {subset_operator:so, tag: "span"} %>
       </span>
     <% end %>
@@ -20,7 +19,6 @@
   <% if data_criteria[:type] == 'derived' && (!data_criteria[:variable] || expand_variable) %>
     <% if data_criteria[:definition] == 'satisfies_all' ||  data_criteria[:definition] == 'satisfies_any' %>
       <span class="rationale eval-<%= @rat_ref %>">
-        <% if should_star?(reference) %>*<% end %>
         <%= render partial: 'satisfies', locals: {reference: reference, measure:measure, tag: "span"} %>
       </span>
     <% elsif data_criteria[:children_criteria] %>
@@ -28,7 +26,6 @@
             data_criteria[:derivation_operator] == 'UNION' &&
             !expand_variable %>
         <ul><li><span class="set-op rationale-target rationale eval-<%= @rat_ref %>">
-          <% if should_star?(reference) %>*<% end %>
           <%= data_criteria[:derivation_operator] %> of:
         </span></li>
       <% end %>
@@ -43,7 +40,6 @@
           <% else %>
             <li>
               <span class="conjunction rationale-target rationale eval-<%= @rat_ref %>">
-                <% if should_star?(reference) %>*<% end %>
                 <%= (data_criteria[:derivation_operator] == 'XPRODUCT')? 'AND':'' %>: <span class="sr-only sr-highlight-status"></span>
               </span>
           <% end %>
@@ -55,7 +51,6 @@
             <li>
               <% temp_rat_ref = final_rationale_ref(reference)%>
               <span class="rationale-target rationale eval-<%= temp_rat_ref %>">
-                <% if should_star?(reference) %>*<% end %>
                 <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure:measure, tag: "span"} %>
               </span>
             </li>
@@ -70,7 +65,6 @@
     <% end %>
   <% else %>
     <span class="rationale eval-<%= @rat_ref %>">
-      <% if should_star?(reference) %>*<% end %>
       <span class="criteria-title">
         <% if data_criteria[:specific_occurrence] && !(data_criteria[:description].include? "Occurrence") %>
           Occurrence <%= data_criteria[:specific_occurrence] %>:
@@ -114,7 +108,6 @@
         <ul class="multi-statement">
           <% data_criteria[:temporal_references].each do |temp_ref| %>
             <span class="rationale eval-<%= @rat_ref %>">
-              <% if should_star?(reference) %>*<% end %>
               <li><%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %></li>
             </span>
           <% end %>
@@ -122,7 +115,6 @@
       <% else %>
         <% data_criteria[:temporal_references].each do |temp_ref| %>
           <span class="rationale eval-<%= @rat_ref %>">
-            <% if should_star?(reference) %>*<% end %>
             <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
           </span>
         <% end %>

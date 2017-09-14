@@ -362,8 +362,24 @@ module UploadsHelper
           rat_ref = @updated_rationale[@population_key][reference]
         end
       end
+      
+      return 'bad-specifics' if should_star?(reference)
       return rat_ref
     end
+
+    # def logic_symbol(reference, final_rationale)
+    #   return '' if(final_rationale==nil)
+    #   if( @specifics[@population_key] &&
+    #       @population_key != 'VAR' &&
+    #       @updated_rationale[@population_key] &&
+    #       @updated_rationale[@population_key].key?(reference))
+    #       return '*'
+    #     elsif(final_rationale)
+    #       return '+'
+    #     else
+    #       return 'x'
+    #   end
+    # end
 
     def should_star?(reference)
       return(@specifics[@population_key] &&

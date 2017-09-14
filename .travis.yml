@@ -31,7 +31,7 @@ before_install:
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
-  - npm install eslint
+  - npm install -g eslint
   - cp ./.travis/mongoid.yml ./config/mongoid.yml
 script:
   - bundle exec brakeman -qAzw1

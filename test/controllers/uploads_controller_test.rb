@@ -56,15 +56,29 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload zip file' do
+    skip # Until Rob Clark's PR fixing zips gets merged in, skip this test because it takes 7+ minutes to run
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/2_qrdas.zip'), 'application/zip')
 
     post 'create', file: file, year: '2016', file_type: 'cat3_r1', program: 'none'
 
     assert_response :redirect
-    get 'show', id: redirect_to_url.split('/')[-1]
+    test_id = redirect_to_url.split('/')[-1]
+
+    get 'show', id: test_id
 
     # replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')
+
+    total_wait_time = 0
+    while response_body.include?('Your file is being processed.') && total_wait_time < 300
+      total_wait_time += 10
+      sleep(10)
+      get 'show', id: test_id
+      # replace all whitespace with single spaces for validation
+      response_body = @response.body.gsub(/\s+/, ' ')
+    end
+
+    puts "Total wait time: #{total_wait_time}"
 
     assert(response_body.include?('No errors found'), 'Response for zip file does not include "No errors found"')
   end

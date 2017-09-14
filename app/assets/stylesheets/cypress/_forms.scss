@@ -13,21 +13,24 @@ fieldset {
   margin: 1em auto;
 }
 
-.form legend.control-label {
-  font-size: 1.2em;
-  font-weight: 700;
-  border-bottom: none;
-  margin-bottom: 0;
-}
+.form {
 
-.form div.program-type {
-  font-size: 1em;
-  font-weight: 700;
-  border-bottom: none;
-  margin-bottom: 0;
-}
+  .control-label {
+    font-size: 1.2em;
+    font-weight: 700;
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
 
-.form hr {
-  margin-top:-1em;
-  margin-bottom:-1em;
+  .program-type {
+    font-size: 1em;
+    font-weight: 700;
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin-top: -1em;
+    margin-bottom: -1em;
+  }
 }

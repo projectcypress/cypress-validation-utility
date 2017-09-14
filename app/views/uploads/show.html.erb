@@ -38,7 +38,7 @@
 <div id="all-files" <%= (@files.count > 1 ? 'class="col-xs-9"' : 'style="width:100%"').html_safe %> >
 <% for i in 0...@files.count %>
 
-<% @measures = @bundle ? @bundle.measures.in(hqmf_id: @files[i].get_measure_ids) : [] %>
+<% @measures = @bundle ? @bundle.measures.in(hqmf_id: @files[i].measure_ids_from_file) : [] %>
 
 <div id="file_<%= i %>" class="file-summary">
   <ul id="error_report_toc" class="nav nav-tabs nav-justified fix-nav-height">

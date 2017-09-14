@@ -20,7 +20,9 @@ linters:
 
   IdSelector:
     severity: error
-    exclude: 'app/assets/stylesheets/_globals.scss'
+    exclude:
+      - 'app/assets/stylesheets/_globals.scss'
+      - 'app/assets/stylesheets/cypress/_utilities.scss'
 
   NestingDepth:
     severity: error

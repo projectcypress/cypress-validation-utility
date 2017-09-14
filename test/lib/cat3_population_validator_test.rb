@@ -5,11 +5,11 @@ class Cat3PopulationValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = CypressValidationUtility::Validate::Cat3PopulationValidator.instance
 
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/good_cat3.xml"), "text/xml")
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/good_cat3.xml'), 'text/xml')
     @document = get_document(file)
   end
 
-  test 'Should return error for document with bad data' do 
+  test 'Should return error for document with bad data' do
     numer_greater_than_denom(@document)
 
     errors = @validator.validate(@document)

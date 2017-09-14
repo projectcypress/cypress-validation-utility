@@ -16,18 +16,7 @@ class FileProcessJob < ActiveJob::Base
     curr_file.process
     curr_file.save(validate: false)
 
-    if upload.can_calculate
-      measure_ids = curr_file.get_measure_ids
-
-      @bundle = BUNDLES[upload.year]
-      @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
-      calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, upload.correlation_id)
-
-      curr_file.record = calculator.import_cat1_file(curr_file.content)
-      curr_file.save
-
-      @calculated_results = calculator.generate_cat3
-    end
+    curr_file.record = calculate_upload(upload, curr_file) if upload.can_calculate
 
     curr_file.state = :complete
     curr_file.save(validate: false)
@@ -40,4 +29,17 @@ class FileProcessJob < ActiveJob::Base
     ERROR_LOG.error e.backtrace.join("\n")
   end
 
+  def calculate_upload(upload, curr_file)
+    measure_ids = curr_file.get_measure_ids
+
+    @bundle = BUNDLES[upload.year]
+    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
+    calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, upload.correlation_id)
+
+    rec = calculator.import_cat1_file(curr_file.content)
+
+    @calculated_results = calculator.generate_cat3
+
+    rec
+  end
 end

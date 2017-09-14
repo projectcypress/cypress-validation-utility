@@ -1,16 +1,15 @@
 require File.expand_path('../boot', __FILE__)
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
+require 'active_model/railtie'
 # require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "sprockets/railtie"
-require "rails/test_unit/railtie"
-require "logger"
-
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
+require 'sprockets/railtie'
+require 'rails/test_unit/railtie'
+require 'logger'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -30,12 +29,11 @@ module CypressValidationUtilityRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-
-    Mongoid.load!("config/mongoid.yml")
+    Mongoid.load!('config/mongoid.yml')
 
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
     config.lograge.enabled = true
   end

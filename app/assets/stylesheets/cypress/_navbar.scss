@@ -19,9 +19,6 @@
 
 .navbar {
   @include box-shadow(0 1px 1px $dropdown-border);
-}
-
-.navbar {
   font-family: 'Ubuntu';
   letter-spacing: .04em;
 }

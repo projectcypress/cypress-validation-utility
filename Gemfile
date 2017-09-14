@@ -53,12 +53,14 @@ group :development, :test do
   gem 'overcommit'
   gem 'scss_lint', require: false
   gem 'rubocop', '0.39', require: false
+  gem 'pry'
 end
 
 group :test do
   gem 'brakeman', require: false
   gem 'bundler-audit'
   gem 'simplecov', require: false
+  gem 'mocha'
 end
 
 group :production do

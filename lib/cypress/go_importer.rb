@@ -9,7 +9,6 @@ module Cypress
     end
 
     def self.select_negated_code(entry, bundle)
-      negated_vs = entry.codes['NA_VALUESET'].first
       valueset = HealthDataStandards::SVS::ValueSet.where(oid: entry.codes['NA_VALUESET'].first, bundle_id: bundle.id)
       entry.add_code(valueset.first.concepts.first['code'], valueset.first.concepts.first['code_system_name'])
     end

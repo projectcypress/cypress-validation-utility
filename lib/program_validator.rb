@@ -13,8 +13,8 @@ module CypressValidationUtility
 
         @document = get_document(file)
 
-        #xpath for informationRecipient, which is where CMS wants the code for the program
-        prog = @document.at_xpath("//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension")
+        # xpath for informationRecipient, which is where CMS wants the code for the program
+        prog = @document.at_xpath('//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension')
 
         if !prog
           msg = "Expected to find program '#{@program}' but no program code was found."

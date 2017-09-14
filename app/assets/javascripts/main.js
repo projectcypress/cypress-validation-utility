@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: ["off"],
+ max-statements: ["error", 14] */
 function scrollToElement(element){
   var offsetFromTop = 200;
   if ($(element).length) {

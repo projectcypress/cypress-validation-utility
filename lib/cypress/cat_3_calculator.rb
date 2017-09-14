@@ -76,7 +76,7 @@ module Cypress
       record.save
       record
     rescue StandardError => e
-      puts "#{e.message}"
+      Rails.logger.error e.message.to_s
       nil
     end
 
@@ -100,7 +100,7 @@ module Cypress
                             nil,
                             nil,
                             @correlation_id)
-     # QME::PatientCache.where(test_id: @correlation_id).destroy_all
+      # QME::PatientCache.where(test_id: @correlation_id).destroy_all
       HealthDataStandards::CQM::QueryCache.where(test_id: @correlation_id).destroy_all
       xml
     end

@@ -19,11 +19,8 @@ class Artifact
   end
 
   def get_file(name)
-    if archive?
-      return get_archived_file(name)
-    elsif file.uploaded_filename == name
-      return file.read
-    end
+    return get_archived_file(name) if archive?
+    return file.read if file.uploaded_filename == name
   end
 
   def get_archived_file(name)

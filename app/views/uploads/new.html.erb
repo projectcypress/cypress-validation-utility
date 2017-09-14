@@ -29,21 +29,21 @@
   <fieldset>
     <legend class="control-label">Annual Update Bundle</legend>
     <div class="form-group" id="radioYearContainer">
-      <% if BUNDLES['2016'] %>
+      <% if HealthDataStandards::CQM::Bundle['2016'] %>
       <div class="radio">
       <label class="radio">
         <input required class="proyear" type="radio" name="year" value="2016" id="2016"> 2015 Bundle for the 2016 Reporting Period
       </label>
       </div>
       <% end %>
-      <% if BUNDLES['2017'] %>
+      <% if HealthDataStandards::CQM::Bundle['2017'] %>
       <div class="radio">
       <label class="radio">
         <input required class="proyear" type="radio" name="year" value="2017" id="2017"> 2016 Bundle for the 2017 Reporting Period
       </label>
       </div>
       <% end %>
-      <% if BUNDLES['2018'] %>
+      <% if HealthDataStandards::CQM::Bundle['2018'] %>
       <div class="radio">
       <label class="radio">
         <input required class="proyear" type="radio" name="year" value="2018" id="2018"> 2017 Bundle for the 2018 Reporting Period
@@ -51,13 +51,13 @@
       </div>
       <% end %>
     </div>
-    <% unless BUNDLES['2016'] %>
+    <% unless HealthDataStandards::CQM::Bundle['2016'] %>
       <span id="bundle-message" class="help-block">To enable the <em>2015 Bundle for the 2016 Reporting Period</em>, please install a 2015 Cypress bundle</span>
     <% end %>
-    <% unless BUNDLES['2017'] %>
+    <% unless HealthDataStandards::CQM::Bundle['2017'] %>
       <span id="bundle-message" class="help-block">To enable the <em>2016 Bundle for the 2017 Reporting Period</em>, please install a 2016 Cypress bundle</span>
     <% end %>
-    <% unless BUNDLES['2018'] %>
+    <% unless HealthDataStandards::CQM::Bundle['2018'] %>
       <span id="bundle-message" class="help-block">To enable the <em>2017 Bundle for the 2018 Reporting Period</em>, please install a 2017 Cypress bundle</span>
     <% end %>
   </fieldset>
@@ -127,7 +127,7 @@ $(".proradio").click(function(){
 })
 
 $(window).bind("pageshow", function() {
-    var form = $('form'); 
+    var form = $('form');
     // let the browser natively reset defaults
     form[0].reset();
 });

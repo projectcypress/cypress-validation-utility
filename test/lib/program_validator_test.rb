@@ -5,7 +5,7 @@ class ProgramValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = CypressValidationUtility::Validate::ProgramValidator.new('pqrs_mu_individual')
 
-    file = Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/good_cat1.xml"), "text/xml")
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/good_cat1.xml'), 'text/xml')
     @document = get_document(file)
   end
 
@@ -19,7 +19,7 @@ class ProgramValidatorTest < ActiveSupport::TestCase
   end
 
   test 'Should return error for document with non-matching program code' do
-    node = @document.at_xpath("//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension")
+    node = @document.at_xpath('//cda:informationRecipient/cda:intendedRecipient/cda:id/@extension')
     node.value = 'bobs_house'
 
     errors = @validator.validate(@document)

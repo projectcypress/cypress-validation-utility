@@ -1,16 +1,16 @@
 // Cypress customizations for popovers
 
 .popover {
-  max-width:600px;
+  max-width: 600px;
 }
 
 .popover-inner {
   background: $gray; // has to be full background declaration for IE fallback
-  background: rgba(80,80,80,.8);
-  width:550px;
+  background: rgba(80, 80, 80, .8);
+  width: 550px;
 }
 
 .popover-content {
-	max-height: 300px;
-	overflow: auto;
+  max-height: 300px;
+  overflow: auto;
 }

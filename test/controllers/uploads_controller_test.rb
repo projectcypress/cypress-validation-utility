@@ -56,7 +56,6 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload zip file' do
-    skip # Until Rob Clark's PR fixing zips gets merged in, skip this test because it takes 7+ minutes to run
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/2_qrdas.zip'), 'application/zip')
 
     post 'create', file: file, year: '2016', file_type: 'cat3_r1', program: 'none'
@@ -92,6 +91,7 @@ class UploadsControllerTest < ActionController::TestCase
     get 'show', id: redirect_to_url.split('/')[-1]
     # replace all whitespace with single spaces for validation
     response_body = @response.body.gsub(/\s+/, ' ')
+
     assert(response_body.include?('has a different category than Templates'), 'Response for valid XML does not include "has a different category than Templates"')
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EncounterValidator
   include HealthDataStandards::Validate::BaseValidator
   include Singleton

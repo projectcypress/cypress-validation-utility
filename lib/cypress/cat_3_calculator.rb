@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'cypress/go_importer'
 
 module Cypress

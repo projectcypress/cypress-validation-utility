@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'ext/artifact'
 require 'hqmf-parser'
 
@@ -42,7 +43,7 @@ class UploadsController < ApplicationController
 
     # If you do not convert this to an array then it will return a mongo query instead of
     # a collection of elements.
-    @files = @upload.qrda_files.where(state: :complete).to_a
+    @files = @upload.qrda_files.where(:state => :complete).to_a
 
     @upload_complete = (@files&.count == @upload.file_count)
 

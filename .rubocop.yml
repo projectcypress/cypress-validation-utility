@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'bin/**/*'
+  TargetRubyVersion: 2.3
 Rails:
   Enabled: true
 Rails/FindEach:

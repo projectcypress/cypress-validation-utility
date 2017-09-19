@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../lib/cms_validators'
 require_relative '../../lib/encounter_validator'
 
@@ -11,7 +12,7 @@ module UploadsHelper
   end
 
   def validator_slug(validator)
-    validator.underscore.gsub("/", "_")
+    validator.underscore.tr('/', '_')
   end
 
   def get_result_value(results, measure, population)
@@ -42,7 +43,7 @@ module UploadsHelper
       error_map[location] = elem['error_id'] ? elem['error_id'] : uuid.generate.to_s
     end
 
-    return error_map, error_attributes
+    [error_map, error_attributes]
   end
 
   def should_switch_highlight?(data_key, pop_key, specifics, rationale)

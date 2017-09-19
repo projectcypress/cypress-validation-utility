@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'nokogiri'
 require 'ext/record'
 require 'cat3_population_validator'
@@ -20,7 +21,7 @@ class QrdaFile
   field :content_string, type: String
   field :filename, type: String
   field :validation_errors, type: Hash
-  field :state, type: Symbol, default: :pending
+  field :state, :type => Symbol, :default => :pending
 
   def content
     return @content if @content

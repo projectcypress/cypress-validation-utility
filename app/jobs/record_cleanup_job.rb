@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RecordCleanupJob < ActiveJob::Base
   include SuckerPunch::Job
 

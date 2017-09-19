@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'ccn_validator'
 
@@ -9,7 +10,7 @@ class CCNValidatorTest < ActiveSupport::TestCase
     @document = get_document(file)
   end
 
-  CCN_SELECTOR = "/cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id[@root='2.16.840.1.113883.4.336']/@extension".freeze
+  CCN_SELECTOR = "/cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id[@root='2.16.840.1.113883.4.336']/@extension"
 
   test 'Should return error for document missing CCN' do
     @document.at_xpath(CCN_SELECTOR).parent.remove

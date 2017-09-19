@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Artifact
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -50,8 +51,6 @@ class Artifact
       end
     elsif file.uploaded_filename.eql? filename
       file.read
-    else
-      nil
     end
   end
 

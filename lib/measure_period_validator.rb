@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CypressValidationUtility
   module Validate
     class MeasurePeriodValidator
@@ -5,23 +6,23 @@ module CypressValidationUtility
 
       REPORTING_PERIOD_SELECTOR = "/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/
                                    cda:entry/cda:act[./cda:templateId[@root='2.16.840.1.113883.10.20.17.3.8']]/
-                                   cda:effectiveTime".freeze
+                                   cda:effectiveTime"
 
       REPORTING_PERIOD_START = REPORTING_PERIOD_SELECTOR + '/cda:low/@value'
       REPORTING_PERIOD_END = REPORTING_PERIOD_SELECTOR + '/cda:high/@value'
 
       R3_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
       "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
-      "cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
+      "cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
 
       R3_1_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
       "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:act"\
       "[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.133']]/cda:entryRelationship/cda:encounter"\
-      "[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value".freeze
+      "[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
 
       PROCEDURE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
       "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
-      "cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value".freeze
+      "cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value"
 
       def initialize(program, program_year, doc_type)
         @name = 'Measure Period Validator'

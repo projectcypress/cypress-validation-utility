@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'cypress/cat_3_calculator'
 
 class KickstartProcessJob < ActiveJob::Base

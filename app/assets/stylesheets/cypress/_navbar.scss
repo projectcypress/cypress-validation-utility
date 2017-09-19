@@ -1,14 +1,15 @@
 @media(min-width: 768px) {
   .fix-nav-height {
-      display: flex;
+    display: flex;
   }
+
   .fix-nav-height li {
-      display: flex !important;
-      flex: 1;
+    display: flex !important;
+    flex: 1;
   }
 
   .fix-nav-height li  a {
-      flex: 1;
+    flex: 1;
   }
 }
 

@@ -18,7 +18,8 @@ module HealthDataStandards
 
       def self.bundle_available?
         POSSIBLE_BUNDLES.each do |bundle|
-          @bundles[bundle] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^#{bundle}\./)
+          # CVU defines a "bundle year" as the year before the one defined by this variable
+          @bundles[bundle] ||= HealthDataStandards::CQM::Bundle.find_by(version: /^#{bundle.to_i - 1}\./)
         end
 
         POSSIBLE_BUNDLES.each do |bundle|

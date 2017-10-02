@@ -11,7 +11,7 @@ class EncounterValidator
 
   def validate(file, options = {})
     doc = get_document(file)
-    encounter_times = doc.xpath("//cda:entry/cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime")
+    encounter_times = doc.xpath("//cda:encounter[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.23']/cda:effectiveTime")
     errors = []
     encounter_times.each do |encounter|
       begin
@@ -20,16 +20,14 @@ class EncounterValidator
       rescue
         next
       end
-
       errors.concat validate_encounter_start_end(encounter.path, low, high, options[:file_name])
     end
     errors
   end
 
   def validate_encounter_time(type, title, encounter, file, errors)
-    errors = []
     begin
-      val = get_time_value(encounter, type)
+      val, errors = get_time_value(encounter, type, file, errors)
     rescue ArgumentError => ae
       errors << build_error("Encounter #{title} time invalid. #{ae.message}", encounter.path, file)
       throw ae
@@ -61,8 +59,18 @@ class EncounterValidator
     time.strftime('%-m/%-d/%Y %k:%M')
   end
 
-  def get_time_value(time_el, value_el)
+  def get_time_value(time_el, value_el, file, errors)
     timestamp = time_el.at_xpath("./cda:#{value_el}/@value").value
-    HealthDataStandards::Util::HL7Helper.timestamp_to_integer(timestamp)
+    if timestamp.length != 19
+      case value_el
+      when 'low'
+        errors << build_error("CMS_0075 - Fails validation check for Encounter Performed Admission Date (effectiveTime/low value)
+          as specified in Table 14: Valid Date/Time Format for HQR.", time_el.path, file)
+      when 'high'
+        errors << build_error("CMS_0076 - Fails validation check for Encounter Performed Discharge Date (effectiveTime/high value)
+          as specified in Table 14: Valid Date/Time Format for HQR.", time_el.path, file)
+      end
+    end
+    [HealthDataStandards::Util::HL7Helper.timestamp_to_integer(timestamp), errors]
   end
 end

@@ -72,7 +72,7 @@ module CypressValidationUtility
           value_set_oid = data_element['vset']
           vset = HealthDataStandards::SVS::ValueSet.where(oid: value_set_oid, bundle_id: @bundle_id)
           unless vset.empty?
-            find_vs_categories(vset, data_element['path'], qrda_oids, options[:file_name])
+            result = find_vs_categories(vset, data_element['path'], qrda_oids, options[:file_name])
           end
           next if result
           if qrda_oids.blank?

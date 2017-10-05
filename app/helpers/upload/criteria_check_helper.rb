@@ -46,18 +46,16 @@ module Upload::CriteriaCheckHelper
     occurrences = []
     return occurrences unless child
     if child[:preconditions] && !child[:preconditions].empty?
-      add_precondition_occurrences(occurrences, child, data_crit_hash)
+      child[:preconditions].each do |precondition|
+        occurrences.concat get_data_criteria_keys(precondition, data_crit_hash)
+      end
     elsif child[:reference]
-      add_reference_occurrences(occurrences, child, data_crit_hash)
+      occurrences.concat get_data_criteria_keys(
+        data_crit_hash[child[:reference]], data_crit_hash, child[:reference])
     else
       add_complex_occurrences(occurrences, key, child, data_crit_hash)
     end
     occurrences
-  end
-
-  def add_reference_occurrences(occurrences, child, data_crit_hash)
-    occurrences.concat get_data_criteria_keys(
-      data_crit_hash[child[:reference]], data_crit_hash, child[:reference])
   end
 
   def add_complex_occurrences(occurrences, key, child, data_crit_hash)
@@ -70,12 +68,6 @@ module Upload::CriteriaCheckHelper
       occurrences, :temporal_references, child, data_crit_hash)
     add_references_key_occurrences(
       occurrences, :references, child, data_crit_hash)
-  end
-
-  def add_precondition_occurrences(occurrences, child, data_crit_hash)
-    child[:preconditions].each do |precondition|
-      occurrences.concat get_data_criteria_keys(precondition, data_crit_hash)
-    end
   end
 
   def add_derived_occurrences(occurrences, key, child, data_crit_hash)

@@ -24,25 +24,26 @@ module Upload::OrCountHelper
     or_counts = {}
     return or_counts unless preconditions && !preconditions.empty?
     preconditions.each do |precondition|
-      if precondition[:conjunction_code] == 'atLeastOneTrue' &&
-         !precondition[:negation]
-        true_count = 0
-        if precondition[:preconditions] && !precondition[:preconditions].empty?
-          precondition[:preconditions].each do |child|
-            key = if child[:preconditions]
-                    "precondition_#{child[:id]}"
-                  else
-                    child[:reference]
-                  end
-            true_count += 1 if rationale[key]
-          end
-        end
-        or_counts["precondition_#{precondition[:id]}"] = true_count
-      end
+      calculate_precondition_or_counts(or_counts, rationale, precondition)
       or_counts = or_counts.merge calculate_or_counts_recursive(
         rationale, precondition[:preconditions])
     end
     or_counts
+  end
+
+  def calculate_precondition_or_counts(or_counts, rationale, precondition)
+    if precondition[:conjunction_code] == 'atLeastOneTrue' &&
+       !precondition[:negation]
+      true_count = 0
+      if precondition[:preconditions] && !precondition[:preconditions].empty?
+        precondition[:preconditions].each do |child|
+          has_children = child[:preconditions] && !child[:preconditions].empty?
+          key = has_children? "precondition_#{child[:id]}" : child[:reference]
+          true_count += 1 if rationale[key]
+        end
+      end
+      or_counts["precondition_#{precondition[:id]}"] = true_count
+    end
   end
 
   # walk through data criteria to account for specific occurrences in a UNION

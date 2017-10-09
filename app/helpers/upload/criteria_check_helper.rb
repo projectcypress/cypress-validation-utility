@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # criteria check helper provide functionality for determining whether a
 # criteria should be updated based on specific occurrences
 module Upload::CriteriaCheckHelper
@@ -18,8 +19,8 @@ module Upload::CriteriaCheckHelper
 
       # handle the case where the rationale does not contain a criteria
       if criterion_rationale.nil?
-        puts 'WARNING: data criteria ' + criterion +
-             ' is not contained in the rationale'
+        # ERROR_LOG.error 'WARNING: data criteria ' + criterion +
+        #                 ' is not contained in the rationale'
         next
       end
       add_criterion_results(results, criterion_rationale, criterion, pop_key,

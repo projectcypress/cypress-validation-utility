@@ -2,6 +2,9 @@ AllCops:
   Exclude:
     - 'bin/**/*'
   TargetRubyVersion: 2.3
+ClassAndModuleChildren:
+  Exclude:
+    - 'app/helpers/upload/*'
 Rails:
   Enabled: true
 Rails/FindEach:

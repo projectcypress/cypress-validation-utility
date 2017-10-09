@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # or count helper searches through a measure's logic tree to count branch
 # points that could be flipped by a specific occurrence change
 module Upload::OrCountHelper
@@ -38,7 +39,7 @@ module Upload::OrCountHelper
       if precondition[:preconditions] && !precondition[:preconditions].empty?
         precondition[:preconditions].each do |child|
           has_children = child[:preconditions] && !child[:preconditions].empty?
-          key = has_children? "precondition_#{child[:id]}" : child[:reference]
+          key = has_children ? "precondition_#{child[:id]}" : child[:reference]
           true_count += 1 if rationale[key]
         end
       end

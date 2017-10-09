@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # specifics helper provides general funcitonality necessary for fully
 # determining specific occurrence rationale updates
 module Upload::SpecificsHelper
@@ -15,52 +16,45 @@ module Upload::SpecificsHelper
     return parent_map unless root
     if root[:preconditions] && !root[:preconditions].empty?
       root[:preconditions].each do |precondition|
-        parent_map["precondition_#{precondition[:id]}"] =
-          (parent_map["precondition_#{precondition[:id]}"] || []).push root
-        parent_map = parent_map.merge(
-          build_parent_map(precondition, data_crit_hash)
-        ) { |_key, oldval, newval| oldval.concat newval }
+        push_and_merge_map(parent_map, "precondition_#{precondition[:id]}",
+                           root, precondition, data_crit_hash)
       end
     elsif root[:reference]
-      parent_map[root[:reference]] =
-        (parent_map[root[:reference]] || []).push root
-      parent_map = parent_map.merge(
-        build_parent_map(data_crit_hash[root[:reference]],
-                         data_crit_hash)
-      ) { |_key, oldval, newval| oldval.concat newval }
+      push_and_merge_map(parent_map, root[:reference], root,
+                         data_crit_hash[root[:reference]], data_crit_hash)
     else
-      if root[:temporal_references]
-        root[:temporal_references].each do |temporal_reference|
-          if temporal_reference[:reference] != 'MeasurePeriod'
-            parent_map[temporal_reference[:reference]] =
-              (parent_map[temporal_reference[:reference]] || []).push root
-            parent_map = parent_map.merge(
-              build_parent_map(data_crit_hash[temporal_reference[:reference]],
-                               data_crit_hash)
-            ) { |_key, oldval, newval| oldval.concat newval }
-          end
-        end
-      end
-      if root[:references] # ??? check for :references in db
-        root[:references].each do |reference|
-          parent_map[reference[:reference]] =
-            (parent_map[reference[:reference]] || []).push root
-          parent_map = parent_map.merge(
-            build_parent_map(data_crit_hash[reference[:reference]],
-                             data_crit_hash)
-          ) { |_key, oldval, newval| oldval.concat newval }
-        end
-      end
-      if root[:children_criteria]
-        root[:children_criteria].each do |child|
-          parent_map[child] = (parent_map[child] || []).push root
-          parent_map = parent_map.merge(
-            build_parent_map(data_crit_hash[child], data_crit_hash)
-          ) { |_key, oldval, newval| oldval.concat newval }
-        end
-      end
+      subreference_update_parent_map(parent_map, root, data_crit_hash)
     end
     parent_map
+  end
+
+  def subreference_update_parent_map(parent_map, root, data_crit_hash)
+    if root[:temporal_references]
+      root[:temporal_references].each do |temporal_reference|
+        next if temporal_reference[:reference] == 'MeasurePeriod'
+        push_and_merge_map(
+          parent_map, temporal_reference[:reference], root,
+          data_crit_hash[temporal_reference[:reference]], data_crit_hash)
+      end
+    end
+    if root[:references] # ??? check for :references in db
+      root[:references].each do |reference|
+        push_and_merge_map(parent_map, reference[:reference], root,
+                           data_crit_hash[reference[:reference]], data_crit_hash)
+      end
+    end
+    if root[:children_criteria]
+      root[:children_criteria].each do |child|
+        push_and_merge_map(parent_map, child, root, data_crit_hash[child], data_crit_hash)
+      end
+    end
+  end
+
+  def push_and_merge_map(parent_map, pm_key, old_root, new_root, data_crit_hash)
+    parent_map[pm_key] = (parent_map[pm_key] || []).push old_root
+    parent_map.merge!(
+      build_parent_map(new_root, data_crit_hash)
+    ) { |_key, oldval, newval| oldval.concat newval }
   end
 
   ### make updates
@@ -81,15 +75,15 @@ module Upload::SpecificsHelper
 
   # from each leaf walk up the tree updating the logical statements
   # appropriately to false
-  def update_logic_tree(updated_rationale, rationale, code, bad_occurrence,
-                        or_counts, parent_map, final_specifics)
-    parents = parent_map[bad_occurrence]
-    update_logic_tree_children(updated_rationale, rationale, code, parents,
-                               or_counts, parent_map, final_specifics)
+  def update_logic_tree(updated_rationale, rationale, final_specifics,
+                        update_params, bad_criteria)
+    parents = update_params[:parent_map][bad_criteria]
+    update_logic_tree_children(updated_rationale, rationale,
+                               final_specifics, update_params, parents)
   end
 
-  def update_logic_tree_children(updated_rationale, rationale, code, parents,
-                                 or_counts, parent_map, final_specifics)
+  def update_logic_tree_children(updated_rationale, rationale, final_specifics,
+                                 update_params, parents)
     return updated_rationale unless parents
     parents.each do |parent|
       parent_key = if parent[:id] then "precondition_#{parent[:id]}"
@@ -101,20 +95,30 @@ module Upload::SpecificsHelper
       negated = parent[:negation] && parent[:id]
       # do not bubble up negated unless we have no final specifics.  If we have
       # no final specifics then we may not have positive statements to bubble up
-      next unless updated_rationale[code][parent_key] != false &&
-                  (!negated || final_specifics[code].empty?)
-      # if this is an OR then remove a true increment since it's a bad true
-      or_counts[parent_key] = or_counts[parent_key] - 1 if or_counts[parent_key]
-      # if we're either an AND or we're an OR and the count is zero then switch
-      # to false and move up the tree
-      if (!or_counts[parent_key] || or_counts[parent_key] == 0) &&
-         (!rationale[parent_key].nil? || rationale[parent_key] == true ||
-         !rationale.key?(parent_key))
-        updated_rationale[code][parent_key] = false if rationale[parent_key]
-        updated_rationale = update_logic_tree_children(
-          updated_rationale, rationale, code, parent_map[parent_key],
-          or_counts, parent_map, final_specifics)
-      end
+      next unless updated_rationale[update_params[:code]][parent_key] != false &&
+                  (!negated || final_specifics[update_params[:code]].empty?)
+
+      updated_rationale = find_bubble_ups(updated_rationale, rationale, final_specifics,
+                                          update_params, parent_key)
+    end
+    updated_rationale
+  end
+
+  def find_bubble_ups(updated_rationale, rationale, final_specifics,
+                      update_params, parent_key)
+    # if this is an OR then remove a true increment since it's a bad true
+    update_params[:or_counts][parent_key] =
+      update_params[:or_counts][parent_key] - 1 if update_params[:or_counts][parent_key]
+    parent_oc = update_params[:or_counts][parent_key]
+    # if we're either an AND or we're an OR and the count is zero then switch
+    # to false and move up the tree
+    if (!parent_oc || parent_oc == 0) &&
+       (!rationale[parent_key].nil? || rationale[parent_key] == true ||
+       !rationale.key?(parent_key))
+      updated_rationale[update_params[:code]][parent_key] = false if rationale[parent_key]
+      updated_rationale = update_logic_tree_children(
+        updated_rationale, rationale, final_specifics, update_params,
+        update_params[:parent_map][parent_key])
     end
     updated_rationale
   end

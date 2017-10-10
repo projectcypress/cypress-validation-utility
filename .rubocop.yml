@@ -5,6 +5,7 @@ AllCops:
 ClassAndModuleChildren:
   Exclude:
     - 'app/helpers/upload/*'
+    - 'test/*'
 Rails:
   Enabled: true
 Rails/FindEach:

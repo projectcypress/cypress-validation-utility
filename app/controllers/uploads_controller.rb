@@ -21,7 +21,7 @@ class UploadsController < ApplicationController
     year = params[:year]
 
     @upload = Upload.new(artifact: artf, file_type: file_type,
-                         program: program, year: year, correlation_id: BSON::ObjectId.new)
+                         program: program, year: year)
     @upload.save!(validate: false)
     # TODO: rename errors on the Upload class, so we can remove this validate: false stuff
 

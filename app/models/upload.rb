@@ -8,7 +8,7 @@ class Upload
   field :year, type: String
   field :file_count, type: Integer
   field :state, :type => Symbol, :default => :uploaded
-  field :correlation_id, type: BSON::ObjectId, default: BSON::ObjectId.new
+  field :correlation_id, type: BSON::ObjectId, default: -> { BSON::ObjectId.new }
   field :status_message, type: String
 
   has_one :artifact, :autosave => true, :dependent => :destroy

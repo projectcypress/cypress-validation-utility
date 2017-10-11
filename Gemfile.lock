@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/projectcypress/go-cda-tools.git
-  revision: 88ebd37f32d5f69c7b703f64c6934e4a721c7a64
+  revision: 3d3cbac496895d36f04df9d7df150a6f13f1e07c
   branch: master
   specs:
     go-cda-tools (0.0.0)
@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
-  revision: 12c96b8dac802aee340a7cfbe2742f7c1ccd643f
+  revision: 548eefb22a606282f2e362646c5ae1e2aae133a6
   branch: mongoid5
   specs:
     health-data-standards (3.6.1)

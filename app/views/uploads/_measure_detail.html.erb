@@ -4,6 +4,8 @@
   <% if @patient_cache %>
     <% @rationale = @patient_cache.value[:rationale] %>
     <% @specifics = @patient_cache.value[:finalSpecifics] %>
+    <% @measure = measure %>
+    <% @updated_rationale = specifics_rationale(@measure, @rationale, @specifics) %>
 
     <div class="panel panel-default measure_children">
       <div class="panel-heading">

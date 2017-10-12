@@ -26,8 +26,10 @@
       <% if data_criteria[:temporal_references] %>
         <% data_criteria[:temporal_references].each do |temp_ref| %>
           <li>
-            <span class="rationale-target">
-            <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
+            <% sat_rat_ref = final_rationale_ref(reference)%>
+            <span class="sat rationale-target rationale eval-<%= sat_rat_ref %>">
+              <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
+            </span>
           </li>
         <% end %>
       <% end %>

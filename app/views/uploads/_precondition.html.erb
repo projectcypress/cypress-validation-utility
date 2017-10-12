@@ -2,7 +2,9 @@
 <% unless suppress %>
   <ul id="precondition_<%= precondition[:id] %>">
     <li>
-      <span class="conjunction <%= parent_precondition[:id] %> rationale eval-<%= @rationale[("precondition_"+parent_precondition[:id].to_s)] %>">
+      <% reference = ("precondition_"+parent_precondition[:id].to_s) %>
+      <% rat_ref = final_rationale_ref(reference)%>
+      <span class="conjunction <%= parent_precondition[:id] %> rationale eval-<%= rat_ref %>">
         <b>
           <% if parent_negation %>
             <% if parent_precondition[:conjunction_code]=='allTrue' %>OR NOT<% end %>

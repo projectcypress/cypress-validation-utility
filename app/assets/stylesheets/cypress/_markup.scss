@@ -6,6 +6,9 @@ $xml-light-red:         lighten($xml-red, 25%) !default;
 $xml-green:             #008000 !default;
 $xml-gray:              lighten($gray-base, 60%) !default;
 $xml-dark-blue:         #00008B !default;
+$fa-check:              "\f00c";
+$fa-times:              "\f00d";
+$fa-asterisk:           "\f069";
 
 .xml_frame {
 
@@ -77,10 +80,31 @@ $xml-dark-blue:         #00008B !default;
   .eval-true {
     background-color: $state-success-bg;
     color: $state-success-text;
+
+    &:before {
+      content: $fa-check;
+      font-family: FontAwesome;
+    }
   }
 
   .eval-false {
     background-color: $state-danger-bg;
     color: $state-danger-text;
+
+    &:before {
+      content: $fa-times;
+      font-family: FontAwesome;
+    }
   }
+  
+  .eval-bad-specifics {
+    background-color: $state-danger-bg;
+    color: $state-danger-text;
+
+    &:before {
+      content: $fa-asterisk;
+      font-family: FontAwesome;
+    }
+  }
+
 }

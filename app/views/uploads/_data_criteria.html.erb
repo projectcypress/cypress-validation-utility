@@ -1,15 +1,4 @@
-<% unless expand_variable %>
-  <% @rat_ref = @rationale[reference] %>
-  <% if @rat_ref.is_a?(Hash) &&
-        (@specifics[@population_key] || @population_key == 'VAR')%>
-    <% @rat_ref = @rat_ref[:results].count > 0 %>
-    <% if @population_key != 'VAR' &&
-          should_switch_highlight?(reference, @population_key, @specifics, @rationale) %>
-      *<% @rat_ref = !@rat_ref %>
-    <% end %>
-  <% end %>
-  <span class="rationale eval-<%= @rat_ref %>">
-<% end %>
+<% @rat_ref = final_rationale_ref(reference)%>
 
 <% data_criteria = measure[:hqmf_document][:data_criteria][reference] %>
 <%# check attributes %>
@@ -20,14 +9,18 @@
 <% if data_criteria %>
   <% if data_criteria[:subset_operators] && data_criteria[:subset_operators].length>0 %>
     <% data_criteria[:subset_operators].each do |so| %>
-      <%= render partial: 'subset_operator', locals: {subset_operator:so, tag: "span"} %>
+      <span class="rationale eval-<%= @rat_ref %>">
+        <%= render partial: 'subset_operator', locals: {subset_operator:so, tag: "span"} %>
+      </span>
     <% end %>
   <% end %>
 
 
   <% if data_criteria[:type] == 'derived' && (!data_criteria[:variable] || expand_variable) %>
     <% if data_criteria[:definition] == 'satisfies_all' ||  data_criteria[:definition] == 'satisfies_any' %>
-      <%= render partial: 'satisfies', locals: {reference: reference, measure:measure, tag: "span"} %>
+      <span class="rationale eval-<%= @rat_ref %>">
+        <%= render partial: 'satisfies', locals: {reference: reference, measure:measure, tag: "span"} %>
+      </span>
     <% elsif data_criteria[:children_criteria] %>
       <% if data_criteria[:derivation_operator] == 'INTERSECT' ||
             data_criteria[:derivation_operator] == 'UNION' &&
@@ -46,7 +39,9 @@
             <% end %>
           <% else %>
             <li>
-              <span class="conjunction rationale-target"><%= (data_criteria[:derivation_operator] == 'XPRODUCT')? 'AND':'' %>: <span class="sr-only sr-highlight-status"></span></span>
+              <span class="conjunction rationale-target rationale eval-<%= @rat_ref %>">
+                <%= (data_criteria[:derivation_operator] == 'XPRODUCT')? 'AND':'' %>: <span class="sr-only sr-highlight-status"></span>
+              </span>
           <% end %>
             <%= render partial: 'data_criteria', locals: {reference: child, expand_variable: false, measure:measure, tag: "span"} %>
           </li>
@@ -54,7 +49,8 @@
         <% if data_criteria[:temporal_references] %>
           <% data_criteria[:temporal_references].each do |temp_ref| %>
             <li>
-              <span class="rationale-target">
+              <% temp_rat_ref = final_rationale_ref(reference)%>
+              <span class="rationale-target rationale eval-<%= temp_rat_ref %>">
                 <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure:measure, tag: "span"} %>
               </span>
             </li>
@@ -68,59 +64,62 @@
       <% end %>
     <% end %>
   <% else %>
-    <span class="criteria-title">
-      <% if data_criteria[:specific_occurrence] && !(data_criteria[:description].include? "Occurrence") %>
-        Occurrence <%= data_criteria[:specific_occurrence] %>:
-      <% end %>
-      <% if data_criteria[:variable] && !(data_criteria[:description].include? "$") %>$<% end %><%= data_criteria[:description] %>
+    <span class="rationale eval-<%= @rat_ref %>">
+      <span class="criteria-title">
+        <% if data_criteria[:specific_occurrence] && !(data_criteria[:description].include? "Occurrence") %>
+          Occurrence <%= data_criteria[:specific_occurrence] %>:
+        <% end %>
+        <% if data_criteria[:variable] && !(data_criteria[:description].include? "$") %>$<% end %><%= data_criteria[:description] %>
 
-      <% if data_criteria[:value] && data_criteria[:type]!= 'characteristic' %>
-        <%= render partial: 'value', locals: {value: data_criteria[:value], range_comparison: "", measure: measure, tag: "span"} %>
-      <% end %>
+        <% if data_criteria[:value] && data_criteria[:type]!= 'characteristic' %>
+          <%= render partial: 'value', locals: {value: data_criteria[:value], range_comparison: "", measure: measure, tag: "span"} %>
+        <% end %>
 
-      <% if data_criteria[:field_values] %>
-        <% data_criteria[:field_values].each do |key,value| %>
-          <%# ANYNonNull type means field value type %>
-          <% if value[:type] == 'ANYNonNull' %>
-            (<%= HQMF::DataCriteria::FIELDS[key][:title] %>)
-          <% else %>
-            <%= render partial: 'value', locals: {value: value, range_comparison: "", measure: measure, tag: "span"} %>
+        <% if data_criteria[:field_values] %>
+          <% data_criteria[:field_values].each do |key,value| %>
+            <%# ANYNonNull type means field value type %>
+            <% if value[:type] == 'ANYNonNull' %>
+              (<%= HQMF::DataCriteria::FIELDS[key][:title] %>)
+            <% else %>
+              <%= render partial: 'value', locals: {value: value, range_comparison: "", measure: measure, tag: "span"} %>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
 
-      <% if data_criteria[:references] %>
-        <% data_criteria[:references].each do |key,reference| %>
-          <%= key %> <%= reference[:referenced_criteria][:description] %>
+        <% if data_criteria[:references] %>
+          <% data_criteria[:references].each do |key,reference| %>
+            <%= key %> <%= reference[:referenced_criteria][:description] %>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <% if data_criteria[:negation] %>
-        <% value_sets = HealthDataStandards::SVS::ValueSet.where(oid: data_criteria[:negation_code_list_id]) %>
-        <% value_sets.each do |set| %>
-          (Not Done: <%= set[:display_name] %>)
+        <% if data_criteria[:negation] %>
+          <% value_sets = HealthDataStandards::SVS::ValueSet.where(oid: data_criteria[:negation_code_list_id]) %>
+          <% value_sets.each do |set| %>
+            (Not Done: <%= set[:display_name] %>)
+          <% end %>
         <% end %>
-      <% end %>
 
-      <span class="sr-only sr-highlight-status"></span>
+        <span class="sr-only sr-highlight-status"></span>
+      </span>
     </span>
+
     <% if data_criteria[:temporal_references] %>
       <% if data_criteria[:temporal_references].length > 1 %>
         <ul class="multi-statement">
           <% data_criteria[:temporal_references].each do |temp_ref| %>
-            <li><%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %></li>
+            <span class="rationale eval-<%= @rat_ref %>">
+              <li><%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %></li>
+            </span>
           <% end %>
         </ul>
       <% else %>
         <% data_criteria[:temporal_references].each do |temp_ref| %>
-          <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
+          <span class="rationale eval-<%= @rat_ref %>">
+            <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
+          </span>
         <% end %>
       <% end %>
     <% end %>
+
   <% end %>
-<% end %>
-
-
-<% unless expand_variable %>
-  </span>
 <% end %>

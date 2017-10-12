@@ -1,4 +1,3 @@
-<span class="rationale eval-<%= @rat_ref %>">
 <% if temporal_reference[:range] %>
   <%= render partial: 'value', locals: {value: temporal_reference[:range], range_comparison: "", tag: "span"} %>
 <% end %>
@@ -39,4 +38,3 @@
 <% else %>
   <%= render partial: 'data_criteria', locals: {reference: temporal_reference[:reference], expand_variable: false, measure: measure, tag: "span"} %>
 <% end %>
-</span>

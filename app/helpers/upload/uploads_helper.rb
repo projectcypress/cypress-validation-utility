@@ -22,7 +22,6 @@ module Upload::UploadsHelper
 
   def match_errors(upload)
     doc = upload.content
-    uuid = UUID.new
     error_map = {}
     error_attributes = []
     locs = upload.errors.collect { |e| e['location'] }
@@ -40,7 +39,8 @@ module Upload::UploadsHelper
       end
       elem = elem.root if node_type(elem.type) == :document
       next unless elem
-      error_map[location] = elem['error_id'] ? elem['error_id'] : uuid.generate.to_s
+      elem['error_id'] = UUID.generate.to_s unless elem['error_id']
+      error_map[location] = elem['error_id']
     end
 
     [error_map, error_attributes]

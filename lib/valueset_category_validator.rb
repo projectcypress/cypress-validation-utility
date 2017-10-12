@@ -90,7 +90,7 @@ module CypressValidationUtility
         valueset_categories = vset.first.categories
         # only run check if valueset has categories. compatibility with older bundles
         if valueset_categories.nil?
-          @errors << build_error("Value Set #{value_set_oid} was not checked for template/category alignment.",
+          @errors << build_error("Value Set #{vset.first.oid} was not checked for template/category alignment.",
                                  data_element_path, file_name)
           return true
         else

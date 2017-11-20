@@ -58,19 +58,19 @@ module Upload::SpecificsHelper
   end
 
   ### make updates
-  def updated_negated_good(updated_rationale, rationale, good_occurrence,
+  def updated_negated_good(updated_rationale_param, rationale, good_occurrence,
                            parent_map)
     parent = parent_map[good_occurrence]
     while parent
       # byebug
       # TODO: get rid of array in hash?
       if parent[0][:negation] && rationale[good_occurrence]
-        updated_rationale[good_occurrence] = false
-        return
+        updated_rationale_param[good_occurrence] = false
+        return updated_rationale_param
       end
       parent = parent_map["precondition_#{parent[0][:id]}"]
     end
-    updated_rationale
+    updated_rationale_param
   end
 
   # from each leaf walk up the tree updating the logical statements

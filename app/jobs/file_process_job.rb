@@ -35,7 +35,7 @@ class FileProcessJob < ActiveJob::Base
 
     @bundle = HealthDataStandards::CQM::Bundle[upload.year]
     @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
-    calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, upload.correlation_id)
+    calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, BSON::ObjectId.new)
 
     rec = calculator.import_cat1_file(curr_file.content)
 

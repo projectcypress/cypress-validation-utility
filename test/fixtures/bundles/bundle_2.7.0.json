@@ -1,5 +1,5 @@
 {
-    "_id" : "55b663b54d4d316449000000",
+    "_id" : {"$oid" : "55b663b54d4d316449000000"},
     "title" : "Meaningful Use Stage 2 Quality Bundle",
     "measure_period_start" : 1.38853e+09,
     "effective_date" : 1.42007e+09,

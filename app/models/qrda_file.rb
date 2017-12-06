@@ -139,7 +139,7 @@ class QrdaFile
     @validators << CypressValidationUtility::Validate::CCNValidator.instance if program_type == 'eh'
     @validators << HealthDataStandards::Validate::CDA.instance
     @validators << CypressValidationUtility::Validate::ProgramValidator.new(program) unless program == 'none'
-    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program_type, program_year, doc_type)
+    @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program, program_type, program_year, doc_type)
 
     @validators
   end

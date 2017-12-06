@@ -11,22 +11,14 @@ module CypressValidationUtility
       REPORTING_PERIOD_START = REPORTING_PERIOD_SELECTOR + '/cda:low/@value'
       REPORTING_PERIOD_END = REPORTING_PERIOD_SELECTOR + '/cda:high/@value'
 
-      R3_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
-      "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
-      "cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
+      DISCHARGE_SELECTOR = "//cda:encounter[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
 
-      R3_1_DISCHARGE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
-      "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/cda:act"\
-      "[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.133']]/cda:entryRelationship/cda:encounter"\
-      "[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.23']]/cda:effectiveTime/cda:high/@value"
+      PROCEDURE_SELECTOR = "//cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value"
 
-      PROCEDURE_SELECTOR = '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/'\
-      "cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.17.2.4']]/cda:entry/"\
-      "cda:procedure[./cda:templateId[@root='2.16.840.1.113883.10.20.24.3.64']]/cda:effectiveTime/cda:high/@value"
-
-      def initialize(program, program_year, doc_type)
+      def initialize(program, program_type, program_year, doc_type)
         @name = 'Measure Period Validator'
         @program = program
+        @program_type = program_type
         @program_year = program_year
         @doc_type = doc_type
       end
@@ -40,7 +32,7 @@ module CypressValidationUtility
         @rp_end_node = @document.at_xpath(REPORTING_PERIOD_END)
         @rp_end = @rp_end_node.value.to_s
 
-        case @program.downcase
+        case @program_type.downcase
         when 'ep'
           validate_year_measurement_period
         when 'eh'
@@ -53,8 +45,27 @@ module CypressValidationUtility
       end
 
       def validate_year_measurement_period
-        validate_year_start
-        validate_year_end
+        if @program == 'MIPS_INDIV' || @program == 'MIPS_GROUP'
+          validate_pyp_measurement_period
+        else
+          validate_year_start
+          validate_year_end
+        end
+      end
+
+      # the MIPS program allows for Pick Your Pace (PYP) reporting periods, where the length can be anywhere
+      # between 1 day and a year of data
+      def validate_pyp_measurement_period
+        rp_start_date, rp_end_date = formatted_start_and_end(@rp_start, @rp_end)
+        mp_start_date, mp_end_date = formatted_start_and_end(@program_year + '0101', @program_year + '1231')
+        unless rp_end_date >= rp_start_date
+          msg = 'Reported Measurement Period should be at least 1 day'
+          @errors << build_error(msg, @rp_start_node.parent.path, @options[:file_name])
+        end
+        unless rp_start_date >= mp_start_date && rp_end_date <= mp_end_date
+          msg = "Reported Measurement Period should be between #{mp_start_date} and #{mp_end_date}"
+          @errors << build_error(msg, @rp_start_node.parent.path, @options[:file_name])
+        end
       end
 
       def validate_year_start
@@ -96,15 +107,10 @@ module CypressValidationUtility
 
       def validate_encounter_during_reporting_period
         # pick all the discharge dates and make sure at least one falls within the reporting period
-        discharge_dates = @document.xpath(R3_DISCHARGE_SELECTOR).collect(&:value)
-        discharge_dates += @document.xpath(R3_1_DISCHARGE_SELECTOR).collect(&:value)
+        discharge_dates = @document.xpath(DISCHARGE_SELECTOR).collect(&:value)
         discharge_dates += @document.xpath(PROCEDURE_SELECTOR).collect(&:value)
 
-        # it looks like DateTime.parse is smart enough to figure out the date format, ex "20110706122735-0800" -> "Wed, 06 Jul 2011 12:27:35 -0800"
-        rp_start_date = DateTime.parse(@rp_start).in_time_zone
-        rp_end_date = DateTime.parse(@rp_end).in_time_zone
-        rp_start_date.change(hour: 0, min: 0, sec: 0)
-        rp_end_date.change(hour: 23, min: 59, sec: 59)
+        rp_start_date, rp_end_date = formatted_start_and_end(@rp_start, @rp_end)
 
         any_date_within_period = false
 
@@ -121,6 +127,12 @@ module CypressValidationUtility
           msg = 'Documents must contain at least one encounter or procedure with a discharge date during the reporting period'
           @errors << build_error(msg, '/', @options[:file_name])
         end
+      end
+
+      def formatted_start_and_end(rp_start, rp_end)
+        rp_start_date = DateTime.parse(rp_start).in_time_zone
+        rp_end_date = DateTime.parse(rp_end).in_time_zone
+        [rp_start_date.change(hour: 0, min: 0, sec: 0), rp_end_date.change(hour: 23, min: 59, sec: 59)]
       end
     end
   end

@@ -61,7 +61,7 @@ class EncounterValidator
 
   def get_time_value(time_el, value_el, file, errors)
     timestamp = time_el.at_xpath("./cda:#{value_el}/@value").value
-    if timestamp.length != 19
+    if timestamp.length != 19 && timestamp.length != 14
       case value_el
       when 'low'
         errors << build_error("CMS_0075 - Fails validation check for Encounter Performed Admission Date (effectiveTime/low value)

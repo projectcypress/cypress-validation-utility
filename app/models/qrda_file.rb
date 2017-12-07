@@ -169,6 +169,8 @@ class QrdaFile
       CypressValidationUtility::Validate::EPCat3_2016
     elsif program_type == 'ep' && program_year == '2017'
       CypressValidationUtility::Validate::ECCat3_2017
+    elsif program_type == 'ep' && program_year == '2018'
+      CypressValidationUtility::Validate::ECCat3_2018
     elsif program_type == 'none'
       if doc_type == 'cat3_r1'
         HealthDataStandards::Validate::Cat3

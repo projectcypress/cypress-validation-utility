@@ -165,16 +165,26 @@ class QrdaFile
   def cms_cat3_validator
     @validators.concat CAT3_VALIDATORS
     @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
-    if program_type == 'ep' && program_year == '2016'
-      CypressValidationUtility::Validate::EPCat3_2016
-    elsif program_type == 'ep' && program_year == '2017'
-      CypressValidationUtility::Validate::ECCat3_2017
+    if program_type == 'ep'
+      cms_cat3_program_validator
     elsif program_type == 'none'
       if doc_type == 'cat3_r1'
         HealthDataStandards::Validate::Cat3
       elsif doc_type == 'cat3_r21'
         HealthDataStandards::Validate::Cat3R21
       end
+    else
+      raise 'Cannot validate an EH QRDA Category III file'
+    end
+  end
+
+  def cms_cat3_program_validator
+    if program_year == '2016'
+      CypressValidationUtility::Validate::EPCat3_2016
+    elsif program_year == '2017'
+      CypressValidationUtility::Validate::ECCat3_2017
+    elsif program_year == '2018'
+      CypressValidationUtility::Validate::ECCat3_2018
     else
       raise 'Cannot validate an EH QRDA Category III file'
     end

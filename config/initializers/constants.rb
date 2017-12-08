@@ -36,7 +36,9 @@ YEAR_PROGRAMS = {
              ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
              ['Hospital Quality Reporting for Inpatient Quality Reporting Program voluntary submissions', 'I', 'HQR_IQR_VOL'],
              ['Hospital Quality Reporting for Episode Payment Model voluntary submissions', 'I', 'HQR_EPM_VOL']],
-    'ep' => []
+    'ep' => [['CPC+', 'III', 'CPCPLUS'],
+             ['MIPS Individual', 'III', 'MIPS_INDIV'],
+             ['MIPS Group', 'III', 'MIPS_GROUP']]
   }
 }.freeze
 

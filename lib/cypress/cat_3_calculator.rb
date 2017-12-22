@@ -75,6 +75,10 @@ module Cypress
       record.medical_record_number = rand(1_000_000_000_000_000)
       Cypress::GoImport.replace_negated_codes(record, @bundle)
       record.save
+      exporter = HealthDataStandards::Export::HTML.new
+      output = File.open('tmp/patient.html', 'w')
+        output << exporter.export(record)
+      output.close
       record
     rescue StandardError => e
       Rails.logger.error e.message.to_s

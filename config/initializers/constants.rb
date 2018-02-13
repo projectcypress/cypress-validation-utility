@@ -111,3 +111,6 @@ BUNDLE_PERIOD_OVERRIDES = {
     'effective_date' => 1_546_300_799
   }
 }.freeze
+
+ZIP_FILE_LIMIT = 25
+FILE_SIZE_LIMIT = 2_000_000 # bytes (2 MB)

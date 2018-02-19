@@ -20,7 +20,7 @@
       <% data_criteria[:children_criteria].each do |child| %>
         <li>
           <span class="sr-only sr-highlight-status"></span>
-          <%= render partial: 'data_criteria', locals: {reference: child, expand_variable: false, measure: measure, tag: "span"} %>
+          <%= render partial: 'highlighting/data_criteria', locals: {reference: child, expand_variable: false, measure: measure, tag: "span"} %>
         </li>
       <% end %>
       <% if data_criteria[:temporal_references] %>
@@ -28,7 +28,7 @@
           <li>
             <% sat_rat_ref = final_rationale_ref(reference)%>
             <span class="sat rationale-target rationale eval-<%= sat_rat_ref %>">
-              <%= render partial: 'temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
+              <%= render partial: 'highlighting/temporal_reference', locals: {temporal_reference: temp_ref, measure: measure, tag: "span"} %>
             </span>
           </li>
         <% end %>

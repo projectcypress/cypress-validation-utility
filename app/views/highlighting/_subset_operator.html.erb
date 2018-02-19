@@ -12,6 +12,6 @@ when "RECENT" %>
 <% end %>
 
 <% if subset_operator[:value] && subset_operator[:value][:type]!= 'ANYNonNull' %>
-  <%= render partial: 'value', locals: {value: subset_operator[:value], range_comparison: "", tag: "span"} %>
+  <%= render partial: 'highlighting/value', locals: {value: subset_operator[:value], range_comparison: "", tag: "span"} %>
 <% end %>
 :

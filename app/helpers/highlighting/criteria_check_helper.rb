@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # criteria check helper provide functionality for determining whether a
 # criteria should be updated based on specific occurrences
-module Upload::CriteriaCheckHelper
+module Highlighting::CriteriaCheckHelper
   def check_criteria_for_rationale(
       final_specifics, population, rationale, data_crit_hash, pop_key)
     # get the referenced occurrences in the logic tree using original pop code

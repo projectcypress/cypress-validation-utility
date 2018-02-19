@@ -120,7 +120,7 @@
       <div class="tab-pane" id="test_highlighting_<%= i %>">
         <% @patient_cache_all = QME::PatientCache.where({'value.patient_id'=> @files[i].record._id}) unless @files[i].record == nil %>
         <% if @patient_cache_all && @patient_cache_all.first %>
-          <%= render partial: 'measure_detail', locals: {measures: @measures} %>
+          <%= render partial: 'highlighting/measure_detail', locals: {measures: @measures} %>
         <% else %>
           <h3>Measure Breakdown Unavailable</h3>
           File must validate and patient must fall into the IPP for <i>Measure Breakdown</i> view.

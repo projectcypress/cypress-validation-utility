@@ -20,10 +20,10 @@
 
 <% if precondition[:preconditions] %>
   <% precondition[:preconditions].each do |prec| %>
-    <%= render partial: 'precondition', locals: {precondition: prec, parent_precondition:precondition, parent_negation: precondition[:negation], measure: measure} %>
+    <%= render partial: 'highlighting/precondition', locals: {precondition: prec, parent_precondition:precondition, parent_negation: precondition[:negation], measure: measure} %>
   <% end %>
 <% else %>
-  <%= render partial: 'data_criteria', locals: {reference: precondition[:reference], expand_variable: false, measure: measure, negatedParent: parent_negation,tag: "span"} %>
+  <%= render partial: 'highlighting/data_criteria', locals: {reference: precondition[:reference], expand_variable: false, measure: measure, negatedParent: parent_negation,tag: "span"} %>
 <% end %>
 
 <% unless suppress %>

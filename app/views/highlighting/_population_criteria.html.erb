@@ -25,7 +25,7 @@
         <% root_precondition = population[:preconditions][0] %>
         <% if root_precondition[:preconditions] %>
           <% root_precondition[:preconditions].each do |precondition| %>
-            <%= render partial: 'precondition', locals: {precondition: precondition, parent_precondition: root_precondition, parent_negation: root_precondition[:negation], measure: measure} %>
+            <%= render partial: 'highlighting/precondition', locals: {precondition: precondition, parent_precondition: root_precondition, parent_negation: root_precondition[:negation], measure: measure} %>
           <% end %>
         <% else %>
           <ul>
@@ -33,7 +33,7 @@
               <% if population[:aggregator] %>
                 <%= population[:aggregator] %> of
               <% end %>
-              <%= render partial: 'data_criteria', locals: {reference: root_precondition[:reference], expand_variable: false, measure: measure, tag: "span"} %>
+              <%= render partial: 'highlighting/data_criteria', locals: {reference: root_precondition[:reference], expand_variable: false, measure: measure, tag: "span"} %>
             </li>
           </ul>
         <% end %>

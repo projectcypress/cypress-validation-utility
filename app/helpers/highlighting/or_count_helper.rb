@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # or count helper searches through a measure's logic tree to count branch
 # points that could be flipped by a specific occurrence change
-module Upload::OrCountHelper
+module Highlighting::OrCountHelper
   # Or counts are used to know when to turn an OR from green to red.
   # Once we negate all the true ors, we can switch to red
   def calculate_or_counts(measure, rationale)

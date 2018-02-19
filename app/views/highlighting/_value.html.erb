@@ -26,16 +26,16 @@
     <% if value[:type] == 'IVL_PQ' ||value[:type] == 'IVL_TS' %>
       <% if value[:high] && value[:low] %>
         <% if value[:high][:value] == value[:low][:value] && value[:high][:inclusive?] && value[:low][:inclusive?] %>
-          <%= render partial: 'value', locals: {value: value[:low], range_comparison: "", tag: "span"} %>
+          <%= render partial: 'highlighting/value', locals: {value: value[:low], range_comparison: "", tag: "span"} %>
         <% else %>
-          <%= render partial: 'value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %> and
-          <%= render partial: 'value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
+          <%= render partial: 'highlighting/value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %> and
+          <%= render partial: 'highlighting/value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
         <% end %>
       <% else %>
         <% if value[:high] %>
-          <%= render partial: 'value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
+          <%= render partial: 'highlighting/value', locals: {value: value[:high], range_comparison: "<", tag: "span"} %>
         <% elsif value[:low] %>
-          <%= render partial: 'value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %>
+          <%= render partial: 'highlighting/value', locals: {value: value[:low], range_comparison: ">", tag: "span"} %>
         <% end %>
       <% end %>
     <% else %>

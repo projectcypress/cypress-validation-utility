@@ -33,10 +33,10 @@
           <% measure[:population_ids].values.uniq.each do |id| %>
             <% population = (measure.hqmf_document[:population_criteria].select{|k, h| h[:hqmf_id] == id }).values[0] %>
             <% @population_key = population[:type] %>
-            <%= render partial: 'population_criteria', locals: {population: population, measure: measure} %>
+            <%= render partial: 'highlighting/population_criteria', locals: {population: population, measure: measure} %>
           <% end %>
           <% @population_key = 'VAR' %>
-          <%= render partial: 'variables', locals: {measure: measure} %>
+          <%= render partial: 'highlighting/variables', locals: {measure: measure} %>
         </div>
         <div class="d3-measure-viz">
         </div>

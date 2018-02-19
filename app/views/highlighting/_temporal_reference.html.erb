@@ -1,5 +1,5 @@
 <% if temporal_reference[:range] %>
-  <%= render partial: 'value', locals: {value: temporal_reference[:range], range_comparison: "", tag: "span"} %>
+  <%= render partial: 'highlighting/value', locals: {value: temporal_reference[:range], range_comparison: "", tag: "span"} %>
 <% end %>
 
 <% timing_map =
@@ -36,5 +36,5 @@
 <% if temporal_reference[:reference] == 'MeasurePeriod' %>
   Measurement Period
 <% else %>
-  <%= render partial: 'data_criteria', locals: {reference: temporal_reference[:reference], expand_variable: false, measure: measure, tag: "span"} %>
+  <%= render partial: 'highlighting/data_criteria', locals: {reference: temporal_reference[:reference], expand_variable: false, measure: measure, tag: "span"} %>
 <% end %>

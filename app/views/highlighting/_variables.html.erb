@@ -25,7 +25,7 @@
               <b><%= dc[:description] %> = </b>
               <span class="sr-only sr-highlight-status"></span>
             </span>
-            <%= render partial: 'data_criteria', locals: {reference: dc[:source_data_criteria], expand_variable: true, measure: measure, tag: "span"} %>
+            <%= render partial: 'highlighting/data_criteria', locals: {reference: dc[:source_data_criteria], expand_variable: true, measure: measure, tag: "span"} %>
           </li>
         <% end %>
       </ul>

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 # criteria check helper provide functionality for determining whether a
 # criteria should be updated based on specific occurrences
 module Upload::CriteriaCheckHelper
   def check_criteria_for_rationale(
-      final_specifics, population, rationale, data_crit_hash, pop_key)
+      final_specifics, population, rationale, data_crit_hash, pop_key
+  )
     # get the referenced occurrences in the logic tree using original pop code
     criteria = get_data_criteria_keys(population, data_crit_hash, pop_key).uniq
 
@@ -30,8 +32,7 @@ module Upload::CriteriaCheckHelper
 
   def add_criterion_results(results, criterion_rationale, criterion, pop_key,
                             final_specifics)
-    if criterion_rationale &&
-       criterion_rationale.is_a?(Hash) &&
+    if criterion_rationale && criterion_rationale.is_a?(Hash) &&
        criterion_rationale[:specifics] &&
        !criterion_rationale[:specifics].empty? &&
        should_switch_highlight?(criterion_rationale, pop_key, final_specifics)
@@ -46,13 +47,14 @@ module Upload::CriteriaCheckHelper
     # byebug
     occurrences = []
     return occurrences unless child
-    if child[:preconditions] && !child[:preconditions].empty?
+    if child[:preconditions].present?
       child[:preconditions].each do |precondition|
         occurrences.concat get_data_criteria_keys(precondition, data_crit_hash)
       end
     elsif child[:reference]
       occurrences.concat get_data_criteria_keys(
-        data_crit_hash[child[:reference]], data_crit_hash, child[:reference])
+        data_crit_hash[child[:reference]], data_crit_hash, child[:reference]
+      )
     else
       add_complex_occurrences(occurrences, key, child, data_crit_hash)
     end
@@ -66,9 +68,11 @@ module Upload::CriteriaCheckHelper
       occurrences.push key
     end
     add_references_key_occurrences(
-      occurrences, :temporal_references, child, data_crit_hash)
+      occurrences, :temporal_references, child, data_crit_hash
+    )
     add_references_key_occurrences(
-      occurrences, :references, child, data_crit_hash)
+      occurrences, :references, child, data_crit_hash
+    )
   end
 
   def add_derived_occurrences(occurrences, key, child, data_crit_hash)
@@ -79,17 +83,19 @@ module Upload::CriteriaCheckHelper
     child[:children_criteria].each do |data_criteria_key|
       data_criteria = data_crit_hash[data_criteria_key]
       occurrences.concat get_data_criteria_keys(
-        data_criteria, data_crit_hash, data_criteria_key)
+        data_criteria, data_crit_hash, data_criteria_key
+      )
     end
   end
 
   def add_references_key_occurrences(occurrences, key, child, data_crit_hash)
-    if child[key] && !child[key].empty?
+    if child[key].present?
       # for type, reference of child.references ???
       child[key].each do |reference|
         data_criteria = data_crit_hash[reference[:reference]]
         occurrences.concat get_data_criteria_keys(
-          data_criteria, data_crit_hash, reference[:reference])
+          data_criteria, data_crit_hash, reference[:reference]
+        )
       end
     end
   end

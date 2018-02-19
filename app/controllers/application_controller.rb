@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'logger'
 
 class ApplicationController < ActionController::Base
@@ -13,6 +14,6 @@ class ApplicationController < ActionController::Base
     ERROR_LOG.error exception.backtrace.join("\n")
 
     flash[:notice] = exception.message
-    render(template: 'errors/500', status: 500) && return
+    render(:template => 'errors/500', :status => 500) && return
   end
 end

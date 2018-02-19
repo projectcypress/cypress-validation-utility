@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'bin/**/*'
   TargetRubyVersion: 2.3
+  TargetRailsVersion: 4.2
 ClassAndModuleChildren:
   Exclude:
     - 'app/helpers/upload/*'

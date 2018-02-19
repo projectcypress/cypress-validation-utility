@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -22,7 +23,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', :group => :doc
 
 gem 'carrierwave'
-gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
 gem 'thin'
 
@@ -32,9 +33,9 @@ gem 'sucker_punch', '~> 2.0'
 # gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
 gem 'health-data-standards', '~> 3.7.0'
 
+gem 'go-cda-tools', :git => 'https://github.com/projectcypress/go-cda-tools.git', :branch => 'master'
 gem 'quality-measure-engine',
-    git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
-gem 'go-cda-tools', git: 'https://github.com/projectcypress/go-cda-tools.git', branch: 'master'
+    :git => 'https://github.com/projectcypress/quality-measure-engine.git', :branch => 'bump_mongoid'
 # gem 'go-cda-tools', path: '../go-cda-tools'
 
 # gem "bson"
@@ -54,19 +55,19 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'overcommit'
-  gem 'scss_lint', require: false
-  gem 'rubocop', '0.39', require: false
   gem 'pry'
+  gem 'rubocop', '0.49', :require => false
+  gem 'scss_lint', :require => false
 end
 
 group :test do
-  gem 'brakeman', require: false
+  gem 'brakeman', :require => false
   gem 'bundler-audit'
-  gem 'simplecov', require: false
   gem 'mocha'
+  gem 'simplecov', :require => false
 end
 
 group :production do
-  gem 'unicorn-rails'
   gem 'newrelic_rpm'
+  gem 'unicorn-rails'
 end

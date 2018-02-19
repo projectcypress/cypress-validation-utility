@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -31,8 +32,8 @@ class ActiveSupport::TestCase
   end
 
   def unzip_if_necessary(zipped_collection)
-    zipfile = File.join(Rails.root, 'test', 'fixtures', zipped_collection + '.zip')
-    folder = File.join(Rails.root, 'test', 'fixtures', zipped_collection)
+    zipfile = Rails.root.join('test', 'fixtures', zipped_collection + '.zip')
+    folder = Rails.root.join('test', 'fixtures', zipped_collection)
 
     return if Dir.exist? folder
 
@@ -72,7 +73,7 @@ class ActiveSupport::TestCase
         json[k] = value_or_bson(v)
       elsif v.is_a? Array
         json[k] = map_array(v)
-      elsif k == 'created_at' || k == 'updated_at'
+      elsif %w[created_at updated_at].include?(k)
         json[k] = Time.parse(v).utc
       end
     end
@@ -82,7 +83,7 @@ class ActiveSupport::TestCase
   def collection_fixtures(*collections)
     collections.each do |collection|
       Mongoid.default_client[collection].drop
-      Dir.glob(File.join(Rails.root, 'test', 'fixtures', collection, '*.json')).each do |json_fixture_file|
+      Dir.glob(Rails.root.join('test', 'fixtures', collection, '*.json')).each do |json_fixture_file|
         fixture_json = JSON.parse(File.read(json_fixture_file), max_nesting: 250)
         map_bson_ids(fixture_json)
         Mongoid.default_client[collection].insert_one(fixture_json)
@@ -91,14 +92,12 @@ class ActiveSupport::TestCase
   end
 
   def load_library_functions
-    Dir.glob(File.join(Rails.root, 'test', 'fixtures', 'library_functions', '*.js')).each do |js_path|
+    Dir.glob(Rails.root.join('test', 'fixtures', 'library_functions', '*.js')).each do |js_path|
       fn = "function () {\n #{File.read(js_path)} \n }"
       name = File.basename(js_path, '.js')
       Mongoid.default_client['system.js'].replace_one({ '_id' => name },
                                                       { '_id' => name,
-                                                        'value' => BSON::Code.new(fn)
-                                                      }, upsert: true
-                                                     )
+                                                        'value' => BSON::Code.new(fn) }, upsert: true)
     end
   end
 end

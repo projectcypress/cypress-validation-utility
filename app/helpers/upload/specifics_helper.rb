@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # specifics helper provides general funcitonality necessary for fully
 # determining specific occurrence rationale updates
 module Upload::SpecificsHelper
@@ -14,7 +15,7 @@ module Upload::SpecificsHelper
   def build_parent_map(root, data_crit_hash)
     parent_map = {}
     return parent_map unless root
-    if root[:preconditions] && !root[:preconditions].empty?
+    if root[:preconditions].present?
       root[:preconditions].each do |precondition|
         push_and_merge_map(parent_map, "precondition_#{precondition[:id]}",
                            root, precondition, data_crit_hash)
@@ -29,24 +30,19 @@ module Upload::SpecificsHelper
   end
 
   def subreference_update_parent_map(parent_map, root, data_crit_hash)
-    if root[:temporal_references]
-      root[:temporal_references].each do |temporal_reference|
-        next if temporal_reference[:reference] == 'MeasurePeriod'
-        push_and_merge_map(
-          parent_map, temporal_reference[:reference], root,
-          data_crit_hash[temporal_reference[:reference]], data_crit_hash)
-      end
+    root[:temporal_references]&.each do |temporal_reference|
+      next if temporal_reference[:reference] == 'MeasurePeriod'
+      push_and_merge_map(
+        parent_map, temporal_reference[:reference], root,
+        data_crit_hash[temporal_reference[:reference]], data_crit_hash
+      )
     end
-    if root[:references] # ??? check for :references in db
-      root[:references].each do |reference|
-        push_and_merge_map(parent_map, reference[:reference], root,
-                           data_crit_hash[reference[:reference]], data_crit_hash)
-      end
+    root[:references]&.each do |reference|
+      push_and_merge_map(parent_map, reference[:reference], root,
+                         data_crit_hash[reference[:reference]], data_crit_hash)
     end
-    if root[:children_criteria]
-      root[:children_criteria].each do |child|
-        push_and_merge_map(parent_map, child, root, data_crit_hash[child], data_crit_hash)
-      end
+    root[:children_criteria]&.each do |child|
+      push_and_merge_map(parent_map, child, root, data_crit_hash[child], data_crit_hash)
     end
   end
 
@@ -107,18 +103,21 @@ module Upload::SpecificsHelper
   def find_bubble_ups(updated_rationale, rationale, final_specifics,
                       update_params, parent_key)
     # if this is an OR then remove a true increment since it's a bad true
-    update_params[:or_counts][parent_key] =
-      update_params[:or_counts][parent_key] - 1 if update_params[:or_counts][parent_key]
+    if update_params[:or_counts][parent_key]
+      update_params[:or_counts][parent_key] =
+        update_params[:or_counts][parent_key] - 1
+    end
     parent_oc = update_params[:or_counts][parent_key]
     # if we're either an AND or we're an OR and the count is zero then switch
     # to false and move up the tree
-    if (!parent_oc || parent_oc == 0) &&
+    if (!parent_oc || parent_oc.zero?) &&
        (!rationale[parent_key].nil? || rationale[parent_key] == true ||
        !rationale.key?(parent_key))
       updated_rationale[update_params[:code]][parent_key] = false if rationale[parent_key]
       updated_rationale = update_logic_tree_children(
         updated_rationale, rationale, final_specifics, update_params,
-        update_params[:parent_map][parent_key])
+        update_params[:parent_map][parent_key]
+      )
     end
     updated_rationale
   end

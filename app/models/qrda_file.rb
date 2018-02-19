@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'nokogiri'
 require 'ext/record'
 require 'cat3_population_validator'
@@ -36,11 +37,11 @@ class QrdaFile
 
     @bundle = HealthDataStandards::CQM::Bundle[program_year]
 
-    self.validation_errors = { qrda: [], reporting: [], submission: [], warning: [], ungrouped: [] }
+    self.validation_errors = { :qrda => [], :reporting => [], :submission => [], :warning => [], :ungrouped => [] }
     validators.each do |v|
       # require 'pry'
       # binding.pry
-      errs = v.validate(content, file_name: @filename)
+      errs = v.validate(content, :file_name => @filename)
       errs.each do |e|
         e.validator ||= v.class.name
         # make cat1 validation error types a warning for data criteria outside the measure definition

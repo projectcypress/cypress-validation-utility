@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Be sure to restart your server when you modify this file.
 require 'logger'
 
@@ -7,7 +8,7 @@ require_relative '../../lib/encounter_validator'
 
 ERROR_LOG = Logger.new(::File.new('log/error.log', 'a+'))
 
-POSSIBLE_BUNDLES = %w(2016 2017 2018).freeze
+POSSIBLE_BUNDLES = %w[2016 2017 2018].freeze
 # just define which bundles we want for now, in the uploads controller we'll populate these
 # (allows for re-checking without restarting in case the user installs a new one)
 
@@ -19,7 +20,7 @@ YEAR_PROGRAMS = {
     'ep' => [['Comprehensive End-Stage Renal Disease Care Initiative', 'III', 'CEC'],
              ['PQRS Meaningful Use Individual', 'both', 'PQRS_MU_INDIVIDUAL'],
              ['PQRS Meaningful Use Group', 'both', 'PQRS_MU_GROUP'],
-             %w(CPC III CPC),
+             %w[CPC III CPC],
              ['Meaningful Use Only', 'III', 'MU_ONLY']]
   },
   '2017' => {

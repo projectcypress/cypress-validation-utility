@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DocumentUploader < CarrierWave::Uploader::Base
   include CarrierWave::MimeTypes
 
@@ -6,11 +7,11 @@ class DocumentUploader < CarrierWave::Uploader::Base
   process :set_content_type
 
   def store_dir
-    "#{Rails.root}/tmp/uploads/#{model.id}"
+    Rails.root.join('tmp', 'uploads', '#{model.id}')
   end
 
   def extension_white_list
-    %w(xml zip)
+    %w[xml zip]
   end
 
   def uploaded_filename

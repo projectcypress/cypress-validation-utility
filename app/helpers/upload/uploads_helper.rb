@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../../lib/cms_validators'
 require_relative '../../../lib/encounter_validator'
 
@@ -55,8 +56,7 @@ module Upload::UploadsHelper
     keyed_data_crit_hash = create_keyed_hash(data_crit_hash)
 
     measure[:population_ids].values.uniq.each do |id|
-      pop_map = measure.hqmf_document[:population_criteria
-        ].select { |_k, h| h[:hqmf_id] == id }
+      pop_map = measure.hqmf_document[:population_criteria].select { |_k, h| h[:hqmf_id] == id }
       population = pop_map.values[0]
       update_params[:code] = population[:type]
       next unless final_specifics[update_params[:code]]
@@ -65,14 +65,16 @@ module Upload::UploadsHelper
       # get the referenced occurrences in the logic tree and
       # identify good/bad to update rationale
       update_params[:criteria_results] = check_criteria_for_rationale(
-        final_specifics, population, rationale, data_crit_hash, update_params[:code])
+        final_specifics, population, rationale, data_crit_hash, update_params[:code]
+      )
       # submeasure_code = pop_map.keys[0]
       # @population.get(code)?.code || code ???
 
       update_params[:parent_map] = build_parent_map(population, keyed_data_crit_hash)
 
       updated_rationale = update_with_criteria_results(
-        updated_rationale, rationale, final_specifics, update_params)
+        updated_rationale, rationale, final_specifics, update_params
+      )
     end
     # byebug
     updated_rationale
@@ -87,7 +89,8 @@ module Upload::UploadsHelper
       # move up the logic tree to set AND/ORs to false based on the
       # removal of the bad specific's true eval
       updated_rationale = update_logic_tree(
-        updated_rationale, rationale, final_specifics, update_params, bad_criteria)
+        updated_rationale, rationale, final_specifics, update_params, bad_criteria
+      )
     end
     # check the good specifics with a negated parent.  If there are multiple
     # candidate specifics and one is good while the other is bad, the child
@@ -96,7 +99,8 @@ module Upload::UploadsHelper
     # it evaluated to false
     update_params[:criteria_results][:good].each do |good_criteria|
       updated_rationale[update_params[:code]] = updated_negated_good(
-        updated_rationale[update_params[:code]], rationale, good_criteria, update_params[:parent_map])
+        updated_rationale[update_params[:code]], rationale, good_criteria, update_params[:parent_map]
+      )
     end
 
     updated_rationale
@@ -107,7 +111,7 @@ module Upload::UploadsHelper
     rat_ref = nil
     if @specifics[@population_key] || @population_key == 'VAR'
       rat_ref = @rationale[reference]
-      rat_ref = rat_ref[:results].count > 0 if rat_ref.is_a?(Hash)
+      rat_ref = rat_ref[:results].count.positive? if rat_ref.is_a?(Hash)
       if @population_key != 'VAR' &&
          @updated_rationale[@population_key] &&
          @updated_rationale[@population_key].key?(reference)

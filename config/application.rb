@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails'
@@ -32,7 +33,7 @@ module CypressValidationUtilityRails
 
     Mongoid.load!('config/mongoid.yml')
 
-    config.assets.paths << "#{Rails.root}/app/assets/fonts"
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
     config.exceptions_app = routes
 

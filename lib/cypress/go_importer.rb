@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Cypress
   module GoImport
     def self.replace_negated_codes(record, bundle)

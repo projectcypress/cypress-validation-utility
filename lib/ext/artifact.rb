@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Artifact
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -8,10 +9,10 @@ class Artifact
                       'text/xml' => :xml }.freeze
 
   mount_uploader :file, DocumentUploader
-  belongs_to :upload, index: true
+  belongs_to :upload, :index => true
 
-  field :content_type, type: String
-  field :file_size, type: Integer
+  field :content_type, :type => String
+  field :file_size, :type => Integer
 
   before_save :update_asset_attributes
 
@@ -57,7 +58,7 @@ class Artifact
   private
 
   def update_asset_attributes
-    return if !file.present? || !file_changed?
+    return if file.blank? || !file_changed?
     self.content_type = file.file.content_type
     self.file_size = file.file.size
   end

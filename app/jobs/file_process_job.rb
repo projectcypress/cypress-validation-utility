@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'cypress/cat_3_calculator'
 
 class FileProcessJob < ActiveJob::Base
@@ -21,7 +22,6 @@ class FileProcessJob < ActiveJob::Base
 
     curr_file.state = :complete
     curr_file.save(validate: false)
-
   rescue Nokogiri::XML::SyntaxError => e
     upload.fail(e, curr_file)
   rescue => e

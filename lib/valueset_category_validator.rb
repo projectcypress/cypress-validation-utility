@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CypressValidationUtility
   module Validate
     class ValuesetCategoryValidator
@@ -28,7 +29,7 @@ module CypressValidationUtility
         @name = 'Valueset Category Validator'
         @hqmf_qrda_oid_map = HealthDataStandards::Export::QRDA::EntryTemplateResolver.hqmf_qrda_oid_map
         @measure_cms_ids = []
-        if measure_ids && !measure_ids.empty?
+        if measure_ids.present?
           @measure_cms_ids = HealthDataStandards::CQM::Measure.where(:hqmf_id.in => measure_ids).distinct(:cms_id)
         end
       end
@@ -46,7 +47,7 @@ module CypressValidationUtility
         doc.xpath('//*[@sdtc:valueSet]').each do |value_set|
           value_set_hash = {}
           template_ids = []
-          if %w(code value translation).include? value_set.name
+          if %w[code value translation].include? value_set.name
             # all of the template ids for the entry
             template_node = value_set
             while template_node.name != 'entry'
@@ -75,13 +76,13 @@ module CypressValidationUtility
             result = find_vs_categories(vset, data_element['path'], qrda_oids, options[:file_name])
           end
           next if result
-          if qrda_oids.blank?
-            @errors << build_error("Value Set #{value_set_oid} has a different category than 'Attribute'",
+          @errors << if qrda_oids.blank?
+                       build_error("Value Set #{value_set_oid} has a different category than 'Attribute'",
                                    data_element['path'], options[:file_name])
-          else
-            @errors << build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}",
+                     else
+                       build_error("Value Set #{value_set_oid} has a different category than Templates #{qrda_oids}",
                                    data_element['path'], options[:file_name])
-          end
+                     end
         end
       end
 

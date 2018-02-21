@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'ext/artifact'
 require 'hqmf-parser'
 
@@ -11,8 +12,7 @@ class UploadsController < ApplicationController
     end
   end
 
-  def new
-  end
+  def new; end
 
   def create
     artf = Artifact.new(file: params[:file])
@@ -45,7 +45,7 @@ class UploadsController < ApplicationController
     # a collection of elements.
     @files = @upload.qrda_files.where(:state => :complete).to_a
 
-    @upload_complete = (@files&.count == @upload.file_count)
+    @upload_complete = (@upload.file_count == @files&.count)
 
     return unless @upload_complete
 

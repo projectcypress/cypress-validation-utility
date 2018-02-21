@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 require 'measure_period_validator'
 
 class MeasurePeriodValidatorTest < ActiveSupport::TestCase
   setup do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/good_cat1.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'good_cat1.xml'), 'text/xml')
     @document = get_document(file)
   end
 

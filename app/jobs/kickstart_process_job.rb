@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'cypress/cat_3_calculator'
 
 class KickstartProcessJob < ActiveJob::Base
@@ -13,7 +14,6 @@ class KickstartProcessJob < ActiveJob::Base
 
     upload.file_count = file_count
     upload.save!(validate: false)
-
   rescue Nokogiri::XML::SyntaxError => e
     upload.fail(e)
   rescue => e

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 require 'mocha/mini_test'
 
@@ -18,7 +19,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload single valid xml' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/good_cat3.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'good_cat3.xml'), 'text/xml')
 
     post 'create', file: file, year: '2016', file_type: 'cat3_r1', program: 'none'
 
@@ -32,7 +33,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload single xml with errors' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/5_ASTHMA_A_with_errors.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', '5_ASTHMA_A_with_errors.xml'), 'text/xml')
 
     post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
 
@@ -46,7 +47,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload single broken xml' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/invalid_xml.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'invalid_xml.xml'), 'text/xml')
 
     post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'none'
 
@@ -57,7 +58,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload zip file' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/2_qrdas.zip'), 'application/zip')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', '2_qrdas.zip'), 'application/zip')
 
     post 'create', file: file, year: '2016', file_type: 'cat3_r1', program: 'none'
 
@@ -84,7 +85,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload single xml with category error' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/wrong_categories.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'wrong_categories.xml'), 'text/xml')
 
     post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
 
@@ -97,7 +98,7 @@ class UploadsControllerTest < ActionController::TestCase
   end
 
   test 'upload single xml without category error' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/correct_categories.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'correct_categories.xml'), 'text/xml')
 
     post 'create', file: file, year: '2016', file_type: 'cat1_r3', program: 'pqrs_mu_individual'
 

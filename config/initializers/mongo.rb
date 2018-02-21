@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module QME
   if defined? Rails::Server
     patient_cache = Mongoid.default_client['patient_cache']

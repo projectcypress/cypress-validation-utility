@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CypressValidationUtility
   module Validate
     class Cat3PopulationValidator

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # or count helper searches through a measure's logic tree to count branch
 # points that could be flipped by a specific occurrence change
 module Upload::OrCountHelper
@@ -14,7 +15,8 @@ module Upload::OrCountHelper
       population = pop_map.values[0]
 
       or_counts = or_counts.merge(
-        calculate_or_counts_recursive(rationale, population[:preconditions]))
+        calculate_or_counts_recursive(rationale, population[:preconditions])
+      )
     end
     or_counts.merge(calculate_data_criteria_or_counts(measure, rationale))
   end
@@ -23,11 +25,12 @@ module Upload::OrCountHelper
   # down the tree
   def calculate_or_counts_recursive(rationale, preconditions)
     or_counts = {}
-    return or_counts unless preconditions && !preconditions.empty?
+    return or_counts if preconditions.blank?
     preconditions.each do |precondition|
       calculate_precondition_or_counts(or_counts, rationale, precondition)
       or_counts = or_counts.merge calculate_or_counts_recursive(
-        rationale, precondition[:preconditions])
+        rationale, precondition[:preconditions]
+      )
     end
     or_counts
   end
@@ -36,9 +39,9 @@ module Upload::OrCountHelper
     if precondition[:conjunction_code] == 'atLeastOneTrue' &&
        !precondition[:negation]
       true_count = 0
-      if precondition[:preconditions] && !precondition[:preconditions].empty?
+      if precondition[:preconditions].present?
         precondition[:preconditions].each do |child|
-          has_children = child[:preconditions] && !child[:preconditions].empty?
+          has_children = child[:preconditions].present?
           key = has_children ? "precondition_#{child[:id]}" : child[:reference]
           true_count += 1 if rationale[key]
         end

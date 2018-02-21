@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CypressValidationUtility
   module Validate
     class MeasurePeriodValidator
@@ -85,7 +86,7 @@ module CypressValidationUtility
       end
 
       def validate_quarters_measurement_period
-        quarters = [%w(0101 0331), %w(0401 0630), %w(0701 0930), %w(1001 1231)]
+        quarters = [%w[0101 0331], %w[0401 0630], %w[0701 0930], %w[1001 1231]]
 
         matches_quarter = false
 

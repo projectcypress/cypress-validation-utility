@@ -55,15 +55,14 @@ module CypressValidationUtility
           " is greater than Denominator value #{denom} for measure #{measure}", '/', file)
         end
 
-        errors.concat(validate_cv_populations(file))
+        errors.concat(validate_cv_populations(file, pop, ipp, measure))
       end
 
-      def validate_cv_populations(file)
+      def validate_cv_populations(file, pop, ipp, measure)
         errors = []
         # CVT measures, IPP >= MSRPOPL >= OBSERV
         msrpopl = pop['MSRPOPL'] || 0
         observ = pop['OBSERV'] || 0
-
         if msrpopl > ipp
           errors << build_error("Measure Population value #{msrpopl} is greater than Initial Population value #{ipp} for  "\
           "measure #{measure}", '/', file)
@@ -77,7 +76,8 @@ module CypressValidationUtility
 
       def measure_entry_selector
         '/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component' \
-          "/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.27.2.1']]/cda:entry"
+          "/cda:section[./cda:templateId[@root='2.16.840.1.113883.10.20.27.2.1']]" \
+          "/cda:entry[./cda:organizer/cda:templateId[@root='2.16.840.1.113883.10.20.24.3.98']]"
       end
 
       def measure_id_selector

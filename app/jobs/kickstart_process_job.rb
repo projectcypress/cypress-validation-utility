@@ -17,7 +17,7 @@ class KickstartProcessJob < ActiveJob::Base
       # limits exceeded
       # pretty_file_size = number_to_human_size(upload.artifact.file_size)
       # pretty_limit = number_to_human_size(FILE_SIZE_LIMIT)
-      raise "File has size #{number_to_human_size(upload.artifact.file_size)} and file count #{file_count} which
+      raise "File has size of #{number_to_human_size(upload.artifact.file_size)} and file count of #{file_count} which
              exceeds upload limits of #{number_to_human_size(FILE_SIZE_LIMIT)} and #{ZIP_FILE_LIMIT} files."
     end
 

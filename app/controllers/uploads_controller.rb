@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'ext/artifact'
 require 'hqmf-parser'
+require 'sharedcypress'
 
 class UploadsController < ApplicationController
   before_action :require_bundles

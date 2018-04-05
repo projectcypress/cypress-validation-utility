@@ -74,37 +74,3 @@ $fa-asterisk:           "\f069";
     width: 300px;
   }
 }
-
-.rationale {
-
-  .eval-true {
-    background-color: $state-success-bg;
-    color: $state-success-text;
-
-    &:before {
-      content: $fa-check;
-      font-family: FontAwesome;
-    }
-  }
-
-  .eval-false {
-    background-color: $state-danger-bg;
-    color: $state-danger-text;
-
-    &:before {
-      content: $fa-times;
-      font-family: FontAwesome;
-    }
-  }
-  
-  .eval-bad-specifics {
-    background-color: $state-danger-bg;
-    color: $state-danger-text;
-
-    &:before {
-      content: $fa-asterisk;
-      font-family: FontAwesome;
-    }
-  }
-
-}

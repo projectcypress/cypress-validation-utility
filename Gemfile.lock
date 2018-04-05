@@ -18,6 +18,15 @@ GIT
       rubyzip (>= 1.0.0)
       zip-zip
 
+GIT
+  remote: https://github.com/projectcypress/sharedcypress.git
+  revision: 812cfe6d418e88b981daf3d5bf9cb1923679fe0f
+  branch: master
+  specs:
+    sharedcypress (0.1.0)
+      activesupport (~> 4.2.7)
+      sass
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -328,6 +337,7 @@ DEPENDENCIES
   sass-rails (~> 5.0.4)
   scss_lint
   sdoc (~> 0.4.0)
+  sharedcypress!
   simplecov
   sucker_punch (~> 2.0)
   therubyrhino
@@ -337,4 +347,4 @@ DEPENDENCIES
   unicorn-rails
 
 BUNDLED WITH
-   1.15.4
+   1.16.0

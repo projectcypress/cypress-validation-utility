@@ -40,6 +40,8 @@ gem 'go-cda-tools', git: 'https://github.com/projectcypress/go-cda-tools.git', b
 # gem "bson"
 # gem "moped", github: "mongoid/moped"
 
+gem 'sharedcypress', git: 'https://github.com/projectcypress/sharedcypress.git', branch: 'master'
+
 gem 'font-awesome-sass'
 
 gem 'rubyzip'

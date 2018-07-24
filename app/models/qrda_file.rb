@@ -35,7 +35,7 @@ class QrdaFile
   def process
     @measure_ids = measure_ids_from_file
 
-    @bundle = HealthDataStandards::CQM::Bundle[program_year]
+    @bundle = HealthDataStandards::CQM::Bundle[program_year] unless program_year == '2019'
 
     self.validation_errors = { :qrda => [], :reporting => [], :submission => [], :warning => [], :ungrouped => [] }
     validators.each do |v|
@@ -110,23 +110,19 @@ class QrdaFile
 
   def cat1_validator
     @validators.concat CAT1_VALIDATORS
-    @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids)
-    @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id)
+    @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids) unless program_year == '2019'
+    @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id) unless program_year == '2019'
 
     qrda_qdm_template_type = 'r3'
 
-    if program_type == 'ep'
-      @validators << CypressValidationUtility::Validate::EPCat1_2016.instance if program_year == '2016'
-    elsif program_type == 'eh'
+    if program_type == 'eh'
       case program_year
-      when '2016'
-        @validators << CypressValidationUtility::Validate::EHCat1_2016.instance
-      when '2017'
-        @validators << CypressValidationUtility::Validate::EHCat1_2017.instance
-        qrda_qdm_template_type = 'r3_1'
       when '2018'
         @validators << CypressValidationUtility::Validate::EHCat1_2018.instance
         qrda_qdm_template_type = 'r4'
+      when '2019'
+        @validators << CypressValidationUtility::Validate::EHCat1_2019.instance
+        qrda_qdm_template_type = 'r5'
       end
       @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new(qrda_qdm_template_type)
     end
@@ -147,15 +143,12 @@ class QrdaFile
 
   def cms_validator_for_doc_type
     case doc_type
-    when 'cat1_r3'
-      cat1_validator
-      HealthDataStandards::Validate::Cat1
-    when 'cat1_r31'
-      cat1_validator
-      HealthDataStandards::Validate::Cat1R31
     when 'cat1_r4'
       cat1_validator
       HealthDataStandards::Validate::Cat1R4
+    when 'cat1_r5'
+      cat1_validator
+      HealthDataStandards::Validate::Cat1R5
     when 'cat3_r1', 'cat3_r21'
       cms_cat3_validator
     else
@@ -164,8 +157,8 @@ class QrdaFile
   end
 
   def cms_cat3_validator
-    @validators.concat CAT3_VALIDATORS
-    @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
+    @validators.concat CAT3_VALIDATORS unless program_year == '2019'
+    @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance unless program_year == '2019'
     if program_type == 'ep'
       cms_cat3_program_validator
     elsif program_type == 'none'
@@ -180,11 +173,7 @@ class QrdaFile
   end
 
   def cms_cat3_program_validator
-    if program_year == '2016'
-      CypressValidationUtility::Validate::EPCat3_2016
-    elsif program_year == '2017'
-      CypressValidationUtility::Validate::ECCat3_2017
-    elsif program_year == '2018'
+    if program_year == '2018'
       CypressValidationUtility::Validate::ECCat3_2018
     else
       raise 'Cannot validate an EH QRDA Category III file'

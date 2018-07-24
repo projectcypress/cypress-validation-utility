@@ -13,24 +13,6 @@ POSSIBLE_BUNDLES = %w(2018).freeze
 # (allows for re-checking without restarting in case the user installs a new one)
 
 YEAR_PROGRAMS = {
-  '2016' => {
-    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
-             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
-             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR']],
-    'ep' => [['Comprehensive End-Stage Renal Disease Care Initiative', 'III', 'CEC'],
-             ['PQRS Meaningful Use Individual', 'both', 'PQRS_MU_INDIVIDUAL'],
-             ['PQRS Meaningful Use Group', 'both', 'PQRS_MU_GROUP'],
-             %w[CPC III CPC],
-             ['Meaningful Use Only', 'III', 'MU_ONLY']]
-  },
-  '2017' => {
-    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
-             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
-             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR']],
-    'ep' => [['CPC+', 'III', 'CPCPLUS'],
-             ['MIPS Individual', 'III', 'MIPS_INDIV'],
-             ['MIPS Group', 'III', 'MIPS_GROUP']]
-  },
   '2018' => {
     'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
              ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
@@ -40,24 +22,26 @@ YEAR_PROGRAMS = {
     'ep' => [['CPC+', 'III', 'CPCPLUS'],
              ['MIPS Individual', 'III', 'MIPS_INDIV'],
              ['MIPS Group', 'III', 'MIPS_GROUP']]
+  },
+  '2019' => {
+    'eh' => [['Hospital Quality Reporting for the Promoting Interoperability Program', 'I', 'HQR_PI'],
+             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
+             ['Hospital Quality Reporting for the Promoting Interoperability Program and the Inpatient Quality Reporting Program', 'I', 'HQR_PI_IQR'],
+             ['Hospital Quality Reporting for Inpatient Quality Reporting Program voluntary submissions', 'I', 'HQR_IQR_VOL']],
+    'ep' => []
   }
 }.freeze
 
 YEAR_PROGRAMTYPE_DOCUMENTS = {
-  '2016' => {
-    'I' => [['QRDA Cat I (R3)', 'cat1_r3']],
-    'III' => [['QRDA Cat III (R1)', 'cat3_r1']],
-    'both' => [['QRDA Cat I (R3)', 'cat1_r3'], ['QRDA Cat III (R1)', 'cat3_r1']]
-  },
-  '2017' => {
-    'I' => [['QRDA Cat I (R3.1)', 'cat1_r31']],
-    'III' => [['QRDA Cat III (R2.1)', 'cat3_r21']],
-    'both' => [['QRDA Cat I (R3.1)', 'cat1_r31'], ['QRDA Cat III (R2.1)', 'cat3_r21']]
-  },
   '2018' => {
     'I' => [['QRDA Cat I (R4)', 'cat1_r4']],
     'III' => [['QRDA Cat III (R2.1)', 'cat3_r21']],
     'both' => [['QRDA Cat I (R4)', 'cat1_r4'], ['QRDA Cat III (R2.1)', 'cat3_r21']]
+  },
+  '2019' => {
+    'I' => [['QRDA Cat I (R5)', 'cat1_r5']],
+    'III' => [['QRDA Cat III (R2.1)', 'cat3_r21']],
+    'both' => [['QRDA Cat I (R5)', 'cat1_r5'], ['QRDA Cat III (R2.1)', 'cat3_r21']]
   }
 }.freeze
 

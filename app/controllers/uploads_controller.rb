@@ -4,13 +4,6 @@ require 'ext/artifact'
 require 'hqmf-parser'
 
 class UploadsController < ApplicationController
-  before_action :require_bundles
-
-  def require_bundles
-    unless HealthDataStandards::CQM::Bundle.bundle_available?
-      raise 'Please install a 2016, 2017 or 2018 Cypress bundle in order to use the Cypress Validation Utility'
-    end
-  end
 
   def new; end
 

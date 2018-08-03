@@ -38,9 +38,13 @@ class QrdaFile
     @bundle = HealthDataStandards::CQM::Bundle[program_year] unless program_year == '2019'
 
     self.validation_errors = { :qrda => [], :reporting => [], :submission => [], :warning => [], :ungrouped => [] }
+    perform_validatons(validation_errors)
+    # if we forget to group something we will have a tab for it, otherwise dont show that tab
+    validation_errors.delete(:ungrouped) if validation_errors[:ungrouped].empty?
+  end
+
+  def perform_validatons(validation_errors)
     validators.each do |v|
-      # require 'pry'
-      # binding.pry
       errs = v.validate(content, :file_name => @filename)
       errs.each do |e|
         e.validator ||= v.class.name
@@ -53,9 +57,6 @@ class QrdaFile
         # the validation errors are their own class, e.instance_values turns it into just a hash for simplicity
       end
     end
-
-    # if we forget to group something we will have a tab for it, otherwise dont show that tab
-    validation_errors.delete(:ungrouped) if validation_errors[:ungrouped].empty?
   end
 
   def grouped_errors
@@ -173,10 +174,7 @@ class QrdaFile
   end
 
   def cms_cat3_program_validator
-    if program_year == '2018'
-      CypressValidationUtility::Validate::ECCat3_2018
-    else
-      raise 'Cannot validate an EH QRDA Category III file'
-    end
+    return CypressValidationUtility::Validate::ECCat3_2018 if program_year == '2018'
+    raise 'Cannot validate an EH QRDA Category III file'
   end
 end

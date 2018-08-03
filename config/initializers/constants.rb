@@ -8,7 +8,7 @@ require_relative '../../lib/encounter_validator'
 
 ERROR_LOG = Logger.new(::File.new('log/error.log', 'a+'))
 
-POSSIBLE_BUNDLES = %w(2018).freeze
+POSSIBLE_BUNDLES = %w[2018].freeze
 # just define which bundles we want for now, in the uploads controller we'll populate these
 # (allows for re-checking without restarting in case the user installs a new one)
 

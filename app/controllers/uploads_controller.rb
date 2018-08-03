@@ -4,7 +4,6 @@ require 'ext/artifact'
 require 'hqmf-parser'
 
 class UploadsController < ApplicationController
-
   def new; end
 
   def create

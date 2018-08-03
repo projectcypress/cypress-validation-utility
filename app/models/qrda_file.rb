@@ -109,7 +109,7 @@ class QrdaFile
   end
 
   def cat1_validator
-    @validators.concat CAT1_VALIDATORS
+    @validators.concat CAT1_VALIDATORS unless program_year == '2019'
     @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids) unless program_year == '2019'
     @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id) unless program_year == '2019'
 

@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', :group => :doc
 
-gem 'carrierwave'
+gem 'carrierwave', '~> 0.11.2'
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
 gem 'thin'

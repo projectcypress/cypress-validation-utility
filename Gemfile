@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', :group => :doc
 
-gem 'carrierwave'
+gem 'carrierwave', '~> 0.11.2'
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 
 gem 'thin'
@@ -30,8 +30,8 @@ gem 'thin'
 gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
 
-# gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
-gem 'health-data-standards', '~> 3.7.0'
+gem 'health-data-standards', :git => 'https://github.com/projectcypress/health-data-standards.git', :branch => 'r5'
+# gem 'health-data-standards', '~> 3.7.0'
 
 gem 'go-cda-tools', :git => 'https://github.com/projectcypress/go-cda-tools.git', :branch => 'master'
 gem 'quality-measure-engine',

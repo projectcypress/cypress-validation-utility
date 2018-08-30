@@ -35,7 +35,7 @@ before_script:
 script:
   - bundle exec brakeman -qAzw1
   - bundle exec bundle-audit update
-  - bundle exec bundle-audit check
+  - bundle exec bundle-audit check --ignore CVE-2018-1000544
   - bundle exec overcommit --sign
   - bundle exec overcommit --run
   - travis_retry bundle exec rake test

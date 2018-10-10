@@ -2,10 +2,10 @@
 
 source 'https://rubygems.org'
 
-ruby '2.3.5'
+ruby '2.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7.1'
+gem 'rails', '~> 4.2.7'
 # Use Bootstrap via this gem
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '~> 5.0.4'

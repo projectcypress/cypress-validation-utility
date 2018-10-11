@@ -175,6 +175,7 @@ class QrdaFile
 
   def cms_cat3_program_validator
     return CypressValidationUtility::Validate::ECCat3_2018 if program_year == '2018'
+    return CypressValidationUtility::Validate::ECCat3_2019 if program_year == '2019'
     raise 'Cannot validate an EH QRDA Category III file'
   end
 end

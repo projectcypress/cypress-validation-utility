@@ -21,14 +21,18 @@ YEAR_PROGRAMS = {
              ['Hospital Quality Reporting for Episode Payment Model voluntary submissions', 'I', 'HQR_EPM_VOL']],
     'ep' => [['CPC+', 'III', 'CPCPLUS'],
              ['MIPS Individual', 'III', 'MIPS_INDIV'],
-             ['MIPS Group', 'III', 'MIPS_GROUP']]
+             ['MIPS Group', 'III', 'MIPS_GROUP'],
+             ['MIPS Virtual Group', 'III', 'MIPS_VIRTUALGROUP']]
   },
   '2019' => {
     'eh' => [['Hospital Quality Reporting for the Promoting Interoperability Program', 'I', 'HQR_PI'],
              ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
              ['Hospital Quality Reporting for the Promoting Interoperability Program and the Inpatient Quality Reporting Program', 'I', 'HQR_PI_IQR'],
              ['Hospital Quality Reporting for Inpatient Quality Reporting Program voluntary submissions', 'I', 'HQR_IQR_VOL']],
-    'ep' => []
+    'ep' => [['CPC+', 'III', 'CPCPLUS'],
+             ['MIPS Individual', 'III', 'MIPS_INDIV'],
+             ['MIPS Group', 'III', 'MIPS_GROUP'],
+             ['MIPS Virtual Group', 'III', 'MIPS_VIRTUALGROUP']]
   }
 }.freeze
 
@@ -56,6 +60,12 @@ VALIDATOR_NAMES = { 'HealthDataStandards::Validate::CDA' => 'CDA',
                     'CypressValidationUtility::Validate::EPCat1_2016' => 'CMS',
                     'CypressValidationUtility::Validate::EPCat3_2016' => 'CMS',
                     'CypressValidationUtility::Validate::EHCat1_2016' => 'CMS',
+                    'CypressValidationUtility::Validate::EPCat3_2017' => 'CMS',
+                    'CypressValidationUtility::Validate::EHCat1_2017' => 'CMS',
+                    'CypressValidationUtility::Validate::EPCat3_2018' => 'CMS',
+                    'CypressValidationUtility::Validate::EHCat1_2018' => 'CMS',
+                    'CypressValidationUtility::Validate::EPCat3_2019' => 'CMS',
+                    'CypressValidationUtility::Validate::EHCat1_20119' => 'CMS',
                     'HealthDataStandards::Validate::DataValidator' => 'Value Sets',
                     'HealthDataStandards::Validate::Cat1Measure' => 'Measures',
                     'HealthDataStandards::Validate::Cat3Measure' => 'Measures',

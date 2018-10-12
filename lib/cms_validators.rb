@@ -15,6 +15,7 @@ module CypressValidationUtility
     CMS_EP_CAT3_SCHEMATRON_2016 = 'resources/schematron/cat3/2016/EP CMS 2016 QRDA Category III.sch'
     CMS_EC_CAT3_SCHEMATRON_2017 = 'resources/schematron/cat3/2017/EC CMS 2017 QRDA Category III.sch'
     CMS_EC_CAT3_SCHEMATRON_2018 = 'resources/schematron/cat3/2018/EC CMS 2018 QRDA Category III.sch'
+    CMS_EC_CAT3_SCHEMATRON_2019 = 'resources/schematron/cat3/2019/CMS 2019 QRDA Category III.sch'
 
     class EPCat1_2016 < HealthDataStandards::Validate::Schematron::Validator
       include Singleton
@@ -97,6 +98,14 @@ module CypressValidationUtility
 
       def initialize
         super('CMS EC Cat III Schematron Validator', File.join(BASE_DIR, CMS_EC_CAT3_SCHEMATRON_2018))
+      end
+    end
+
+    class ECCat3_2019 < HealthDataStandards::Validate::Schematron::Validator
+      include Singleton
+
+      def initialize
+        super('CMS EC Cat III Schematron Validator', File.join(BASE_DIR, CMS_EC_CAT3_SCHEMATRON_2019))
       end
     end
   end

@@ -32,7 +32,7 @@ gem 'thin'
 gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
 
-gem 'health-data-standards', '~> 4.3.0'
+gem 'health-data-standards', '~> 4.3.2'
 # gem 'health-data-standards', '~> 3.7.0'
 
 gem 'go-cda-tools', :git => 'https://github.com/projectcypress/go-cda-tools.git', :branch => 'master'

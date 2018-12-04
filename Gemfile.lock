@@ -180,7 +180,7 @@ GEM
       mongoid (>= 4.0, < 6.0)
     multi_json (1.13.1)
     netrc (0.11.0)
-    newrelic_rpm (5.4.0.347)
+    newrelic_rpm (5.5.0.348)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     non-stupid-digest-assets (1.0.9)

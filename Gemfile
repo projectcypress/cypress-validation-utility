@@ -65,6 +65,7 @@ end
 group :test do
   gem 'brakeman', :require => false
   gem 'bundler-audit'
+  gem 'codecov', :require => false
   gem 'mocha'
   gem 'simplecov', :require => false
 end

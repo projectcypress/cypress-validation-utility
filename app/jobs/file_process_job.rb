@@ -24,7 +24,7 @@ class FileProcessJob < ActiveJob::Base
     curr_file.save(validate: false)
   rescue Nokogiri::XML::SyntaxError => e
     upload.fail(e, curr_file)
-  rescue => e
+  rescue StandardError => e
     upload.fail(e.message, curr_file)
     ERROR_LOG.error e.message
     ERROR_LOG.error e.backtrace.join("\n")

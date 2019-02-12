@@ -6,7 +6,7 @@ module CypressValidationUtility
   module Validate
     require 'health-data-standards'
 
-    BASE_DIR = File.expand_path('../../', __FILE__)
+    BASE_DIR = File.expand_path('..', __dir__)
     CMS_EP_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/2016/PQRS CMS QRDA Category I.sch'
     CMS_EH_CAT1_SCHEMATRON_2016 = 'resources/schematron/cat1/2016/HQR CMS QRDA Category I.sch'
     CMS_EH_CAT1_SCHEMATRON_2017 = 'resources/schematron/cat1/2017/EH CMS 2017 QRDA Category I.sch'

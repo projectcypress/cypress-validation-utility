@@ -29,9 +29,7 @@ module CypressValidationUtility
         @name = 'Valueset Category Validator'
         @hqmf_qrda_oid_map = HealthDataStandards::Export::QRDA::EntryTemplateResolver.hqmf_qrda_oid_map
         @measure_cms_ids = []
-        if measure_ids.present?
-          @measure_cms_ids = HealthDataStandards::CQM::Measure.where(:hqmf_id.in => measure_ids).distinct(:cms_id)
-        end
+        @measure_cms_ids = HealthDataStandards::CQM::Measure.where(:hqmf_id.in => measure_ids).distinct(:cms_id) if measure_ids.present?
       end
 
       def validate(file, options = {})
@@ -72,10 +70,9 @@ module CypressValidationUtility
           qrda_oids = data_element['template_ids'] || []
           value_set_oid = data_element['vset']
           vset = HealthDataStandards::SVS::ValueSet.where(oid: value_set_oid, bundle_id: @bundle_id)
-          unless vset.empty?
-            result = find_vs_categories(vset, data_element['path'], qrda_oids, options[:file_name])
-          end
+          result = find_vs_categories(vset, data_element['path'], qrda_oids, options[:file_name]) unless vset.empty?
           next if result
+
           @errors << if qrda_oids.blank?
                        build_error("Value Set #{value_set_oid} has a different category than 'Attribute'",
                                    data_element['path'], options[:file_name])
@@ -110,15 +107,14 @@ module CypressValidationUtility
         if qrda_oids.blank?
           return categories.include?('Attribute') ? true : false
         end
+
         # loops though template ids to see if any match the category of the valueset
         qrda_oids.each do |qrda_oid|
           oid_tuples = @hqmf_qrda_oid_map.find_all { |map_tuple| map_tuple['qrda_oid'] == qrda_oid }
           oid_tuples.each do |oid_tuple|
             categories.each do |category|
               # value set category is ok if it matches the hqmf type of the QRDA template, or if value set category is 'attribute'
-              if oid_tuple['hqmf_name'].include?(CATEGORY_MAP[category]) || category == 'Attribute'
-                return true
-              end
+              return true if oid_tuple['hqmf_name'].include?(CATEGORY_MAP[category]) || category == 'Attribute'
             end
           end
         end

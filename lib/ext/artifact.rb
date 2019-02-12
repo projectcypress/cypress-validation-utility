@@ -59,6 +59,7 @@ class Artifact
 
   def update_asset_attributes
     return if file.blank? || !file_changed?
+
     self.content_type = file.file.content_type
     self.file_size = file.file.size
   end

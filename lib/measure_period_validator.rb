@@ -41,7 +41,7 @@ module CypressValidationUtility
         end
         validate_encounter_during_reporting_period unless @doc_type == 'cat3_r1' || @doc_type == 'cat3_r21'
         @errors
-      rescue
+      rescue StandardError
         @errors << build_error('Unable to locate reporting period in document.', '/', @options[:file_name])
       end
 

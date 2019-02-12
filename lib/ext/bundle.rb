@@ -9,11 +9,13 @@ module HealthDataStandards
 
       def effective_date
         return BUNDLE_PERIOD_OVERRIDES[version[0, 4]]['effective_date'] if BUNDLE_PERIOD_OVERRIDES[version[0, 4]]
+
         orig_effective_date
       end
 
       def measure_period_start
         return BUNDLE_PERIOD_OVERRIDES[version[0, 4]]['measure_period_start'] if BUNDLE_PERIOD_OVERRIDES[version[0, 4]]
+
         orig_measure_start
       end
 

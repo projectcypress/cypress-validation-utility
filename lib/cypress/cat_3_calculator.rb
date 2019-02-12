@@ -15,10 +15,10 @@ module Cypress
     # Generates the QRDA/CDA header, using the header info above
     def generate_header(provider = nil)
       cda_header = { identifier: { root: 'CypressRoot', extension: 'CypressExtension' },
-                     authors:       [{ ids: [{ root: 'authorRoot', extension: 'authorExtension' }],
-                                       device: { name: 'deviceName', model: 'deviceModel' },
-                                       addresses: [], telecoms: [], time: nil,
-                                       organization: { ids: [{ root: 'authorsOrganizationRoot', extension: 'authorsOrganizationExt' }], name: '' } }],
+                     authors: [{ ids: [{ root: 'authorRoot', extension: 'authorExtension' }],
+                                 device: { name: 'deviceName', model: 'deviceModel' },
+                                 addresses: [], telecoms: [], time: nil,
+                                 organization: { ids: [{ root: 'authorsOrganizationRoot', extension: 'authorsOrganizationExt' }], name: '' } }],
                      custodian: { ids: [{ root: 'custodianRoot', extension: 'custodianExt' }],
                                   person: { given: '', family: '' }, organization: { ids: [{ root: 'custodianOrganizationRoot',
                                                                                              extension: 'custodianOrganizationExt' }], name: '' } },
@@ -51,6 +51,7 @@ module Cypress
     def cached_value(vs)
       @loaded_valuesets ||= {}
       return @loaded_valuesets[vs.oid] if @loaded_valuesets[vs.oid]
+
       js = {}
       vs.concepts.each do |con|
         name = con.code_system_name

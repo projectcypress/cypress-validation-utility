@@ -26,6 +26,7 @@ class QrdaFile
 
   def content
     return @content if @content
+
     @content = Nokogiri::XML(content_string, &:strict)
     @content.root.add_namespace_definition('cda', 'urn:hl7-org:v3')
     @content.root.add_namespace_definition('sdtc', 'urn:hl7-org:sdtc')
@@ -72,6 +73,7 @@ class QrdaFile
       "/cda:reference[@typeCode='REFR']/cda:externalDocument[@classCode='DOC']" \
       "/cda:id[@root='2.16.840.1.113883.4.738']/@extension").map(&:value).map(&:upcase)
     return nil unless measure_ids
+
     measure_ids
   end
 
@@ -131,6 +133,7 @@ class QrdaFile
 
   def validators
     return @validators if @validators
+
     @validators = []
     cms_validator = cms_validator_for_doc_type
     @validators << cms_validator.instance if cms_validator
@@ -176,6 +179,7 @@ class QrdaFile
   def cms_cat3_program_validator
     return CypressValidationUtility::Validate::ECCat3_2018 if program_year == '2018'
     return CypressValidationUtility::Validate::ECCat3_2019 if program_year == '2019'
+
     raise 'Cannot validate an EH QRDA Category III file'
   end
 end

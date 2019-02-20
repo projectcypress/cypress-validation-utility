@@ -1,5 +1,6 @@
 [![GitHub version](https://badge.fury.io/gh/projectcypress%2Fcypress-validation-utility.svg)](https://badge.fury.io/gh/projectcypress%2Fcypress-validation-utility)
 [![Build Status](https://travis-ci.com/projectcypress/cypress-validation-utility.svg?branch=master)](https://travis-ci.com/projectcypress/cypress-validation-utility)
+[![codecov.io](https://codecov.io/github/projectcypress/cypress-validation-utility/coverage.svg?branch=<branch>)](https://codecov.io/github/projectcypress/cypress-validation-utility?branch=<branch>)
 
 # Cypress Validation Utility
 
@@ -8,7 +9,7 @@ Upload any QRDA Category 1 or Category 3 document. This application will validat
 License
 -------
 
-Copyright 2019 The MITRE Corporation
+Copyright 2016 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

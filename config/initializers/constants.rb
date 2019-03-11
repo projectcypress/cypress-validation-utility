@@ -87,9 +87,9 @@ NODE_TYPES = { 1 => :element,
                7 => :instruction,
                8 => :comment,
                9 => :document,
-               10  => :doc_type,
-               11  => :doc_frag,
-               12  => :notaion }.freeze
+               10 => :doc_type,
+               11 => :doc_frag,
+               12 => :notaion }.freeze
 
 BUNDLE_PERIOD_OVERRIDES = {
   '2015' => {

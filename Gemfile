@@ -58,7 +58,7 @@ group :development, :test do
   gem 'byebug'
   gem 'overcommit'
   gem 'pry'
-  gem 'rubocop', '0.49', :require => false
+  gem 'rubocop', '0.60.0', :require => false
   gem 'scss_lint', :require => false
 end
 

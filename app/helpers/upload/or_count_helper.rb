@@ -26,6 +26,7 @@ module Upload::OrCountHelper
   def calculate_or_counts_recursive(rationale, preconditions)
     or_counts = {}
     return or_counts if preconditions.blank?
+
     preconditions.each do |precondition|
       calculate_precondition_or_counts(or_counts, rationale, precondition)
       or_counts = or_counts.merge calculate_or_counts_recursive(
@@ -56,6 +57,7 @@ module Upload::OrCountHelper
     measure[:hqmf_document][:data_criteria].each do |key, dc|
       next unless dc[:derivation_operator] == 'UNION' &&
                   (key.include?('UNION') || key.include?('satisfiesAny'))
+
       dc[:children_criteria].each do |child|
         # Only add to orCount for logically true branches
         or_counts[key] = (or_counts[key] || 0) + 1 if rationale[child]

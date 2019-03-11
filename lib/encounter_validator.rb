@@ -18,7 +18,7 @@ class EncounterValidator
       begin
         low, errors = validate_encounter_time('low', 'start', encounter, options[:file_name], errors)
         high, errors = validate_encounter_time('high', 'end', encounter, options[:file_name], errors)
-      rescue
+      rescue StandardError
         next
       end
       errors.concat validate_encounter_start_end(encounter.path, low, high, options[:file_name])
@@ -33,9 +33,7 @@ class EncounterValidator
       errors << build_error("Encounter #{title} time invalid. #{ae.message}", encounter.path, file)
       throw ae
     rescue NoMethodError
-      unless encounter.at_xpath('./cda:low/@nullFlavor')
-        errors << build_error("No encounter #{title} time found.", encounter.path, file)
-      end
+      errors << build_error("No encounter #{title} time found.", encounter.path, file) unless encounter.at_xpath('./cda:low/@nullFlavor')
       throw ae
     end
     [val, errors]

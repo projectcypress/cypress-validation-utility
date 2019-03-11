@@ -15,6 +15,7 @@ module Upload::SpecificsHelper
   def build_parent_map(root, data_crit_hash)
     parent_map = {}
     return parent_map unless root
+
     if root[:preconditions].present?
       root[:preconditions].each do |precondition|
         push_and_merge_map(parent_map, "precondition_#{precondition[:id]}",
@@ -32,6 +33,7 @@ module Upload::SpecificsHelper
   def subreference_update_parent_map(parent_map, root, data_crit_hash)
     root[:temporal_references]&.each do |temporal_reference|
       next if temporal_reference[:reference] == 'MeasurePeriod'
+
       push_and_merge_map(
         parent_map, temporal_reference[:reference], root,
         data_crit_hash[temporal_reference[:reference]], data_crit_hash
@@ -81,6 +83,7 @@ module Upload::SpecificsHelper
   def update_logic_tree_children(updated_rationale, rationale, final_specifics,
                                  update_params, parents)
     return updated_rationale unless parents
+
     parents.each do |parent|
       parent_key = if parent[:id] then "precondition_#{parent[:id]}"
                    else parent[:key] || parent[:type]

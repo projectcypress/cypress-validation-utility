@@ -33,6 +33,7 @@ module Upload::UploadsHelper
       clean_location = location.gsub("[namespace-uri()='urn:hl7-org:v3']", '')
       node = doc.at_xpath(clean_location)
       next unless node
+
       elem = node
       if node.class == Nokogiri::XML::Attr
         error_attributes << node
@@ -40,6 +41,7 @@ module Upload::UploadsHelper
       end
       elem = elem.root if node_type(elem.type) == :document
       next unless elem
+
       elem['error_id'] = UUID.generate.to_s unless elem['error_id']
       error_map[location] = elem['error_id']
     end
@@ -60,6 +62,7 @@ module Upload::UploadsHelper
       population = pop_map.values[0]
       update_params[:code] = population[:type]
       next unless final_specifics[update_params[:code]]
+
       updated_rationale[update_params[:code]] = {}
 
       # get the referenced occurrences in the logic tree and
@@ -85,6 +88,7 @@ module Upload::UploadsHelper
     # check each bad occurrence and remove highlights marking true
     update_params[:criteria_results][:bad].each do |bad_criteria|
       next unless rationale[bad_criteria]
+
       updated_rationale[update_params[:code]][bad_criteria] = false
       # move up the logic tree to set AND/ORs to false based on the
       # removal of the bad specific's true eval
@@ -108,6 +112,7 @@ module Upload::UploadsHelper
 
   def final_rationale_ref(reference)
     return nil if @population_key == 'OBSERV'
+
     rat_ref = nil
     if @specifics[@population_key] || @population_key == 'VAR'
       rat_ref = @rationale[reference]
@@ -120,6 +125,7 @@ module Upload::UploadsHelper
     end
 
     return 'bad-specifics' if should_star?(reference)
+
     rat_ref
   end
 

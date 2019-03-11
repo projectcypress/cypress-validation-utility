@@ -5,7 +5,7 @@
 module Upload::CriteriaCheckHelper
   def check_criteria_for_rationale(
       final_specifics, population, rationale, data_crit_hash, pop_key
-  )
+    )
     # get the referenced occurrences in the logic tree using original pop code
     criteria = get_data_criteria_keys(population, data_crit_hash, pop_key).uniq
 
@@ -25,6 +25,7 @@ module Upload::CriteriaCheckHelper
         #                 ' is not contained in the rationale'
         next
       end
+
       add_criterion_results(results, criterion_rationale, criterion, pop_key,
                             final_specifics)
     end
@@ -32,7 +33,7 @@ module Upload::CriteriaCheckHelper
 
   def add_criterion_results(results, criterion_rationale, criterion, pop_key,
                             final_specifics)
-    if criterion_rationale && criterion_rationale.is_a?(Hash) &&
+    if criterion_rationale&.is_a?(Hash) &&
        criterion_rationale[:specifics] &&
        !criterion_rationale[:specifics].empty? &&
        should_switch_highlight?(criterion_rationale, pop_key, final_specifics)
@@ -47,6 +48,7 @@ module Upload::CriteriaCheckHelper
     # byebug
     occurrences = []
     return occurrences unless child
+
     if child[:preconditions].present?
       child[:preconditions].each do |precondition|
         occurrences.concat get_data_criteria_keys(precondition, data_crit_hash)
@@ -106,9 +108,7 @@ module Upload::CriteriaCheckHelper
     # data criteria specifics arrays
     dc_specifics = criterion_rationale[:specifics]
 
-    if specifics && specifics[pop_key] && !specifics[pop_key].empty?
-      return pop_dc_match?(specifics, pop_key, dc_specifics)
-    end
+    return pop_dc_match?(specifics, pop_key, dc_specifics) if specifics && specifics[pop_key] && !specifics[pop_key].empty?
 
     # if there are no population specifics, check for all wildcard in any dc_arr
     # (implicit match)
@@ -137,9 +137,7 @@ module Upload::CriteriaCheckHelper
     # if each element is the same as the corresponding element (or either is
     # a wildcard) then true (spec matches)
     fs_arr.each_with_index do |fs, i|
-      if i < dc_arr.length && fs != '*' && dc_arr[i] != '*' && fs != dc_arr[i]
-        return false
-      end
+      return false if i < dc_arr.length && fs != '*' && dc_arr[i] != '*' && fs != dc_arr[i]
     end
     true
   end

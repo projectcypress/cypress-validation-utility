@@ -32,13 +32,14 @@ gem 'thin'
 gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
 
+gem 'cqm-converter', '~> 0.3.6'
+gem 'cqm-models', '~> 0.8.4'
+gem 'cqm-parsers', '~> 0.2.2'
+gem 'cqm-validators', '~> 0.1.0'
 gem 'health-data-standards', '~> 4.3.0'
-# gem 'health-data-standards', '~> 3.7.0'
 
-gem 'go-cda-tools', :git => 'https://github.com/projectcypress/go-cda-tools.git', :branch => 'master'
 gem 'quality-measure-engine',
-    :git => 'https://github.com/projectcypress/quality-measure-engine.git', :branch => 'bump_mongoid'
-# gem 'go-cda-tools', path: '../go-cda-tools'
+    git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
 
 # gem "bson"
 # gem "moped", github: "mongoid/moped"
@@ -52,6 +53,8 @@ gem 'lograge'
 
 # necessary to prevent cache-busting of the bootstrap fonts
 gem 'non-stupid-digest-assets'
+
+gem 'bunny'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

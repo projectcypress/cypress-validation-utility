@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'cypress/cat_3_calculator'
-
 class FileProcessJob < ActiveJob::Base
   def perform(upload_id, filename, _options = {})
     upload = Upload.find(upload_id)
@@ -18,7 +16,7 @@ class FileProcessJob < ActiveJob::Base
     curr_file.process
     curr_file.save(validate: false)
 
-    curr_file.record = calculate_upload(upload, curr_file) if upload.can_calculate
+    curr_file.patient = calculate_upload(upload, curr_file) if upload.can_calculate
 
     curr_file.state = :complete
     curr_file.save(validate: false)
@@ -34,13 +32,21 @@ class FileProcessJob < ActiveJob::Base
     measure_ids = curr_file.measure_ids_from_file
 
     @bundle = HealthDataStandards::CQM::Bundle[upload.year]
-    @measures = @bundle.measures.top_level.in(hqmf_id: measure_ids)
-    calculator = Cypress::Cat3Calculator.new(measure_ids, @bundle, BSON::ObjectId.new)
+    @measures = @bundle.measures.in(hqmf_id: measure_ids)
 
-    rec = calculator.import_cat1_file(curr_file.content)
-
-    @calculated_results = calculator.generate_cat3
-
-    rec
+    patient = parse_and_save_record(curr_file.content)
+    calc_job = Cypress::JsEcqmCalc.new('correlation_id': upload.id.to_s,
+                                       'effective_date': Time.at(@bundle.effective_date).in_time_zone.to_formatted_s(:number))
+    new_results = calc_job.sync_job([patient.id.to_s], @measures.map { |mes| mes._id.to_s })
+    calc_job.stop
+    patient
   end
+
+  def parse_and_save_record(doc)
+    patient = QRDA::Cat1::PatientImporter.instance.parse_cat1(doc)
+    Cypress::GoImport.replace_negated_codes(patient, @bundle)
+    patient.save
+    patient
+  end
+
 end

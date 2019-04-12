@@ -15,7 +15,7 @@ class Upload
   has_many :qrda_files, :dependent => :destroy, :validate => false
 
   def can_calculate
-    %w[cat1_r2 cat1_r3 cat1_r31 cat1_r4].include?(file_type)
+    %w[cat1_r5].include?(file_type)
   end
 
   def fail(message = '', qrda_file = nil)

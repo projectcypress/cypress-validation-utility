@@ -1,7 +1,7 @@
 development:
   clients:
     default:
-      database: cypress_development
+      database: cypress_development_v4
       hosts:
         - <%= ENV.fetch('MONGO_PORT_27017_TCP_ADDR', 'localhost') %>:<%= ENV.fetch('MONGO_PORT_27017_TCP_PORT', '27017') %>
   options:

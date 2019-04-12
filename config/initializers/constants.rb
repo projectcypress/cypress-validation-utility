@@ -8,22 +8,11 @@ require_relative '../../lib/encounter_validator'
 
 ERROR_LOG = Logger.new(::File.new('log/error.log', 'a+'))
 
-POSSIBLE_BUNDLES = %w[2018].freeze
+POSSIBLE_BUNDLES = %w[2019].freeze
 # just define which bundles we want for now, in the uploads controller we'll populate these
 # (allows for re-checking without restarting in case the user installs a new one)
 
 YEAR_PROGRAMS = {
-  '2018' => {
-    'eh' => [['Hospital Quality Reporting for the EHR Incentive Program', 'I', 'HQR_EHR'],
-             ['Hospital Quality Reporting for the EHR Incentive Program and the IQR Program', 'I', 'HQR_EHR_IQR'],
-             ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
-             ['Hospital Quality Reporting for Inpatient Quality Reporting Program voluntary submissions', 'I', 'HQR_IQR_VOL'],
-             ['Hospital Quality Reporting for Episode Payment Model voluntary submissions', 'I', 'HQR_EPM_VOL']],
-    'ep' => [['CPC+', 'III', 'CPCPLUS'],
-             ['MIPS Individual', 'III', 'MIPS_INDIV'],
-             ['MIPS Group', 'III', 'MIPS_GROUP'],
-             ['MIPS Virtual Group', 'III', 'MIPS_VIRTUALGROUP']]
-  },
   '2019' => {
     'eh' => [['Hospital Quality Reporting for the Promoting Interoperability Program', 'I', 'HQR_PI'],
              ['Hospital Quality Reporting for the Inpatient Quality Reporting Program', 'I', 'HQR_IQR'],
@@ -37,11 +26,6 @@ YEAR_PROGRAMS = {
 }.freeze
 
 YEAR_PROGRAMTYPE_DOCUMENTS = {
-  '2018' => {
-    'I' => [['QRDA Cat I (R4)', 'cat1_r4']],
-    'III' => [['QRDA Cat III (R2.1)', 'cat3_r21']],
-    'both' => [['QRDA Cat I (R4)', 'cat1_r4'], ['QRDA Cat III (R2.1)', 'cat3_r21']]
-  },
   '2019' => {
     'I' => [['QRDA Cat I (R5)', 'cat1_r5']],
     'III' => [['QRDA Cat III (R2.1)', 'cat3_r21']],
@@ -57,13 +41,6 @@ VALIDATOR_NAMES = { 'HealthDataStandards::Validate::CDA' => 'CDA',
                     'HealthDataStandards::Validate::Cat1R2' => 'QRDA',
                     'HealthDataStandards::Validate::Cat3' => 'QRDA',
                     'HealthDataStandards::Validate::Cat3R11' => 'QRDA',
-                    'CypressValidationUtility::Validate::EPCat1_2016' => 'CMS',
-                    'CypressValidationUtility::Validate::EPCat3_2016' => 'CMS',
-                    'CypressValidationUtility::Validate::EHCat1_2016' => 'CMS',
-                    'CypressValidationUtility::Validate::EPCat3_2017' => 'CMS',
-                    'CypressValidationUtility::Validate::EHCat1_2017' => 'CMS',
-                    'CypressValidationUtility::Validate::EPCat3_2018' => 'CMS',
-                    'CypressValidationUtility::Validate::EHCat1_2018' => 'CMS',
                     'CypressValidationUtility::Validate::EPCat3_2019' => 'CMS',
                     'CypressValidationUtility::Validate::EHCat1_20119' => 'CMS',
                     'HealthDataStandards::Validate::DataValidator' => 'Value Sets',
@@ -92,19 +69,11 @@ NODE_TYPES = { 1 => :element,
                12 => :notaion }.freeze
 
 BUNDLE_PERIOD_OVERRIDES = {
-  '2015' => {
-    'measure_period_start' => 1_451_606_400,
-    'effective_date' => 1_483_228_799
-  },
-  '2016' => {
-    'measure_period_start' => 1_483_228_800,
-    'effective_date' => 1_514_764_799
-  },
-  '2017' => {
-    'measure_period_start' => 1_514_851_200,
-    'effective_date' => 1_546_300_799
+  '2018' => {
+    'measure_period_start' => 1_546_300_800,
+    'effective_date' => 1_577_836_799
   }
 }.freeze
 
-ZIP_FILE_LIMIT = 25
-FILE_SIZE_LIMIT = 2_097_152 # bytes (2 MB)
+ZIP_FILE_LIMIT = 100
+FILE_SIZE_LIMIT = 20_971_520 # bytes (20 MB)

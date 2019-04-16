@@ -24,8 +24,6 @@ class RecordCleanupJob < ActiveJob::Base
       next unless correlation_id
 
       Record.where(test_id: correlation_id).destroy_all
-      QME::PatientCache.where(test_id: correlation_id).destroy_all
-      HealthDataStandards::CQM::QueryCache.where(test_id: correlation_id).destroy_all
     end
   end
 end

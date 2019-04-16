@@ -115,7 +115,6 @@ class QrdaFile
   def cat1_validator
     @validators.concat CAT1_VALIDATORS
     @validators << CqmValidators::DataValidator.new(@bundle, @measure_ids)
-    @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id)
 
     qrda_qdm_template_type = 'r5'
 

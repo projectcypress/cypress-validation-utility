@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bunny'
 require 'json'
 require 'securerandom'
@@ -41,6 +43,7 @@ module Cypress
 
       raise 'No result found. Are RabbitMQ and the calculation worker Running?' unless response
       return response['result'] if response['status'] == 'success'
+
       raise response['error'] || 'Calculation failed without an error message'
     end
 

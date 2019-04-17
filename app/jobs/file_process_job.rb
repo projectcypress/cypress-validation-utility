@@ -37,7 +37,7 @@ class FileProcessJob < ActiveJob::Base
     patient = parse_and_save_record(curr_file.content)
     calc_job = Cypress::JsEcqmCalc.new('correlation_id': upload.id.to_s,
                                        'effective_date': Time.at(@bundle.effective_date).in_time_zone.to_formatted_s(:number))
-    new_results = calc_job.sync_job([patient.id.to_s], @measures.map { |mes| mes._id.to_s })
+    calc_job.sync_job([patient.id.to_s], @measures.map { |mes| mes._id.to_s })
     calc_job.stop
     patient
   end
@@ -48,5 +48,4 @@ class FileProcessJob < ActiveJob::Base
     patient.save
     patient
   end
-
 end

@@ -6,8 +6,7 @@ require 'cat3_population_validator'
 class Cat3PopulationValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = CypressValidationUtility::Validate::Cat3PopulationValidator.instance
-
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'good_cat3.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'qrda', 'cat_III', 'good_cat3.xml'), 'text/xml')
     @document = get_document(file)
   end
 

@@ -6,7 +6,6 @@ require 'cat3_population_validator'
 require 'measure_period_validator'
 require 'ccn_validator'
 require 'program_validator'
-require 'valueset_category_validator'
 
 class QrdaFile
   include Mongoid::Document
@@ -50,8 +49,8 @@ class QrdaFile
       errs = v.validate(content, :file_name => @filename)
       errs.each do |e|
         e.validator ||= v.class.name
-        # make cat1 validation error types a warning for data criteria outside the measure definition
-        if (e.validator == 'HealthDataStandards::Validate::DataValidator') && (e.message.include? 'data criteria outside')
+        # make cat1 validation error types a warning for data criteria outside the measure definition'
+        if (e.validator == 'CqmValidators::DataValidator') && (e.message.include? 'data criteria outside')
           validation_errors[:warning] << e.instance_values
         else
           validation_errors[validator_category(e.validator)] << e.instance_values
@@ -89,10 +88,9 @@ class QrdaFile
     when 'Cat 1 Measure ID Validator', 'HealthDataStandards::Validate::Cat1Measure',
          'Cat 3 Measure ID Validator', 'HealthDataStandards::Validate::Cat3Measure',
          'HealthDataStandards::Validate::Cat3PerformanceRate', 'Cat III Population Validator',
-         'HealthDataStandards::Validate::DataValidator'
+         'CqmValidatorse::DataValidator'
       :reporting
-    when 'CCN Validator', 'Measure Period Validator', 'CMS Program Validator', 'Encounter validator',
-         'Valueset Category Validator'
+    when 'CCN Validator', 'Measure Period Validator', 'CMS Program Validator', 'Encounter validator'
       :submission
     else
       :ungrouped
@@ -160,9 +158,7 @@ class QrdaFile
     if program_type == 'ep'
       cms_cat3_program_validator
     elsif program_type == 'none'
-      if doc_type == 'cat3_r21'
-        CqmValidators::Cat3R21
-      end
+      CqmValidators::Cat3R21 if doc_type == 'cat3_r21'
     else
       raise 'Cannot validate an EH QRDA Category III file'
     end

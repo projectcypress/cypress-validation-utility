@@ -2,10 +2,10 @@
 
 source 'https://rubygems.org'
 
-ruby '2.3.7'
+ruby '2.4.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7'
+gem 'rails', '~> 4.2.11'
 # Use Bootstrap via this gem
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '~> 5.0.4'
@@ -39,7 +39,7 @@ gem 'cqm-validators', '~> 0.1.0'
 gem 'health-data-standards', '~> 4.3.0'
 
 gem 'quality-measure-engine',
-    git: 'https://github.com/projectcypress/quality-measure-engine.git', branch: 'bump_mongoid'
+    :git => 'https://github.com/projectcypress/quality-measure-engine.git', :branch => 'bump_mongoid'
 
 # gem "bson"
 # gem "moped", github: "mongoid/moped"
@@ -69,7 +69,11 @@ group :test do
   gem 'brakeman', :require => false
   gem 'bundler-audit'
   gem 'codecov', :require => false
-  gem 'mocha'
+  gem 'factory_bot_rails'
+  gem 'minitest', '5.10.3'
+  gem 'minitest-rails'
+  gem 'minitest-reporters'
+  gem 'mocha', :require => false
   gem 'simplecov', :require => false
 end
 

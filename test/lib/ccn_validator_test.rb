@@ -6,8 +6,7 @@ require 'ccn_validator'
 class CCNValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = CypressValidationUtility::Validate::CCNValidator.instance
-
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'good_cat1.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'qrda', 'cat_I', 'good_cat1.xml'), 'text/xml')
     @document = get_document(file)
   end
 

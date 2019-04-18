@@ -144,7 +144,7 @@ class QrdaFile
     case doc_type
     when 'cat1_r5'
       cat1_validator
-      CqmValidators::Cat1R5
+      CqmValidators::Cat1R5 if program_type == 'none'
     when 'cat3_r1', 'cat3_r21'
       cms_cat3_validator
     else

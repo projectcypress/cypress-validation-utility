@@ -27,6 +27,19 @@ class UploadsControllerTest < ActionController::TestCase
     assert(response_body.include?('No errors found'), 'Response for valid XML does not include "No errors found"')
   end
 
+  test 'upload single valid xml with negated valueset' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'qrda', 'cat_I', 'good_cat1_negated_vs.xml'), 'text/xml')
+
+    post 'create', file: file, year: '2018', file_type: 'cat1_r5', program: 'none'
+
+    assert_response :redirect
+    get 'show', id: redirect_to_url.split('/')[-1]
+
+    # replace all whitespace with single spaces for validation
+    response_body = @response.body.gsub(/\s+/, ' ')
+    assert(response_body.include?('No errors found'), 'Response for valid XML does not include "No errors found"')
+  end
+
   test 'upload single xml with errors' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'qrda', 'cat_I', 'good_cat1.xml'), 'text/xml')
 

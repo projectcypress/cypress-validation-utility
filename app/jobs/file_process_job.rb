@@ -44,7 +44,7 @@ class FileProcessJob < ActiveJob::Base
 
   def parse_and_save_record(doc)
     patient = QRDA::Cat1::PatientImporter.instance.parse_cat1(doc)
-    Cypress::GoImport.replace_negated_codes(patient, @bundle)
+    Cypress::QRDAPostProcessor.replace_negated_codes(patient, @bundle)
     patient.save
     patient
   end

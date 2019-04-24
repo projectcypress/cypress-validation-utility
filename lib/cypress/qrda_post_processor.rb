@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Cypress
-  module GoImport
+  module QRDAPostProcessor
     def self.replace_negated_codes(patient, bundle)
       patient.dataElements.each do |de|
         select_negated_code(de, bundle) if de['negationRationale'] && de.codes.find { |c| c.codeSystem == 'NA_VALUESET' }

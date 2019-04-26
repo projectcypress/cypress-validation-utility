@@ -100,9 +100,9 @@ class QrdaFile
   def program_type
     # Figure out if the program is EP or EH
     case program.upcase
-    when 'CPC', 'PQRS_MU_INDIVIDUAL', 'PQRS_MU_GROUP', 'MU_ONLY', 'CEC', 'CPCPLUS', 'MIPS_INDIV', 'MIPS_GROUP'
+    when 'CPCPLUS', 'MIPS_INDIV', 'MIPS_GROUP', 'MIPS_VIRTUALGROUP'
       'ep'
-    when 'HQR_EHR', 'HQR_IQR', 'HQR_EHR_IQR', 'HQR_IQR_VOL', 'HQR_EPM_VOL'
+    when 'HQR_PI', 'HQR_IQR', 'HQR_PI_IQR', 'HQR_IQR_VOL'
       'eh'
     else
       # If the program name doesn't exist, return nil

@@ -145,7 +145,7 @@ class QrdaFile
     when 'cat1_r5'
       cat1_validator
       CqmValidators::Cat1R5 if program_type == 'none'
-    when 'cat3_r1', 'cat3_r21'
+    when 'cat3_r21'
       cms_cat3_validator
     else
       raise 'Invalid doc_type param: Must be one of (cat1, cat3)'
@@ -153,7 +153,7 @@ class QrdaFile
   end
 
   def cms_cat3_validator
-    @validators.concat CAT3_VALIDATORS unless program_year == '2019'
+    @validators.concat CAT3_VALIDATORS
     @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
     if program_type == 'ep'
       cms_cat3_program_validator

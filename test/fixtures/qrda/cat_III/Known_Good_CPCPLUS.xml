@@ -5,11 +5,11 @@ Title: Comprehensive Primary Care (CPC+) Plus Sample QRDA-III Report
 File Name: Comprehensive Primary Care Plus (CPC+) Sample QRDA-III.xml
 Version: 1.0
 Revision History:  
-    		1) 8/28/18  Created
-    		2) 10/05/18 Added comment indicating line numbers where warnings are triggered
+         1) 8/28/18  Created
+         2) 10/05/18 Added comment indicating line numbers where warnings are triggered
 Description:  
-    		1) This QRDA-III sample file is valid ONLY for CPC+ and for the Performance Period 2019 (01/01/2019 - 12/31/2019 measurement period) reporting. 
-    	   2) This sample file correctly validates against the conformance statements specified in the CMS Implementation Guide for Quality Reporting Document Architecture Category III Eligible Clinicians and Eligible Professionals Programs 
+         1) This QRDA-III sample file is valid ONLY for CPC+ and for the Performance Period 2019 (01/01/2019 - 12/31/2019 measurement period) reporting. 
+         2) This sample file correctly validates against the conformance statements specified in the CMS Implementation Guide for Quality Reporting Document Architecture Category III Eligible Clinicians and Eligible Professionals Programs 
 
 Total Errors Expected: 0
 Total Warnings Expected: 2
@@ -51,7 +51,7 @@ Total Warnings Expected: 2
       </assignedAuthor>
    </author>
    <!--Person Author Example-->
-	<author>
+   <author>
      <time value="20200211061231"/>
       <assignedAuthor>
          <id root="2.16.840.1.113883.4.6"
@@ -105,7 +105,7 @@ Total Warnings Expected: 2
       </associatedEntity>
    </participant>
    <!--Practice Site-->
-	<participant typeCode="LOC">
+   <participant typeCode="LOC">
       <associatedEntity classCode="SDLOC">
          <id root="2.16.840.1.113883.3.249.5.1"
             extension="T2OR1234"
@@ -123,12 +123,12 @@ Total Warnings Expected: 2
       </associatedEntity>
    </participant>
    <!--Providers in Practice Site for which data is being submitted-->
-	<documentationOf typeCode="DOC">
+   <documentationOf typeCode="DOC">
       <serviceEvent classCode="PCPR">
          <effectiveTime>
             <low value="20190101"/>
             <high value="20191231"/>
-         </effectiveTime>	
+         </effectiveTime>  
          <performer typeCode="PRF">
             <time>
                <low value="20190101"/>
@@ -141,7 +141,7 @@ Total Warnings Expected: 2
                   <name>Good Health Clinic</name>
                </representedOrganization>
             </assignedEntity>
-         </performer>	
+         </performer>   
          <performer typeCode="PRF">
             <time>
                <low value="20190101"/>
@@ -154,7 +154,7 @@ Total Warnings Expected: 2
                   <name>Good Health Clinic</name>
                </representedOrganization>
             </assignedEntity>
-         </performer>	
+         </performer>   
          <performer typeCode="PRF">
             <time>
                <low value="20190101"/>
@@ -167,7 +167,7 @@ Total Warnings Expected: 2
                   <name>Good Health Clinic</name>
                </representedOrganization>
             </assignedEntity>
-         </performer>	
+         </performer>   
          <performer typeCode="PRF">
             <time>
                <low value="20190101"/>
@@ -180,7 +180,7 @@ Total Warnings Expected: 2
                   <name>Good Health Clinic</name>
                </representedOrganization>
             </assignedEntity>
-         </performer>	
+         </performer>   
          <performer typeCode="PRF">
             <time>
                <low value="20190101"/>
@@ -211,7 +211,7 @@ Total Warnings Expected: 2
 CDA Body
 ********************************************************
 -->
-	  <component>
+     <component>
       <structuredBody>
 <!--
 ********************************************************
@@ -228,7 +228,7 @@ QRDA Category III Measure Section (CMS EP)
                      displayName="measure document"/>
                <title>Measure Section</title>
                <text>
-						<!--NQF 0059 / CMS122-->
+                  <!--NQF 0059 / CMS122-->
                   <table border="1" width="100%">
                      <thead>
                         <tr>
@@ -1084,7 +1084,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--IPOP Population ID from eCQM-->			
+                           <!--IPOP Population ID from eCQM-->       
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="A15C0CC7-E072-4D9F-BB29-80429C6335DB"/>
@@ -1593,7 +1593,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--DENOM Population ID from eCQM-->			
+                           <!--DENOM Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="F50E5334-415D-482F-A30D-0623C082B602"/>
@@ -2102,7 +2102,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--DENEX Population ID from eCQM-->			
+                           <!--DENEX Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="B88574B5-AE7B-4AAF-9925-6E4D75B595FA"/>
@@ -2611,7 +2611,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--DENOM Population ID from eCQM-->			
+                           <!--DENOM Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="BD70E166-D478-41A4-B8C8-041CE9F75850"/>
@@ -3164,7 +3164,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--IPOP Population ID from eCQM-->			
+                           <!--IPOP Population ID from eCQM-->       
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="A096B729-ECCA-4C7A-9CA0-A601D8D70396"/>
@@ -3673,7 +3673,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--DENOM Population ID from eCQM-->			
+                           <!--DENOM Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="BA4CB92A-1635-4E1B-BC23-1ED7B967072A"/>
@@ -4182,7 +4182,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--DENEX Population ID from eCQM-->			
+                           <!--DENEX Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="4A61F526-AFFA-465F-89C9-B2DB8E6ECEBC"/>
@@ -4691,7 +4691,7 @@ QRDA Category III Measure Section (CMS EP)
                                  </entryRelationship>
                               </observation>
                            </entryRelationship>
-                           <!--NUMER Population ID from eCQM-->			
+                           <!--NUMER Population ID from eCQM-->         
                            <reference typeCode="REFR">
                               <externalObservation classCode="OBS" moodCode="EVN">
                                  <id root="A815D9EA-5CE0-4AD8-A703-BC69D19E360B"/>

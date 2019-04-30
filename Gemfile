@@ -2,12 +2,12 @@
 
 source 'https://rubygems.org'
 
-ruby '2.3.7'
+ruby '2.4.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7'
+gem 'rails', '~> 4.2.11'
 # Use Bootstrap via this gem
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem 'sass-rails', '~> 5.0.4'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -32,13 +32,14 @@ gem 'thin'
 gem 'sucker_punch', '~> 2.0'
 # sucker punch for running jobs async, in-process
 
-gem 'health-data-standards', '~> 4.3.0'
-# gem 'health-data-standards', '~> 3.7.0'
+gem 'cqm-converter', '~> 0.3.6'
+gem 'cqm-models', '~> 0.8.4'
+gem 'cqm-parsers', '~> 0.2.3'
+gem 'cqm-validators', '~> 0.1.1'
+gem 'health-data-standards', '~> 4.3.5'
 
-gem 'go-cda-tools', :git => 'https://github.com/projectcypress/go-cda-tools.git', :branch => 'master'
 gem 'quality-measure-engine',
     :git => 'https://github.com/projectcypress/quality-measure-engine.git', :branch => 'bump_mongoid'
-# gem 'go-cda-tools', path: '../go-cda-tools'
 
 # gem "bson"
 # gem "moped", github: "mongoid/moped"
@@ -53,6 +54,8 @@ gem 'lograge'
 # necessary to prevent cache-busting of the bootstrap fonts
 gem 'non-stupid-digest-assets'
 
+gem 'bunny'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -66,7 +69,11 @@ group :test do
   gem 'brakeman', :require => false
   gem 'bundler-audit'
   gem 'codecov', :require => false
-  gem 'mocha'
+  gem 'factory_bot_rails'
+  gem 'minitest', '5.10.3'
+  gem 'minitest-rails'
+  gem 'minitest-reporters'
+  gem 'mocha', :require => false
   gem 'simplecov', :require => false
 end
 

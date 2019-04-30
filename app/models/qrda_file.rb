@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require 'ext/record'
+require 'ext/patient'
 require 'cat3_population_validator'
 require 'measure_period_validator'
 require 'ccn_validator'
 require 'program_validator'
-require 'valueset_category_validator'
 
 class QrdaFile
   include Mongoid::Document
   include Mongoid::Timestamps
+  include ::CqmValidators
 
   belongs_to :upload, index: true
-  has_one :record
+  has_one :patient
 
   field :doc_type, type: String
   field :program, type: String
@@ -36,7 +36,7 @@ class QrdaFile
   def process
     @measure_ids = measure_ids_from_file
 
-    @bundle = HealthDataStandards::CQM::Bundle[program_year] unless program_year == '2019'
+    @bundle = HealthDataStandards::CQM::Bundle[program_year]
 
     self.validation_errors = { :qrda => [], :reporting => [], :submission => [], :warning => [], :ungrouped => [] }
     perform_validatons(validation_errors)
@@ -49,8 +49,8 @@ class QrdaFile
       errs = v.validate(content, :file_name => @filename)
       errs.each do |e|
         e.validator ||= v.class.name
-        # make cat1 validation error types a warning for data criteria outside the measure definition
-        if (e.validator == 'HealthDataStandards::Validate::DataValidator') && (e.message.include? 'data criteria outside')
+        # make cat1 validation error types a warning for data criteria outside the measure definition'
+        if (e.validator == 'CqmValidators::DataValidator') && (e.message.include? 'data criteria outside')
           validation_errors[:warning] << e.instance_values
         else
           validation_errors[validator_category(e.validator)] << e.instance_values
@@ -88,10 +88,9 @@ class QrdaFile
     when 'Cat 1 Measure ID Validator', 'HealthDataStandards::Validate::Cat1Measure',
          'Cat 3 Measure ID Validator', 'HealthDataStandards::Validate::Cat3Measure',
          'HealthDataStandards::Validate::Cat3PerformanceRate', 'Cat III Population Validator',
-         'HealthDataStandards::Validate::DataValidator'
+         'CqmValidatorse::DataValidator'
       :reporting
-    when 'CCN Validator', 'Measure Period Validator', 'CMS Program Validator', 'Encounter validator',
-         'Valueset Category Validator'
+    when 'CCN Validator', 'Measure Period Validator', 'CMS Program Validator', 'Encounter validator'
       :submission
     else
       :ungrouped
@@ -101,9 +100,9 @@ class QrdaFile
   def program_type
     # Figure out if the program is EP or EH
     case program.upcase
-    when 'CPC', 'PQRS_MU_INDIVIDUAL', 'PQRS_MU_GROUP', 'MU_ONLY', 'CEC', 'CPCPLUS', 'MIPS_INDIV', 'MIPS_GROUP'
+    when 'CPCPLUS', 'MIPS_INDIV', 'MIPS_GROUP', 'MIPS_VIRTUALGROUP'
       'ep'
-    when 'HQR_EHR', 'HQR_IQR', 'HQR_EHR_IQR', 'HQR_IQR_VOL', 'HQR_EPM_VOL'
+    when 'HQR_PI', 'HQR_IQR', 'HQR_PI_IQR', 'HQR_IQR_VOL'
       'eh'
     else
       # If the program name doesn't exist, return nil
@@ -112,22 +111,18 @@ class QrdaFile
   end
 
   def cat1_validator
-    @validators.concat CAT1_VALIDATORS unless program_year == '2019'
-    @validators << HealthDataStandards::Validate::DataValidator.new(@bundle, @measure_ids) unless program_year == '2019'
-    @validators << CypressValidationUtility::Validate::ValuesetCategoryValidator.new(@measure_ids, @bundle.id) unless program_year == '2019'
+    @validators.concat CAT1_VALIDATORS
+    @validators << CqmValidators::DataValidator.new(@bundle, @measure_ids)
 
-    qrda_qdm_template_type = 'r3'
+    qrda_qdm_template_type = 'r5'
 
     if program_type == 'eh'
       case program_year
-      when '2018'
-        @validators << CypressValidationUtility::Validate::EHCat1_2018.instance
-        qrda_qdm_template_type = 'r4'
       when '2019'
         @validators << CypressValidationUtility::Validate::EHCat1_2019.instance
         qrda_qdm_template_type = 'r5'
       end
-      @validators << HealthDataStandards::Validate::QrdaQdmTemplateValidator.new(qrda_qdm_template_type)
+      @validators << CqmValidators::QrdaQdmTemplateValidator.new(qrda_qdm_template_type)
     end
   end
 
@@ -138,7 +133,7 @@ class QrdaFile
     cms_validator = cms_validator_for_doc_type
     @validators << cms_validator.instance if cms_validator
     @validators << CypressValidationUtility::Validate::CCNValidator.instance if program_type == 'eh'
-    @validators << HealthDataStandards::Validate::CDA.instance
+    @validators << CqmValidators::CDA.instance
     @validators << CypressValidationUtility::Validate::ProgramValidator.new(program) unless program == 'none'
     @validators << CypressValidationUtility::Validate::MeasurePeriodValidator.new(program, program_type, program_year, doc_type)
 
@@ -147,13 +142,10 @@ class QrdaFile
 
   def cms_validator_for_doc_type
     case doc_type
-    when 'cat1_r4'
-      cat1_validator
-      HealthDataStandards::Validate::Cat1R4
     when 'cat1_r5'
       cat1_validator
-      HealthDataStandards::Validate::Cat1R5
-    when 'cat3_r1', 'cat3_r21'
+      CqmValidators::Cat1R5 if program_type == 'none'
+    when 'cat3_r21'
       cms_cat3_validator
     else
       raise 'Invalid doc_type param: Must be one of (cat1, cat3)'
@@ -161,23 +153,18 @@ class QrdaFile
   end
 
   def cms_cat3_validator
-    @validators.concat CAT3_VALIDATORS unless program_year == '2019'
-    @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance unless program_year == '2019'
+    @validators.concat CAT3_VALIDATORS
+    @validators << CypressValidationUtility::Validate::Cat3PopulationValidator.instance
     if program_type == 'ep'
       cms_cat3_program_validator
     elsif program_type == 'none'
-      if doc_type == 'cat3_r1'
-        HealthDataStandards::Validate::Cat3
-      elsif doc_type == 'cat3_r21'
-        HealthDataStandards::Validate::Cat3R21
-      end
+      CqmValidators::Cat3R21 if doc_type == 'cat3_r21'
     else
       raise 'Cannot validate an EH QRDA Category III file'
     end
   end
 
   def cms_cat3_program_validator
-    return CypressValidationUtility::Validate::ECCat3_2018 if program_year == '2018'
     return CypressValidationUtility::Validate::ECCat3_2019 if program_year == '2019'
 
     raise 'Cannot validate an EH QRDA Category III file'

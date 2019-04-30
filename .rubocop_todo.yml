@@ -24,7 +24,6 @@ Lint/SafeNavigationConsistency:
 # AllowedNames: io, id, to, by, on, in, at, ip, db
 Naming/UncommunicativeMethodParamName:
   Exclude:
-    - 'lib/cypress/cat_3_calculator.rb'
     - 'test/test_helper.rb'
 
 # Offense count: 1

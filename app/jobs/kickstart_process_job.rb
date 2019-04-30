@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'cypress/cat_3_calculator'
 include ActionView::Helpers::NumberHelper
 
 class KickstartProcessJob < ActiveJob::Base

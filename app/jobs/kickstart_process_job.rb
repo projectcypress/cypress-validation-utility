@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'cypress/cat_3_calculator'
 include ActionView::Helpers::NumberHelper
 
 class KickstartProcessJob < ActiveJob::Base
@@ -29,7 +28,7 @@ class KickstartProcessJob < ActiveJob::Base
     upload.save!(validate: false)
   rescue Nokogiri::XML::SyntaxError => e
     upload.fail(e)
-  rescue => e
+  rescue StandardError => e
     upload.fail(e.message)
     ERROR_LOG.error e.message
     ERROR_LOG.error e.backtrace.join("\n")

@@ -1,8 +1,10 @@
 [![GitHub version](https://badge.fury.io/gh/projectcypress%2Fcypress-validation-utility.svg)](https://badge.fury.io/gh/projectcypress%2Fcypress-validation-utility)
+[![Build Status](https://travis-ci.com/projectcypress/cypress-validation-utility.svg?branch=master)](https://travis-ci.com/projectcypress/cypress-validation-utility)
+[![codecov.io](https://codecov.io/github/projectcypress/cypress-validation-utility/coverage.svg?branch=<branch>)](https://codecov.io/github/projectcypress/cypress-validation-utility?branch=<branch>)
 
 # Cypress Validation Utility
 
-Upload any QRDA Category 1 or Category 3 document. This application will validate it against the 2014 QRDA Errata release and optionally against the CMS Combined IG.
+Upload any QRDA Category 1 or Category 3 document. This application will validate it against various QRDA IGs, based on the reporting program and document type chosen.
 
 License
 -------

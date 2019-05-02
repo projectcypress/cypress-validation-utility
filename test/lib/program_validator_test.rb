@@ -5,9 +5,9 @@ require 'program_validator'
 
 class ProgramValidatorTest < ActiveSupport::TestCase
   setup do
-    @validator = CypressValidationUtility::Validate::ProgramValidator.new('pqrs_mu_individual')
+    @validator = CypressValidationUtility::Validate::ProgramValidator.new('HQR_PI')
 
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'good_cat1.xml'), 'text/xml')
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test', 'fixtures', 'qrda', 'cat_I', 'good_cat1.xml'), 'text/xml')
     @document = get_document(file)
   end
 
@@ -16,7 +16,7 @@ class ProgramValidatorTest < ActiveSupport::TestCase
     errors = @validator.validate(@document)
 
     assert_equal 1, errors.count, "Expected 1 error, got #{errors}"
-    msg = "Expected to find program 'PQRS_MU_INDIVIDUAL' but no program code was found."
+    msg = "Expected to find program 'HQR_PI' but no program code was found."
     assert_equal msg, errors[0].message
   end
 
@@ -27,7 +27,7 @@ class ProgramValidatorTest < ActiveSupport::TestCase
     errors = @validator.validate(@document)
 
     assert_equal 1, errors.count, "Expected 1 error, got #{errors}"
-    msg = "CMS Program code 'bobs_house' does not match the expected code for program PQRS_MU_INDIVIDUAL."
+    msg = "CMS Program code 'bobs_house' does not match the expected code for program HQR_PI."
     assert_equal msg, errors[0].message
   end
 

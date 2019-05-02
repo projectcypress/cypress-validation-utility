@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Exclude:
     - 'bin/**/*'
@@ -38,13 +40,14 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 10
 
+Naming/ClassAndModuleCamelCase:
+  Exclude:
+    - 'lib/cms_validators.rb'
+
 Style/GuardClause:
   MinBodyLength: 100
 Style/HashSyntax:
   UseHashRocketsWithSymbolValues: true
-Style/ClassAndModuleCamelCase:
-  Exclude:
-    - 'lib/cms_validators.rb'
 Style/ClassAndModuleChildren:
   Exclude:
     - 'test/test_helper.rb'

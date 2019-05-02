@@ -2,7 +2,8 @@ language: ruby
 cache:
   - bundler
   - node_modules
-sudo: false
+sudo: required
+dist: trusty
 addons:
   apt:
     sources:
@@ -12,6 +13,7 @@ addons:
       - mongodb-org-server=3.4.5
 services:
   - mongodb
+  - rabbitmq
 branches:
   only:
   - master
@@ -24,13 +26,16 @@ notifications:
     secure: NfcNb3LCyd7/ACYc6mDoBJZlBFIV5wKMMWs0On2DNeaDoD/EKCbQRQQVOHEvfsaqOM+5zmi9giYaV7cV+Gl+zfehZ/Q69x89YjWWVFeAp5QGDzoCnM7oaaTXygla52sfcL9Oi3rLgTWyjqMSS7tM2DW5d/V+iEjyilmavsUvRbU=
 before_install:
   - . $HOME/.nvm/nvm.sh
-  - nvm install stable
+  - nvm install 10.0
   - nvm use stable
   - npm install
+  - git clone -b master https://github.com/projectcypress/js-ecqm-engine.git /tmp/js-ecqm-engine
 before_script:
   - git config --global user.email "travis@travis.ci"
   - git config --global user.name "Travis CI"
   - npm install -g eslint
+  - yarn install --cwd /tmp/js-ecqm-engine
+  - NODE_ENV=test /tmp/js-ecqm-engine/bin/rabbit_worker.js &
   - cp ./.travis/mongoid.yml ./config/mongoid.yml
 script:
   - bundle exec brakeman -qAzw1

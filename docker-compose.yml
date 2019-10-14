@@ -1,3 +1,15 @@
+js_ecqm_engine:
+  image: projectcypress/js-ecqm-engine
+  restart: unless-stopped
+  environment:
+    - MONGODB_HOST=mongo
+    - RABBITMQ_HOST=rabbitmq
+    - RABBITMQ_PORT=5672
+  links:
+    - mongodb:mongo
+    - rabbit:rabbitmq
+rabbit:
+  image: rabbitmq
 cypress_validation_utility:
   build: ./
   ports:
@@ -5,12 +17,17 @@ cypress_validation_utility:
   command: /rails/cypress-validation-utility/rails-entrypoint.sh
   links:
     - mongodb:mongo
+    - rabbit:rabbitmq
   env_file: .env-prod
+  environment:
+  - MONGODB_HOST=mongo
+  - RABBITMQ_HOST=rabbitmq
+  - RABBITMQ_PORT=5672
   restart: unless-stopped
 mongodb:
   image: mongo
   volumes:
     - /data/db:/data/db
-  ports:
-    - "27017:27017"
+    - ./mongo:/etc/mongo
+  command: --config=/etc/mongo/docker_mongod.conf
   restart: unless-stopped

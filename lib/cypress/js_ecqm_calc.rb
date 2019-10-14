@@ -11,7 +11,8 @@ module Cypress
 
     def initialize(options)
       # @hds_record_converter = CQM::Converter::HDSRecord.new
-      @connection = Bunny.new
+      @connection = Bunny.new(:host => ENV['RABBITMQ_HOST'] || 'localhost',
+                              :port => ENV['RABBITMQ_PORT'] || '5672')
       @connection.start
       @channel = connection.create_channel
       @queue = channel.queue('calculation_queue', durable: true)

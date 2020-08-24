@@ -1,6 +1,5 @@
 js_ecqm_engine:
   image: projectcypress/js-ecqm-engine
-  restart: unless-stopped
   environment:
     - MONGODB_HOST=mongo
     - RABBITMQ_HOST=rabbitmq
@@ -8,8 +7,12 @@ js_ecqm_engine:
   links:
     - mongodb:mongo
     - rabbit:rabbitmq
+  restart: unless-stopped
 rabbit:
-  image: rabbitmq
+  image: rabbitmq:3-management
+  restart: unless-stopped
+  ports:
+  - "15672:15672"
 cypress_validation_utility:
   build: ./
   ports:
@@ -31,3 +34,5 @@ mongodb:
     - ./mongo:/etc/mongo
   command: --config=/etc/mongo/docker_mongod.conf
   restart: unless-stopped
+  ports:
+  - "27019:27017"
